@@ -20,13 +20,13 @@
     /* HERO */
     .hero { position: relative; width: 100vw; height: 100vh; overflow: hidden; display: flex; align-items: flex-end; }
     .hero-bg { position: absolute; inset: 0; background: repeating-linear-gradient(45deg, transparent, transparent 40px, rgba(255,60,0,0.03) 40px, rgba(255,60,0,0.03) 80px), linear-gradient(160deg, #111 0%, #0a0a0a 60%, #1a0800 100%); display: flex; align-items: center; justify-content: center; }
-    .hero-bg span { font-family: 'Space Mono', monospace; font-size: 0.75rem; color: rgba(255,255,255,0.1); letter-spacing: 0.2em; }
+    .hero-bg span { font-family: 'Space Mono', monospace; font-size: 0.75rem; color: rgba(255,255,255,0.05); letter-spacing: 0.2em; }
     .hero-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.2) 60%, transparent 100%); }
     .hero-content { position: relative; z-index: 2; padding: 0 6vw 6vh; width: 100%; }
-    .hero-tag { font-family: 'Space Mono', monospace; font-size: 0.7rem; letter-spacing: 0.3em; color: var(--accent); text-transform: uppercase; margin-bottom: 1rem; opacity: 0; animation: fadeUp 0.8s 0.3s forwards; }
-    .hero-name { font-family: 'Bebas Neue', sans-serif; font-size: clamp(5rem, 13vw, 14rem); line-height: 0.88; color: var(--white); opacity: 0; animation: fadeUp 0.9s 0.5s forwards; }
+    .hero-tag { font-family: 'Space Mono', monospace; font-size: 0.7rem; letter-spacing: 0.3em; color: var(--accent); text-transform: uppercase; margin-bottom: 1rem; min-height: 1em; opacity: 0; animation: fadeUp 0.8s 0.3s forwards; }
+    .hero-name { font-family: 'Bebas Neue', sans-serif; font-size: clamp(5rem, 13vw, 14rem); line-height: 0.88; color: var(--white); min-height: 1em; opacity: 0; animation: fadeUp 0.9s 0.5s forwards; }
     .hero-name .accent { color: var(--accent); }
-    .hero-sub { margin-top: 1.5rem; font-size: clamp(0.85rem, 1.2vw, 1rem); font-weight: 300; color: rgba(240,237,232,0.5); letter-spacing: 0.05em; opacity: 0; animation: fadeUp 0.9s 0.75s forwards; }
+    .hero-sub { margin-top: 1.5rem; font-size: clamp(0.85rem, 1.2vw, 1rem); font-weight: 300; color: rgba(240,237,232,0.5); letter-spacing: 0.05em; min-height: 1em; opacity: 0; animation: fadeUp 0.9s 0.75s forwards; }
     .scroll-hint { position: absolute; bottom: 2.5rem; right: 6vw; z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 0.5rem; opacity: 0; animation: fadeIn 1s 1.5s forwards; }
     .scroll-hint span { font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.25em; color: rgba(255,255,255,0.25); writing-mode: vertical-rl; }
     .scroll-line { width: 1px; height: 60px; background: linear-gradient(to bottom, var(--accent), transparent); animation: scrollPulse 2s 2s infinite; }
@@ -39,7 +39,7 @@
     /* ABOUT */
     .about { padding: 14vh 6vw; max-width: 1200px; margin: 0 auto; }
     .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6vw; align-items: start; }
-    .about-headline { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.5rem, 5vw, 5rem); line-height: 1.0; color: var(--white); }
+    .about-headline { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.5rem, 5vw, 5rem); line-height: 1.0; color: var(--white); min-height: 1em; }
     .about-headline .hl { color: var(--accent); }
     .about-body { font-size: 0.95rem; line-height: 1.9; color: rgba(240,237,232,0.65); font-weight: 300; }
     .about-body p + p { margin-top: 1.2rem; }
@@ -86,13 +86,13 @@
     .modal-body p { margin-bottom: 1rem; }
     .modal-body h2 { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; color: var(--white); margin: 2rem 0 1rem; }
     .modal-body h3 { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; color: var(--white); margin: 1.5rem 0 0.8rem; }
-    .modal-body li { padding-left: 1rem; border-left: 2px solid var(--accent); margin: 0.5rem 0; }
+    .modal-body li { padding-left: 1rem; border-left: 2px solid var(--accent); margin: 0.5rem 0; list-style: none; }
 
     /* PROCESS */
     .process { padding: 14vh 6vw; border-top: 1px solid rgba(255,255,255,0.06); max-width: 1200px; margin: 0 auto; }
     .process-intro { display: grid; grid-template-columns: 1fr 1fr; gap: 6vw; margin-bottom: 4rem; align-items: start; }
-    .process-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.5rem, 5vw, 5rem); color: var(--white); line-height: 1.0; }
-    .process-desc { font-size: 0.9rem; color: rgba(240,237,232,0.55); line-height: 1.9; font-weight: 300; }
+    .process-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.5rem, 5vw, 5rem); color: var(--white); line-height: 1.0; min-height: 1em; }
+    .process-desc { font-size: 0.9rem; color: rgba(240,237,232,0.55); line-height: 1.9; font-weight: 300; min-height: 1em; }
     .process-steps { display: grid; grid-template-columns: repeat(5, 1fr); gap: 2px; }
     .process-step { padding: 2.5rem 1.5rem; background: #111; position: relative; overflow: hidden; transition: background 0.3s; }
     .process-step:hover { background: #161616; }
@@ -105,19 +105,16 @@
     /* CONTACT */
     .contact { padding: 16vh 6vw; border-top: 1px solid rgba(255,255,255,0.06); display: flex; flex-direction: column; align-items: center; text-align: center; }
     .contact-label { font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 0.4em; color: var(--accent); text-transform: uppercase; margin-bottom: 2rem; }
-    .contact-headline { font-family: 'Bebas Neue', sans-serif; font-size: clamp(3rem, 8vw, 9rem); line-height: 0.9; color: var(--white); margin-bottom: 2rem; }
-    .contact-sub { font-size: 0.9rem; color: rgba(240,237,232,0.45); line-height: 1.8; max-width: 480px; font-weight: 300; margin-bottom: 3.5rem; }
+    .contact-headline { font-family: 'Bebas Neue', sans-serif; font-size: clamp(3rem, 8vw, 9rem); line-height: 0.9; color: var(--white); margin-bottom: 2rem; min-height: 1em; }
+    .contact-sub { font-size: 0.9rem; color: rgba(240,237,232,0.45); line-height: 1.8; max-width: 480px; font-weight: 300; margin-bottom: 3.5rem; min-height: 1em; }
     .contact-btn { display: inline-flex; align-items: center; gap: 1rem; padding: 1.1rem 2.5rem; border: 1px solid var(--accent); color: var(--white); text-decoration: none; font-family: 'Space Mono', monospace; font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; transition: background 0.3s, color 0.3s; cursor: none; }
     .contact-btn:hover { background: var(--accent); color: var(--black); }
-    .contact-note { margin-top: 2rem; font-family: 'Space Mono', monospace; font-size: 0.6rem; color: rgba(255,255,255,0.2); letter-spacing: 0.15em; }
+    .contact-note { margin-top: 2rem; font-family: 'Space Mono', monospace; font-size: 0.6rem; color: rgba(255,255,255,0.2); letter-spacing: 0.15em; min-height: 1em; }
 
     /* FOOTER */
     footer { padding: 2.5rem 6vw; border-top: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center; }
-    .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; color: rgba(255,255,255,0.2); }
-    .footer-copy { font-family: 'Space Mono', monospace; font-size: 0.6rem; color: rgba(255,255,255,0.15); letter-spacing: 0.1em; }
-
-    /* LOADING */
-    .loading { font-family: 'Space Mono', monospace; font-size: 0.7rem; color: rgba(255,255,255,0.2); letter-spacing: 0.2em; padding: 2rem 0; }
+    .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; color: rgba(255,255,255,0.2); min-height: 1em; }
+    .footer-copy { font-family: 'Space Mono', monospace; font-size: 0.6rem; color: rgba(255,255,255,0.15); letter-spacing: 0.1em; min-height: 1em; }
 
     /* ANIMATIONS */
     @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
@@ -125,9 +122,7 @@
     @keyframes scrollPulse { 0%,100% { opacity: 0.3; } 50% { opacity: 1; } }
 
     /* RESPONSIVE */
-    @media (max-width: 900px) {
-      .process-steps { grid-template-columns: repeat(3, 1fr); }
-    }
+    @media (max-width: 900px) { .process-steps { grid-template-columns: repeat(3, 1fr); } }
     @media (max-width: 768px) {
       .about-grid, .process-intro { grid-template-columns: 1fr; }
       .works-grid { grid-template-columns: 1fr 1fr; }
@@ -150,9 +145,9 @@
     <div class="hero-bg"><span>FLASH KANG</span></div>
     <div class="hero-overlay"></div>
     <div class="hero-content">
-      <p class="hero-tag" id="hero-tag">OCTOPO STUDIO VFX ARTIST</p>
-      <h1 class="hero-name" id="hero-name">FLASH<br><span class="accent">KANG</span></h1>
-      <p class="hero-sub" id="hero-sub">sunghoon.kang@octopo.art</p>
+      <p class="hero-tag" id="hero-tag"></p>
+      <h1 class="hero-name" id="hero-name"></h1>
+      <p class="hero-sub" id="hero-sub"></p>
     </div>
     <div class="scroll-hint">
       <span>Scroll</span>
@@ -164,15 +159,15 @@
   <section class="about">
     <p class="section-label">About</p>
     <div class="about-grid fade-item">
-      <div class="about-headline" id="about-headline">플래시는 죽지 않았다. <span class="hl">나한테</span> 살아있다.</div>
-      <div class="about-body" id="about-body"><p class="loading">Loading...</p></div>
+      <div class="about-headline" id="about-headline"></div>
+      <div class="about-body" id="about-body"></div>
     </div>
   </section>
 
   <!-- TIMELINE -->
   <section class="timeline">
     <p class="section-label">Timeline</p>
-    <div id="timeline-list"><p class="loading">Loading...</p></div>
+    <div id="timeline-list"></div>
   </section>
 
   <!-- WORKS -->
@@ -182,7 +177,7 @@
         <h2 class="works-title">Works</h2>
         <p class="works-note">작업물 일부는 NDA로<br>공개가 제한될 수 있습니다</p>
       </div>
-      <div class="works-grid" id="works-grid"><p class="loading">Loading...</p></div>
+      <div class="works-grid" id="works-grid"></div>
     </div>
   </section>
 
@@ -200,16 +195,16 @@
   <section class="process">
     <p class="section-label">How I Work</p>
     <div class="process-intro fade-item">
-      <h2 class="process-title" id="process-title">완성보다<br>과정이<br>중요하다</h2>
-      <p class="process-desc" id="process-desc"><span class="loading">Loading...</span></p>
+      <h2 class="process-title" id="process-title"></h2>
+      <p class="process-desc" id="process-desc"></p>
     </div>
-    <div class="process-steps" id="process-steps"><p class="loading">Loading...</p></div>
+    <div class="process-steps" id="process-steps"></div>
   </section>
 
   <!-- CONTACT -->
   <section class="contact">
     <p class="contact-label">Contact</p>
-    <h2 class="contact-headline fade-item" id="contact-headline">함께<br>만들자</h2>
+    <h2 class="contact-headline fade-item" id="contact-headline"></h2>
     <p class="contact-sub" id="contact-sub"></p>
     <a href="#" class="contact-btn" id="contact-btn" target="_blank">Instagram DM <span>→</span></a>
     <p class="contact-note" id="contact-note"></p>
@@ -217,8 +212,8 @@
 
   <!-- FOOTER -->
   <footer>
-    <div class="footer-logo" id="footer-logo">FLASH-KANG.COM</div>
-    <div class="footer-copy" id="footer-copy">© 2026 Flash Kang. All rights reserved.</div>
+    <div class="footer-logo" id="footer-logo"></div>
+    <div class="footer-copy" id="footer-copy"></div>
   </footer>
 
   <script>
@@ -226,10 +221,7 @@
     const cursor = document.getElementById('cursor');
     const ring = document.getElementById('cursorRing');
     let mx=0, my=0, rx=0, ry=0;
-    document.addEventListener('mousemove', e => {
-      mx=e.clientX; my=e.clientY;
-      cursor.style.left=mx+'px'; cursor.style.top=my+'px';
-    });
+    document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; cursor.style.left=mx+'px'; cursor.style.top=my+'px'; });
     (function animRing(){ rx+=(mx-rx)*0.12; ry+=(my-ry)*0.12; ring.style.left=rx+'px'; ring.style.top=ry+'px'; requestAnimationFrame(animRing); })();
     document.querySelectorAll('a,button').forEach(el=>{
       el.addEventListener('mouseenter',()=>{ ring.style.width='60px'; ring.style.height='60px'; });
@@ -344,7 +336,7 @@
     async function openModal(pageId, title, meta) {
       document.getElementById('modal-title').textContent = title;
       document.getElementById('modal-meta').textContent = meta;
-      document.getElementById('modal-body').innerHTML = '<p class="loading">Loading...</p>';
+      document.getElementById('modal-body').innerHTML = '<p style="font-family:Space Mono,monospace;font-size:0.7rem;color:rgba(255,255,255,0.3);letter-spacing:0.2em;padding:2rem 0">Loading...</p>';
       document.getElementById('modal').classList.add('active');
       document.body.style.overflow = 'hidden';
       try {
@@ -371,13 +363,11 @@
     async function loadProcess() {
       try {
         const rows = await fetchDB('process');
-        // headline 행 찾기 (num === 'headline')
         const hlRow = rows.find(r => val(r,'num') === 'headline');
         if (hlRow) {
           document.getElementById('process-title').innerHTML = val(hlRow,'title').replace(/\n/g,'<br>');
           document.getElementById('process-desc').textContent = val(hlRow,'text');
         }
-        // 나머지 스텝 (num !== 'headline'), order 숫자로 이미 정렬되어 있음
         const stepRows = rows.filter(r => val(r,'num') !== 'headline');
         const steps = document.getElementById('process-steps');
         steps.innerHTML = '';
