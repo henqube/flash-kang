@@ -13,13 +13,11 @@
     :root { --black: #0a0a0a; --white: #f0ede8; --accent: #ff3c00; }
     html, body { width: 100%; background: var(--black); color: var(--white); font-family: 'Noto Sans KR', sans-serif; overflow-x: hidden; cursor: none; }
 
-    /* CURSOR */
     .cursor { position: fixed; width: 10px; height: 10px; background: var(--accent); border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); }
     .cursor-ring { position: fixed; width: 36px; height: 36px; border: 1px solid rgba(255,60,0,0.5); border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%,-50%); transition: width 0.2s, height 0.2s; }
 
-    /* HERO */
     .hero { position: relative; width: 100vw; height: 100vh; overflow: hidden; display: flex; align-items: flex-end; }
-   .hero-bg { position: absolute; inset: 0; overflow: hidden; background: #0a0a0a; }
+    .hero-bg { position: absolute; inset: 0; overflow: hidden; background: #0a0a0a; }
     .hero-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.2) 60%, transparent 100%); }
     .hero-content { position: relative; z-index: 2; padding: 0 6vw 6vh; width: 100%; }
     .hero-tag { font-family: 'Space Mono', monospace; font-size: 0.7rem; letter-spacing: 0.3em; color: var(--accent); text-transform: uppercase; margin-bottom: 1rem; min-height: 1em; opacity: 0; animation: fadeUp 0.8s 0.3s forwards; }
@@ -30,13 +28,11 @@
     .scroll-hint span { font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.25em; color: rgba(255,255,255,0.25); writing-mode: vertical-rl; }
     .scroll-line { width: 1px; height: 60px; background: linear-gradient(to bottom, var(--accent), transparent); animation: scrollPulse 2s 2s infinite; }
 
-    /* SECTION COMMON */
     .section-label { font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 0.4em; color: var(--accent); text-transform: uppercase; margin-bottom: 3rem; }
     .fade-item { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
     .fade-item.visible { opacity: 1; transform: translateY(0); }
 
-    /* ABOUT */
-    .about { padding: 14vh 6vw; max-width: 1200px; margin: 0 auto;border-top: 1px solid rgba(255,255,255,0.06);  }
+    .about { padding: 14vh 6vw; max-width: 1200px; margin: 0 auto; }
     .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6vw; align-items: start; }
     .about-headline { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.5rem, 5vw, 5rem); line-height: 1.0; color: var(--white); min-height: 1em; }
     .about-headline .hl { color: var(--accent); }
@@ -45,7 +41,6 @@
     .about-body .em { color: var(--white); font-weight: 700; }
     .about-footline { margin-top: 2rem; font-family: 'Space Mono', monospace; font-size: 0.75rem; color: rgba(255,60,0,0.7); letter-spacing: 0.1em; }
 
-    /* TIMELINE */
     .timeline { padding: 8vh 6vw; border-top: 1px solid rgba(255,255,255,0.06); max-width: 1200px; margin: 0 auto; }
     .timeline-item { display: grid; grid-template-columns: 140px 1fr; gap: 3vw; padding: 2rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); transition: border-color 0.3s; }
     .timeline-item:hover { border-color: rgba(255,60,0,0.3); }
@@ -54,12 +49,10 @@
     .timeline-desc { font-size: 0.9rem; color: rgba(240,237,232,0.55); line-height: 1.7; padding-top: 0.3rem; }
     .timeline-desc strong { color: var(--white); display: block; margin-bottom: 0.2rem; font-size: 1rem; }
 
-    /* WORKS */
     .works { padding: 14vh 6vw; }
     .works-inner { max-width: 1200px; margin: 0 auto; }
     .works-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 4rem; }
     .works-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.5rem, 5vw, 5rem); color: var(--white); }
-    .works-note { font-family: 'Space Mono', monospace; font-size: 0.65rem; color: rgba(255,255,255,0.25); text-align: right; line-height: 1.6; }
     .works-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
     .work-card { position: relative; aspect-ratio: 4/5; background: #111; overflow: hidden; cursor: none; }
     .work-card-bg { position: absolute; inset: 0; background: linear-gradient(135deg, #1a0500, #0d0d0d); display: flex; align-items: center; justify-content: center; }
@@ -72,7 +65,6 @@
     .work-card-btn { margin-top: 0.8rem; display: inline-block; padding: 0.4rem 1rem; border: 1px solid rgba(255,255,255,0.3); font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.15em; color: var(--white); transition: border-color 0.3s; }
     .work-card:hover .work-card-btn { border-color: var(--accent); }
 
-    /* MODAL */
     .modal-overlay { position: fixed; inset: 0; z-index: 1000; background: rgba(10,10,10,0.96); display: none; justify-content: center; overflow-y: auto; padding: 4rem 2rem; }
     .modal-overlay.active { display: flex; }
     .modal-box { width: 100%; max-width: 800px; background: #111; padding: 3rem; position: relative; height: fit-content; }
@@ -87,7 +79,6 @@
     .modal-body h3 { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; color: var(--white); margin: 1.5rem 0 0.8rem; }
     .modal-body li { padding-left: 1rem; border-left: 2px solid var(--accent); margin: 0.5rem 0; list-style: none; }
 
-    /* PROCESS */
     .process { padding: 14vh 6vw; border-top: 1px solid rgba(255,255,255,0.06); max-width: 1200px; margin: 0 auto; }
     .process-intro { display: grid; grid-template-columns: 1fr 1fr; gap: 6vw; margin-bottom: 4rem; align-items: start; }
     .process-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.5rem, 5vw, 5rem); color: var(--white); line-height: 1.0; min-height: 1em; }
@@ -101,7 +92,6 @@
     .step-title { font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 0.2em; color: var(--accent); text-transform: uppercase; margin-bottom: 0.8rem; }
     .step-desc { font-size: 0.82rem; color: rgba(240,237,232,0.5); line-height: 1.7; font-weight: 300; }
 
-    /* CONTACT */
     .contact { padding: 16vh 6vw; border-top: 1px solid rgba(255,255,255,0.06); display: flex; flex-direction: column; align-items: center; text-align: center; }
     .contact-label { font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 0.4em; color: var(--accent); text-transform: uppercase; margin-bottom: 2rem; }
     .contact-headline { font-family: 'Bebas Neue', sans-serif; font-size: clamp(3rem, 8vw, 9rem); line-height: 0.9; color: var(--white); margin-bottom: 2rem; min-height: 1em; }
@@ -110,17 +100,14 @@
     .contact-btn:hover { background: var(--accent); color: var(--black); }
     .contact-note { margin-top: 2rem; font-family: 'Space Mono', monospace; font-size: 0.6rem; color: rgba(255,255,255,0.2); letter-spacing: 0.15em; min-height: 1em; }
 
-    /* FOOTER */
     footer { padding: 2.5rem 6vw; border-top: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center; }
     .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; color: rgba(255,255,255,0.2); min-height: 1em; }
     .footer-copy { font-family: 'Space Mono', monospace; font-size: 0.6rem; color: rgba(255,255,255,0.15); letter-spacing: 0.1em; min-height: 1em; }
 
-    /* ANIMATIONS */
     @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     @keyframes scrollPulse { 0%,100% { opacity: 0.3; } 50% { opacity: 1; } }
 
-    /* RESPONSIVE */
     @media (max-width: 900px) { .process-steps { grid-template-columns: repeat(3, 1fr); } }
     @media (max-width: 768px) {
       .about-grid, .process-intro { grid-template-columns: 1fr; }
@@ -139,9 +126,8 @@
   <div class="cursor" id="cursor"></div>
   <div class="cursor-ring" id="cursorRing"></div>
 
-  <!-- HERO -->
   <section class="hero">
-  <div class="hero-bg"></div>
+    <div class="hero-bg"></div>
     <div class="hero-overlay"></div>
     <div class="hero-content">
       <p class="hero-tag" id="hero-tag"></p>
@@ -154,7 +140,6 @@
     </div>
   </section>
 
-  <!-- ABOUT -->
   <section class="about">
     <p class="section-label">About</p>
     <div class="about-grid fade-item">
@@ -163,13 +148,11 @@
     </div>
   </section>
 
-  <!-- TIMELINE -->
   <section class="timeline">
     <p class="section-label">Timeline</p>
     <div id="timeline-list"></div>
   </section>
 
-  <!-- WORKS -->
   <section class="works">
     <div class="works-inner">
       <div class="works-header fade-item">
@@ -179,7 +162,6 @@
     </div>
   </section>
 
-  <!-- MODAL -->
   <div class="modal-overlay" id="modal">
     <div class="modal-box">
       <button class="modal-close" id="modal-close">✕ CLOSE</button>
@@ -189,7 +171,6 @@
     </div>
   </div>
 
-  <!-- PROCESS -->
   <section class="process">
     <p class="section-label">How I Work</p>
     <div class="process-intro fade-item">
@@ -199,7 +180,6 @@
     <div class="process-steps" id="process-steps"></div>
   </section>
 
-  <!-- CONTACT -->
   <section class="contact">
     <p class="contact-label">Contact</p>
     <h2 class="contact-headline fade-item" id="contact-headline"></h2>
@@ -208,14 +188,13 @@
     <p class="contact-note" id="contact-note"></p>
   </section>
 
-  <!-- FOOTER -->
   <footer>
     <div class="footer-logo" id="footer-logo"></div>
     <div class="footer-copy" id="footer-copy"></div>
   </footer>
 
   <script>
-    // ── 커서 ──
+    // 커서
     const cursor = document.getElementById('cursor');
     const ring = document.getElementById('cursorRing');
     let mx=0, my=0, rx=0, ry=0;
@@ -226,17 +205,17 @@
       el.addEventListener('mouseleave',()=>{ ring.style.width='36px'; ring.style.height='36px'; });
     });
 
-    // ── 스크롤 옵저버 ──
+    // 스크롤 옵저버
     const observer = new IntersectionObserver(entries=>{
       entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); });
     }, { threshold: 0.1 });
     document.querySelectorAll('.fade-item').forEach(el => observer.observe(el));
 
-    // ── 파싱 헬퍼 ──
+    // 파싱
     const parseHL = t => t.replace(/<([^>]+)>/g, '<span class="hl">$1</span>');
     const parseEM = t => t.replace(/<([^>]+)>/g, '<span class="em">$1</span>');
 
-    // ── 노션 API ──
+    // API
     async function fetchDB(db) {
       const r = await fetch('/api/notion?db='+db);
       const d = await r.json();
@@ -246,7 +225,7 @@
     function val(row, key) {
       const p = row.properties[key];
       if (!p) return '';
-      if (p.title)   return p.title.map(t=>t.plain_text).join('');
+      if (p.title) return p.title.map(t=>t.plain_text).join('');
       if (p.rich_text) return p.rich_text.map(t=>t.plain_text).join('');
       if (p.number !== undefined && p.number !== null) return p.number;
       if (p.checkbox !== undefined) return p.checkbox;
@@ -258,38 +237,82 @@
       return rows.find(r => String(val(r, key)) === String(value)) || null;
     }
 
-    // ── TITLE ──
-   async function loadTitle() {
-  try {
-    const rows = await fetchDB('title');
-    const get = k => { const r = find(rows,'key',k); return r ? val(r,'value') : ''; };
-    const tag=get('tag'), name=get('name'), sub=get('sub');
-    const heroVideo=get('hero_video');
+    // 블록 렌더링 (async - column_list 지원)
+    async function renderBlocks(blocks) {
+      let html = '';
+      for (const block of blocks) {
+        const type = block.type;
+        const c = block[type];
+        if (!c) continue;
+        const txt = arr => (arr||[]).map(t=>t.plain_text).join('');
 
-    if (tag) document.getElementById('hero-tag').textContent = tag;
-    if (name) {
-      const p = name.split(' ');
-      document.getElementById('hero-name').innerHTML = p[0]+'<br><span class="accent">'+p.slice(1).join(' ')+'</span>';
-    }
-    if (sub) document.getElementById('hero-sub').textContent = sub;
-
-    // 유튜브 URL에서 ID 추출
-    if (heroVideo) {
-      const match = heroVideo.match(/[?&]v=([^&]+)/);
-      const videoId = match ? match[1] : null;
-      if (videoId) {
-        const iframe = document.createElement('iframe');
-        iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1`;
-        iframe.frameBorder = '0';
-        iframe.allow = 'autoplay; fullscreen';
-        iframe.style.cssText = 'position:absolute;top:50%;left:50%;width:177.78vh;min-width:100%;height:56.25vw;min-height:100%;transform:translate(-50%,-50%);pointer-events:none;opacity:0.6;';
-        document.querySelector('.hero-bg').appendChild(iframe);
+        if (type === 'paragraph') {
+          html += `<p>${txt(c.rich_text)}</p>`;
+        } else if (type === 'heading_1') {
+          html += `<h2>${txt(c.rich_text)}</h2>`;
+        } else if (type === 'heading_2') {
+          html += `<h3>${txt(c.rich_text)}</h3>`;
+        } else if (type === 'image') {
+          const url = c.type === 'file' ? c.file.url : c.external.url;
+          html += `<img src="${url}" alt="">`;
+        } else if (type === 'bulleted_list_item') {
+          html += `<li>${txt(c.rich_text)}</li>`;
+        } else if (type === 'divider') {
+          html += `<hr style="border:none;border-top:1px solid rgba(255,255,255,0.1);margin:2rem 0">`;
+        } else if (type === 'column_list') {
+          const colRes = await fetch('/api/notion?pageId='+block.id);
+          const colData = await colRes.json();
+          let colHtml = '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.5rem;margin:1.5rem 0">';
+          for (const col of (colData.results||[])) {
+            const colBlocksRes = await fetch('/api/notion?pageId='+col.id);
+            const colBlockData = await colBlocksRes.json();
+            colHtml += '<div>';
+            for (const b of (colBlockData.results||[])) {
+              const bc = b[b.type];
+              if (!bc) continue;
+              const t = arr => (arr||[]).map(x=>x.plain_text).join('');
+              if (b.type === 'paragraph') colHtml += `<p style="margin-bottom:0.8rem">${t(bc.rich_text)}</p>`;
+              else if (b.type === 'image') { const u = bc.type==='file' ? bc.file.url : bc.external.url; colHtml += `<img src="${u}" alt="" style="width:100%;margin-bottom:0.8rem">`; }
+              else if (b.type === 'heading_1') colHtml += `<h2 style="font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:var(--white);margin-bottom:0.5rem">${t(bc.rich_text)}</h2>`;
+              else if (b.type === 'heading_2') colHtml += `<h3 style="font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:var(--white);margin-bottom:0.5rem">${t(bc.rich_text)}</h3>`;
+            }
+            colHtml += '</div>';
+          }
+          colHtml += '</div>';
+          html += colHtml;
+        }
       }
+      return html;
     }
-  } catch(e) { console.error('TITLE',e); }
-}
 
-    // ── ABOUT ──
+    // TITLE
+    async function loadTitle() {
+      try {
+        const rows = await fetchDB('title');
+        const get = k => { const r = find(rows,'key',k); return r ? val(r,'value') : ''; };
+        const tag=get('tag'), name=get('name'), sub=get('sub'), heroVideo=get('hero_video');
+        if (tag) document.getElementById('hero-tag').textContent = tag;
+        if (name) {
+          const p = name.split(' ');
+          document.getElementById('hero-name').innerHTML = p[0]+'<br><span class="accent">'+p.slice(1).join(' ')+'</span>';
+        }
+        if (sub) document.getElementById('hero-sub').textContent = sub;
+        if (heroVideo) {
+          const match = heroVideo.match(/[?&]v=([^&]+)/);
+          const videoId = match ? match[1] : null;
+          if (videoId) {
+            const iframe = document.createElement('iframe');
+            iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1`;
+            iframe.frameBorder = '0';
+            iframe.allow = 'autoplay; fullscreen';
+            iframe.style.cssText = 'position:absolute;top:50%;left:50%;width:177.78vh;min-width:100%;height:56.25vw;min-height:100%;transform:translate(-50%,-50%);pointer-events:none;opacity:0.6;';
+            document.querySelector('.hero-bg').appendChild(iframe);
+          }
+        }
+      } catch(e) { console.error('TITLE',e); }
+    }
+
+    // ABOUT
     async function loadAbout() {
       try {
         const rows = await fetchDB('about');
@@ -304,7 +327,7 @@
       } catch(e) { console.error('ABOUT',e); }
     }
 
-    // ── TIMELINE ──
+    // TIMELINE
     async function loadTimeline() {
       try {
         const rows = await fetchDB('timeline');
@@ -321,7 +344,7 @@
       } catch(e) { console.error('TIMELINE',e); }
     }
 
-    // ── WORKS ──
+    // WORKS
     async function loadWorks() {
       try {
         const rows = await fetchDB('works');
@@ -346,45 +369,7 @@
       } catch(e) { console.error('WORKS',e); }
     }
 
-    // ── MODAL ──
-    async function renderBlocks(blocks) {
-      let html = '';
-      for (const block of blocks) {
-        const type = block.type, c = block[type];
-        if (!c) continue;
-        const txt = arr => (arr||[]).map(t=>t.plain_text).join('');
-        if (type==='paragraph') html+=`<p>${txt(c.rich_text)}</p>`;
-        else if (type==='heading_1') html+=`<h2>${txt(c.rich_text)}</h2>`;
-        else if (type==='heading_2') html+=`<h3>${txt(c.rich_text)}</h3>`;
-        else if (type==='image') { const url=c.type==='file'?c.file.url:c.external.url; html+=`<img src="${url}" alt="">`; }
-        else if (type==='bulleted_list_item') html+=`<li>${txt(c.rich_text)}</li>`;
-        else if (type==='divider') html+=`<hr style="border:none;border-top:1px solid rgba(255,255,255,0.1);margin:2rem 0">`;
-        else if (type==='column_list') {
-          const colRes = await fetch('/api/notion?pageId='+block.id);
-          const colData = await colRes.json();
-          let colHtml = '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.5rem;margin:1.5rem 0">';
-          for (const col of colData.results||[]) {
-            const colBlocksRes = await fetch('/api/notion?pageId='+col.id);
-            const colBlockData = await colBlocksRes.json();
-            colHtml += '<div>';
-            for (const b of colBlockData.results||[]) {
-              const bc = b[b.type];
-              if (!bc) continue;
-              const t = arr => (arr||[]).map(x=>x.plain_text).join('');
-              if (b.type==='paragraph') colHtml+=`<p style="margin-bottom:0.8rem">${t(bc.rich_text)}</p>`;
-              else if (b.type==='image') { const u=bc.type==='file'?bc.file.url:bc.external.url; colHtml+=`<img src="${u}" alt="" style="width:100%;margin-bottom:0.8rem">`; }
-              else if (b.type==='heading_1') colHtml+=`<h2 style="font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:var(--white);margin-bottom:0.5rem">${t(bc.rich_text)}</h2>`;
-              else if (b.type==='heading_2') colHtml+=`<h3 style="font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:var(--white);margin-bottom:0.5rem">${t(bc.rich_text)}</h3>`;
-            }
-            colHtml += '</div>';
-          }
-          colHtml += '</div>';
-          html += colHtml;
-        }
-      }
-      return html;
-    }
-
+    // MODAL
     async function openModal(pageId, title, meta) {
       document.getElementById('modal-title').textContent = title;
       document.getElementById('modal-meta').textContent = meta;
@@ -396,15 +381,23 @@
         const d = await r.json();
         const html = await renderBlocks(d.results||[]);
         document.getElementById('modal-body').innerHTML = html || '<p>내용이 없습니다.</p>';
-      } catch(e) { document.getElementById('modal-body').innerHTML='<p>로드 실패</p>'; }
+      } catch(e) {
+        document.getElementById('modal-body').innerHTML = '<p>로드 실패</p>';
+      }
     }
-        document.getElementById('modal-body').innerHTML = html || '<p>내용이 없습니다.</p>';
-      } catch(e) { document.getElementById('modal-body').innerHTML='<p>로드 실패</p>'; }
-    }
-    document.getElementById('modal-close').addEventListener('click', ()=>{ document.getElementById('modal').classList.remove('active'); document.body.style.overflow=''; });
-    document.getElementById('modal').addEventListener('click', e=>{ if(e.target.id==='modal'){ document.getElementById('modal').classList.remove('active'); document.body.style.overflow=''; } });
 
-    // ── PROCESS ──
+    document.getElementById('modal-close').addEventListener('click', ()=>{
+      document.getElementById('modal').classList.remove('active');
+      document.body.style.overflow = '';
+    });
+    document.getElementById('modal').addEventListener('click', e=>{
+      if (e.target.id === 'modal') {
+        document.getElementById('modal').classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    });
+
+    // PROCESS
     async function loadProcess() {
       try {
         const rows = await fetchDB('process');
@@ -427,7 +420,7 @@
       } catch(e) { console.error('PROCESS',e); }
     }
 
-    // ── CONTACT ──
+    // CONTACT
     async function loadContact() {
       try {
         const rows = await fetchDB('contact');
@@ -442,7 +435,7 @@
       } catch(e) { console.error('CONTACT',e); }
     }
 
-    // ── FOOTER ──
+    // FOOTER
     async function loadFooter() {
       try {
         const rows = await fetchDB('footer');
@@ -453,7 +446,7 @@
       } catch(e) { console.error('FOOTER',e); }
     }
 
-    // ── 전체 로드 ──
+    // 전체 로드
     loadTitle();
     loadAbout();
     loadTimeline();
