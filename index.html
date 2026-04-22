@@ -289,6 +289,21 @@
   } catch(e) { console.error('TITLE',e); }
 }
 
+    // ── ABOUT ──
+    async function loadAbout() {
+      try {
+        const rows = await fetchDB('about');
+        const get = k => { const r = find(rows,'key',k); return r ? val(r,'value') : ''; };
+        const headline = get('headline');
+        if (headline) document.getElementById('about-headline').innerHTML = parseHL(headline);
+        let html = '';
+        ['body1','body2','body3','body4'].forEach(k=>{ const v=get(k); if(v) html+=`<p>${parseEM(v)}</p>`; });
+        const fl = get('footline');
+        if (fl) html += `<p class="about-footline">${fl}</p>`;
+        document.getElementById('about-body').innerHTML = html;
+      } catch(e) { console.error('ABOUT',e); }
+    }
+
     // ── TIMELINE ──
     async function loadTimeline() {
       try {
