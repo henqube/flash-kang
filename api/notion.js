@@ -36,6 +36,12 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Invalid db parameter' });
   }
 
+  // order 속성 있는 DB만 정렬 적용
+  const sortedDbs = ['timeline', 'process', 'works'];
+  const body = sortedDbs.includes(db)
+    ? { sorts: [{ property: 'order', direction: 'ascending' }] }
+    : {};
+
   try {
     const response = await fetch(`https://api.notion.com/v1/databases/${databaseId}/query`, {
       method: 'POST',
@@ -44,9 +50,7 @@ export default async function handler(req, res) {
         'Notion-Version': '2022-06-28',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-  sorts: [{ property: 'order', direction: 'ascending' }]
-}),
+      body: JSON.stringify(body),
     });
 
     const data = await response.json();
