@@ -262,7 +262,7 @@
         } else if (type === 'column_list') {
           const colRes = await fetch('/api/notion?pageId='+block.id);
           const colData = await colRes.json();
-          let colHtml = '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.5rem;margin:1.5rem 0">';
+          let colHtml = `<div style="display:grid;grid-template-columns:repeat(${colData.results.length},1fr);gap:1.5rem;margin:1.5rem 0">`;
           for (const col of (colData.results||[])) {
             const colBlocksRes = await fetch('/api/notion?pageId='+col.id);
             const colBlockData = await colBlocksRes.json();
