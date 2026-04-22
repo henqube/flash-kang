@@ -366,6 +366,29 @@
           else if (type==='heading_2') html+=`<h3>${txt(c.rich_text)}</h3>`;
           else if (type==='image') { const url=c.type==='file'?c.file.url:c.external.url; html+=`<img src="${url}" alt="">`; }
           else if (type==='bulleted_list_item') html+=`<li>${txt(c.rich_text)}</li>`;
+          else if (type==='divider') html+=`<hr style="border:none;border-top:1px solid rgba(255,255,255,0.1);margin:2rem 0">`;
+else if (type==='column_list') {
+  const colRes = await fetch('/api/notion?pageId='+block.id);
+  const colData = await colRes.json();
+  let colHtml = '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.5rem;margin:1.5rem 0">';
+  for (const col of colData.results||[]) {
+    const colBlocks = await fetch('/api/notion?pageId='+col.id);
+    const colBlockData = await colBlocks.json();
+    colHtml += '<div>';
+    for (const b of colBlockData.results||[]) {
+      const bc = b[b.type];
+      if (!bc) continue;
+      const t = arr => (arr||[]).map(x=>x.plain_text).join('');
+      if (b.type==='paragraph') colHtml+=`<p style="margin-bottom:0.8rem">${t(bc.rich_text)}</p>`;
+      else if (b.type==='image') { const u=bc.type==='file'?bc.file.url:bc.external.url; colHtml+=`<img src="${u}" alt="" style="width:100%;margin-bottom:0.8rem">`; }
+      else if (b.type==='heading_1') colHtml+=`<h2 style="font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:var(--white);margin-bottom:0.5rem">${t(bc.rich_text)}</h2>`;
+      else if (b.type==='heading_2') colHtml+=`<h3 style="font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:var(--white);margin-bottom:0.5rem">${t(bc.rich_text)}</h3>`;
+    }
+    colHtml += '</div>';
+  }
+  colHtml += '</div>';
+  html += colHtml;
+}
         });
         document.getElementById('modal-body').innerHTML = html || '<p>내용이 없습니다.</p>';
       } catch(e) { document.getElementById('modal-body').innerHTML='<p>로드 실패</p>'; }
