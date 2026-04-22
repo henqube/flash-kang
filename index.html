@@ -267,34 +267,35 @@
     }
 
     // ── TITLE ──
-    async function loadTitle() {
-      try {
-        const rows = await fetchDB('title');
-        const get = k => { const r = find(rows,'key',k); return r ? val(r,'value') : ''; };
-        const tag=get('tag'), name=get('name'), sub=get('sub');
-        if (tag) document.getElementById('hero-tag').textContent = tag;
-        if (name) {
-          const p = name.split(' ');
-          document.getElementById('hero-name').innerHTML = p[0]+'<br><span class="accent">'+p.slice(1).join(' ')+'</span>';
-        }
-        if (sub) document.getElementById('hero-sub').textContent = sub;
-      } catch(e) { console.error('TITLE',e); }
-    }
+   async function loadTitle() {
+  try {
+    const rows = await fetchDB('title');
+    const get = k => { const r = find(rows,'key',k); return r ? val(r,'value') : ''; };
+    const tag=get('tag'), name=get('name'), sub=get('sub');
+    const heroVideo=get('hero_video');
 
-    // ── ABOUT ──
-    async function loadAbout() {
-      try {
-        const rows = await fetchDB('about');
-        const get = k => { const r = find(rows,'key',k); return r ? val(r,'value') : ''; };
-        const headline = get('headline');
-        if (headline) document.getElementById('about-headline').innerHTML = parseHL(headline);
-        let html = '';
-        ['body1','body2','body3','body4'].forEach(k=>{ const v=get(k); if(v) html+=`<p>${parseEM(v)}</p>`; });
-        const fl = get('footline');
-        if (fl) html += `<p class="about-footline">${fl}</p>`;
-        document.getElementById('about-body').innerHTML = html;
-      } catch(e) { console.error('ABOUT',e); }
+    if (tag) document.getElementById('hero-tag').textContent = tag;
+    if (name) {
+      const p = name.split(' ');
+      document.getElementById('hero-name').innerHTML = p[0]+'<br><span class="accent">'+p.slice(1).join(' ')+'</span>';
     }
+    if (sub) document.getElementById('hero-sub').textContent = sub;
+
+    // 유튜브 URL에서 ID 추출
+    if (heroVideo) {
+      const match = heroVideo.match(/[?&]v=([^&]+)/);
+      const videoId = match ? match[1] : null;
+      if (videoId) {
+        const iframe = document.createElement('iframe');
+        iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1`;
+        iframe.frameBorder = '0';
+        iframe.allow = 'autoplay; fullscreen';
+        iframe.style.cssText = 'position:absolute;top:50%;left:50%;width:177.78vh;min-width:100%;height:56.25vw;min-height:100%;transform:translate(-50%,-50%);pointer-events:none;opacity:0.6;';
+        document.querySelector('.hero-bg').appendChild(iframe);
+      }
+    }
+  } catch(e) { console.error('TITLE',e); }
+}
 
     // ── TIMELINE ──
     async function loadTimeline() {
