@@ -6,74 +6,77 @@
   <title>Flash Kang — Game Artist</title>
   <meta name="description" content="2002년 스틱 하나에서 시작한 게임 아티스트. OCTOPO VFX 총괄 리드." />
   <meta name="keywords" content="Flash Kang, OCTOPO, VFX, 게임 아티스트, 2D VFX, 핸드드로잉, 브롤스타즈, 데스티니차일드, 강성훈" />
-  <meta property="og:title" content="Flash Kang — Game Artist" />
-  <meta property="og:description" content="OCTOPO Studio VFX Artist. Hand-drawn. Since 2002." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+KR:wght@300;400;700&family=Space+Mono&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
     :root { --black: #0a0a0a; --white: #f0ede8; --accent: #ff3c00; }
-    html, body { width: 100%; height: 100%; background: var(--black); color: var(--white); font-family: 'Noto Sans KR', sans-serif; overflow-x: hidden; cursor: none; }
+    html, body { width: 100%; background: var(--black); color: var(--white); font-family: 'Noto Sans KR', sans-serif; overflow-x: hidden; cursor: none; }
 
-    .cursor { position: fixed; width: 10px; height: 10px; background: var(--accent); border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); }
-    .cursor-ring { position: fixed; width: 36px; height: 36px; border: 1px solid rgba(255,60,0,0.5); border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%, -50%); transition: width 0.2s, height 0.2s; }
+    /* CURSOR */
+    .cursor { position: fixed; width: 10px; height: 10px; background: var(--accent); border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); }
+    .cursor-ring { position: fixed; width: 36px; height: 36px; border: 1px solid rgba(255,60,0,0.5); border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%,-50%); transition: width 0.2s, height 0.2s; }
 
     /* HERO */
     .hero { position: relative; width: 100vw; height: 100vh; overflow: hidden; display: flex; align-items: flex-end; }
-    .hero-placeholder { position: absolute; inset: 0; background: repeating-linear-gradient(45deg, transparent, transparent 40px, rgba(255,60,0,0.03) 40px, rgba(255,60,0,0.03) 80px), linear-gradient(160deg, #111 0%, #0a0a0a 60%, #1a0800 100%); display: flex; align-items: center; justify-content: center; }
-    .hero-placeholder span { font-family: 'Space Mono', monospace; font-size: 0.75rem; color: rgba(255,255,255,0.15); letter-spacing: 0.2em; text-transform: uppercase; }
-    .hero-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.3) 50%, rgba(10,10,10,0.1) 100%); }
+    .hero-bg { position: absolute; inset: 0; background: repeating-linear-gradient(45deg, transparent, transparent 40px, rgba(255,60,0,0.03) 40px, rgba(255,60,0,0.03) 80px), linear-gradient(160deg, #111 0%, #0a0a0a 60%, #1a0800 100%); display: flex; align-items: center; justify-content: center; }
+    .hero-bg span { font-family: 'Space Mono', monospace; font-size: 0.75rem; color: rgba(255,255,255,0.1); letter-spacing: 0.2em; }
+    .hero-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.2) 60%, transparent 100%); }
     .hero-content { position: relative; z-index: 2; padding: 0 6vw 6vh; width: 100%; }
     .hero-tag { font-family: 'Space Mono', monospace; font-size: 0.7rem; letter-spacing: 0.3em; color: var(--accent); text-transform: uppercase; margin-bottom: 1rem; opacity: 0; animation: fadeUp 0.8s 0.3s forwards; }
     .hero-name { font-family: 'Bebas Neue', sans-serif; font-size: clamp(5rem, 13vw, 14rem); line-height: 0.88; color: var(--white); opacity: 0; animation: fadeUp 0.9s 0.5s forwards; }
     .hero-name .accent { color: var(--accent); }
-    .hero-sub { margin-top: 1.5rem; font-size: clamp(0.85rem, 1.2vw, 1rem); font-weight: 300; color: rgba(240,237,232,0.6); letter-spacing: 0.05em; opacity: 0; animation: fadeUp 0.9s 0.75s forwards; }
-    .hero-slogan { margin-top: 0.5rem; font-family: 'Space Mono', monospace; font-size: 0.75rem; color: rgba(255,60,0,0.7); letter-spacing: 0.15em; opacity: 0; animation: fadeUp 0.9s 0.9s forwards; }
+    .hero-sub { margin-top: 1.5rem; font-size: clamp(0.85rem, 1.2vw, 1rem); font-weight: 300; color: rgba(240,237,232,0.5); letter-spacing: 0.05em; opacity: 0; animation: fadeUp 0.9s 0.75s forwards; }
     .scroll-hint { position: absolute; bottom: 2.5rem; right: 6vw; z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 0.5rem; opacity: 0; animation: fadeIn 1s 1.5s forwards; }
-    .scroll-hint span { font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.25em; color: rgba(255,255,255,0.3); writing-mode: vertical-rl; }
+    .scroll-hint span { font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.25em; color: rgba(255,255,255,0.25); writing-mode: vertical-rl; }
     .scroll-line { width: 1px; height: 60px; background: linear-gradient(to bottom, var(--accent), transparent); animation: scrollPulse 2s 2s infinite; }
+
+    /* SECTION COMMON */
+    .section-label { font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 0.4em; color: var(--accent); text-transform: uppercase; margin-bottom: 3rem; }
+    .fade-item { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .fade-item.visible { opacity: 1; transform: translateY(0); }
 
     /* ABOUT */
     .about { padding: 14vh 6vw; max-width: 1200px; margin: 0 auto; }
-    .section-label { font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 0.4em; color: var(--accent); text-transform: uppercase; margin-bottom: 3rem; }
     .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6vw; align-items: start; }
     .about-headline { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.5rem, 5vw, 5rem); line-height: 1.0; color: var(--white); }
-    .about-headline .highlight { color: var(--accent); }
+    .about-headline .hl { color: var(--accent); }
     .about-body { font-size: 0.95rem; line-height: 1.9; color: rgba(240,237,232,0.65); font-weight: 300; }
     .about-body p + p { margin-top: 1.2rem; }
-    .about-body .emphasize { color: var(--white); font-weight: 700; }
+    .about-body .em { color: var(--white); font-weight: 700; }
     .about-footline { margin-top: 2rem; font-family: 'Space Mono', monospace; font-size: 0.75rem; color: rgba(255,60,0,0.7); letter-spacing: 0.1em; }
 
     /* TIMELINE */
     .timeline { padding: 8vh 6vw; border-top: 1px solid rgba(255,255,255,0.06); max-width: 1200px; margin: 0 auto; }
-    .timeline-item { display: grid; grid-template-columns: 120px 1fr; gap: 3vw; padding: 2rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); transition: border-color 0.3s; }
+    .timeline-item { display: grid; grid-template-columns: 140px 1fr; gap: 3vw; padding: 2rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); transition: border-color 0.3s; }
     .timeline-item:hover { border-color: rgba(255,60,0,0.3); }
-    .timeline-year { font-family: 'Bebas Neue', sans-serif; font-size: 2.2rem; color: rgba(255,255,255,0.15); transition: color 0.3s; }
+    .timeline-year { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; color: rgba(255,255,255,0.15); transition: color 0.3s; line-height: 1.2; }
     .timeline-item:hover .timeline-year { color: var(--accent); }
-    .timeline-desc { font-size: 0.9rem; color: rgba(240,237,232,0.55); line-height: 1.7; padding-top: 0.4rem; }
-    .timeline-desc strong { color: var(--white); display: block; margin-bottom: 0.2rem; }
+    .timeline-desc { font-size: 0.9rem; color: rgba(240,237,232,0.55); line-height: 1.7; padding-top: 0.3rem; }
+    .timeline-desc strong { color: var(--white); display: block; margin-bottom: 0.2rem; font-size: 1rem; }
 
     /* WORKS */
     .works { padding: 14vh 6vw; border-top: 1px solid rgba(255,255,255,0.06); }
-    .works-header { max-width: 1200px; margin: 0 auto 5rem; display: flex; justify-content: space-between; align-items: flex-end; }
+    .works-inner { max-width: 1200px; margin: 0 auto; }
+    .works-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 4rem; }
     .works-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.5rem, 5vw, 5rem); color: var(--white); }
     .works-note { font-family: 'Space Mono', monospace; font-size: 0.65rem; color: rgba(255,255,255,0.25); text-align: right; line-height: 1.6; }
-    .works-grid { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+    .works-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
     .work-card { position: relative; aspect-ratio: 4/5; background: #111; overflow: hidden; cursor: none; }
+    .work-card-bg { position: absolute; inset: 0; background: linear-gradient(135deg, #1a0500, #0d0d0d); display: flex; align-items: center; justify-content: center; }
+    .work-card-bg span { font-family: 'Space Mono', monospace; font-size: 0.6rem; color: rgba(255,255,255,0.08); letter-spacing: 0.15em; text-align: center; padding: 0 1rem; }
     .work-card-thumb { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-    .work-card-placeholder { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #1a0500, #0d0d0d); }
-    .work-card-placeholder span { font-family: 'Space Mono', monospace; font-size: 0.6rem; color: rgba(255,255,255,0.1); letter-spacing: 0.2em; }
     .work-card-inner { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; padding: 1.5rem; background: linear-gradient(to top, rgba(10,10,10,0.92) 0%, transparent 60%); opacity: 0; transition: opacity 0.4s; }
     .work-card:hover .work-card-inner { opacity: 1; }
-    .work-title-card { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; color: var(--white); }
-    .work-meta { font-family: 'Space Mono', monospace; font-size: 0.6rem; color: var(--accent); letter-spacing: 0.2em; margin-top: 0.3rem; }
-    .work-open-btn { margin-top: 0.8rem; display: inline-block; padding: 0.4rem 1rem; border: 1px solid rgba(255,255,255,0.3); font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.15em; color: var(--white); transition: border-color 0.3s; }
-    .work-card:hover .work-open-btn { border-color: var(--accent); }
+    .work-card-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; color: var(--white); }
+    .work-card-meta { font-family: 'Space Mono', monospace; font-size: 0.6rem; color: var(--accent); letter-spacing: 0.15em; margin-top: 0.3rem; }
+    .work-card-btn { margin-top: 0.8rem; display: inline-block; padding: 0.4rem 1rem; border: 1px solid rgba(255,255,255,0.3); font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.15em; color: var(--white); transition: border-color 0.3s; }
+    .work-card:hover .work-card-btn { border-color: var(--accent); }
 
     /* MODAL */
-    .modal-overlay { position: fixed; inset: 0; z-index: 1000; background: rgba(10,10,10,0.95); display: none; align-items: flex-start; justify-content: center; overflow-y: auto; padding: 4rem 2rem; }
+    .modal-overlay { position: fixed; inset: 0; z-index: 1000; background: rgba(10,10,10,0.96); display: none; justify-content: center; overflow-y: auto; padding: 4rem 2rem; }
     .modal-overlay.active { display: flex; }
-    .modal-content { width: 100%; max-width: 800px; background: #111; padding: 3rem; position: relative; }
+    .modal-box { width: 100%; max-width: 800px; background: #111; padding: 3rem; position: relative; height: fit-content; }
     .modal-close { position: absolute; top: 1.5rem; right: 1.5rem; font-family: 'Space Mono', monospace; font-size: 0.7rem; color: rgba(255,255,255,0.4); cursor: none; letter-spacing: 0.2em; background: none; border: none; transition: color 0.3s; }
     .modal-close:hover { color: var(--accent); }
     .modal-title { font-family: 'Bebas Neue', sans-serif; font-size: 3rem; color: var(--white); margin-bottom: 0.5rem; }
@@ -81,21 +84,23 @@
     .modal-body { font-size: 0.9rem; line-height: 1.9; color: rgba(240,237,232,0.7); }
     .modal-body img { width: 100%; margin: 1.5rem 0; display: block; }
     .modal-body p { margin-bottom: 1rem; }
-    .modal-loading { font-family: 'Space Mono', monospace; font-size: 0.7rem; color: rgba(255,255,255,0.3); letter-spacing: 0.2em; text-align: center; padding: 3rem 0; }
+    .modal-body h2 { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; color: var(--white); margin: 2rem 0 1rem; }
+    .modal-body h3 { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; color: var(--white); margin: 1.5rem 0 0.8rem; }
+    .modal-body li { padding-left: 1rem; border-left: 2px solid var(--accent); margin: 0.5rem 0; }
 
     /* PROCESS */
     .process { padding: 14vh 6vw; border-top: 1px solid rgba(255,255,255,0.06); max-width: 1200px; margin: 0 auto; }
-    .process-intro { display: grid; grid-template-columns: 1fr 1fr; gap: 6vw; margin-bottom: 6rem; }
+    .process-intro { display: grid; grid-template-columns: 1fr 1fr; gap: 6vw; margin-bottom: 4rem; align-items: start; }
     .process-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.5rem, 5vw, 5rem); color: var(--white); line-height: 1.0; }
-    .process-desc { font-size: 0.9rem; color: rgba(240,237,232,0.55); line-height: 1.9; font-weight: 300; padding-top: 0.5rem; }
+    .process-desc { font-size: 0.9rem; color: rgba(240,237,232,0.55); line-height: 1.9; font-weight: 300; }
     .process-steps { display: grid; grid-template-columns: repeat(5, 1fr); gap: 2px; }
-    .process-step { padding: 2.5rem 2rem; background: #111; position: relative; overflow: hidden; transition: background 0.3s; }
+    .process-step { padding: 2.5rem 1.5rem; background: #111; position: relative; overflow: hidden; transition: background 0.3s; }
     .process-step:hover { background: #161616; }
     .process-step::before { content: ''; position: absolute; top: 0; left: 0; width: 2px; height: 0; background: var(--accent); transition: height 0.4s; }
     .process-step:hover::before { height: 100%; }
-    .step-num { font-family: 'Bebas Neue', sans-serif; font-size: 4rem; color: rgba(255,255,255,0.05); line-height: 1; margin-bottom: 1rem; }
-    .step-title { font-family: 'Space Mono', monospace; font-size: 0.7rem; letter-spacing: 0.2em; color: var(--accent); text-transform: uppercase; margin-bottom: 0.8rem; }
-    .step-desc { font-size: 0.85rem; color: rgba(240,237,232,0.5); line-height: 1.7; font-weight: 300; }
+    .step-num { font-family: 'Bebas Neue', sans-serif; font-size: 3.5rem; color: rgba(255,255,255,0.05); line-height: 1; margin-bottom: 1rem; }
+    .step-title { font-family: 'Space Mono', monospace; font-size: 0.65rem; letter-spacing: 0.2em; color: var(--accent); text-transform: uppercase; margin-bottom: 0.8rem; }
+    .step-desc { font-size: 0.82rem; color: rgba(240,237,232,0.5); line-height: 1.7; font-weight: 300; }
 
     /* CONTACT */
     .contact { padding: 16vh 6vw; border-top: 1px solid rgba(255,255,255,0.06); display: flex; flex-direction: column; align-items: center; text-align: center; }
@@ -104,8 +109,6 @@
     .contact-sub { font-size: 0.9rem; color: rgba(240,237,232,0.45); line-height: 1.8; max-width: 480px; font-weight: 300; margin-bottom: 3.5rem; }
     .contact-btn { display: inline-flex; align-items: center; gap: 1rem; padding: 1.1rem 2.5rem; border: 1px solid var(--accent); color: var(--white); text-decoration: none; font-family: 'Space Mono', monospace; font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase; transition: background 0.3s, color 0.3s; cursor: none; }
     .contact-btn:hover { background: var(--accent); color: var(--black); }
-    .contact-btn .arrow { transition: transform 0.3s; }
-    .contact-btn:hover .arrow { transform: translateX(4px); }
     .contact-note { margin-top: 2rem; font-family: 'Space Mono', monospace; font-size: 0.6rem; color: rgba(255,255,255,0.2); letter-spacing: 0.15em; }
 
     /* FOOTER */
@@ -113,19 +116,27 @@
     .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; color: rgba(255,255,255,0.2); }
     .footer-copy { font-family: 'Space Mono', monospace; font-size: 0.6rem; color: rgba(255,255,255,0.15); letter-spacing: 0.1em; }
 
+    /* LOADING */
+    .loading { font-family: 'Space Mono', monospace; font-size: 0.7rem; color: rgba(255,255,255,0.2); letter-spacing: 0.2em; padding: 2rem 0; }
+
+    /* ANIMATIONS */
     @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-    @keyframes scrollPulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+    @keyframes scrollPulse { 0%,100% { opacity: 0.3; } 50% { opacity: 1; } }
 
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      .process-steps { grid-template-columns: repeat(3, 1fr); }
+    }
     @media (max-width: 768px) {
       .about-grid, .process-intro { grid-template-columns: 1fr; }
       .works-grid { grid-template-columns: 1fr 1fr; }
-      .process-steps { grid-template-columns: 1fr 1fr; }
       .works-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
-      .timeline-item { grid-template-columns: 80px 1fr; }
+      .timeline-item { grid-template-columns: 100px 1fr; }
     }
     @media (max-width: 480px) {
-      .works-grid, .process-steps { grid-template-columns: 1fr; }
+      .works-grid { grid-template-columns: 1fr; }
+      .process-steps { grid-template-columns: 1fr 1fr; }
     }
   </style>
 </head>
@@ -136,13 +147,12 @@
 
   <!-- HERO -->
   <section class="hero">
-    <div class="hero-placeholder"><span>WORK IN PROGRESS</span></div>
+    <div class="hero-bg"><span>FLASH KANG</span></div>
     <div class="hero-overlay"></div>
     <div class="hero-content">
       <p class="hero-tag" id="hero-tag">OCTOPO STUDIO VFX ARTIST</p>
       <h1 class="hero-name" id="hero-name">FLASH<br><span class="accent">KANG</span></h1>
       <p class="hero-sub" id="hero-sub">sunghoon.kang@octopo.art</p>
-      <p class="hero-slogan" id="hero-slogan"></p>
     </div>
     <div class="scroll-hint">
       <span>Scroll</span>
@@ -153,53 +163,55 @@
   <!-- ABOUT -->
   <section class="about">
     <p class="section-label">About</p>
-    <div class="about-grid">
-      <div class="about-headline" id="about-headline">플래시는 죽지 않았다. <span class="highlight">나한테</span> 살아있다.</div>
-      <div class="about-body" id="about-body"><div class="modal-loading">Loading...</div></div>
+    <div class="about-grid fade-item">
+      <div class="about-headline" id="about-headline">플래시는 죽지 않았다. <span class="hl">나한테</span> 살아있다.</div>
+      <div class="about-body" id="about-body"><p class="loading">Loading...</p></div>
     </div>
   </section>
 
   <!-- TIMELINE -->
   <section class="timeline">
     <p class="section-label">Timeline</p>
-    <div class="timeline-list" id="timeline-list"><div class="modal-loading">Loading...</div></div>
+    <div id="timeline-list"><p class="loading">Loading...</p></div>
   </section>
 
   <!-- WORKS -->
   <section class="works">
-    <div class="works-header">
-      <h2 class="works-title">Works</h2>
-      <p class="works-note">작업물 일부는 NDA로<br>공개가 제한될 수 있습니다</p>
+    <div class="works-inner">
+      <div class="works-header fade-item">
+        <h2 class="works-title">Works</h2>
+        <p class="works-note">작업물 일부는 NDA로<br>공개가 제한될 수 있습니다</p>
+      </div>
+      <div class="works-grid" id="works-grid"><p class="loading">Loading...</p></div>
     </div>
-    <div class="works-grid" id="works-grid"><div class="modal-loading">Loading...</div></div>
   </section>
 
   <!-- MODAL -->
   <div class="modal-overlay" id="modal">
-    <div class="modal-content">
+    <div class="modal-box">
       <button class="modal-close" id="modal-close">✕ CLOSE</button>
       <div class="modal-title" id="modal-title"></div>
       <div class="modal-meta" id="modal-meta"></div>
-      <div class="modal-body" id="modal-body"><div class="modal-loading">Loading...</div></div>
+      <div class="modal-body" id="modal-body"></div>
     </div>
   </div>
 
   <!-- PROCESS -->
   <section class="process">
     <p class="section-label">How I Work</p>
-    <div class="process-intro">
+    <div class="process-intro fade-item">
       <h2 class="process-title" id="process-title">완성보다<br>과정이<br>중요하다</h2>
-      <p class="process-desc" id="process-desc"></p>
+      <p class="process-desc" id="process-desc"><span class="loading">Loading...</span></p>
     </div>
-    <div class="process-steps" id="process-steps"><div class="modal-loading">Loading...</div></div>
+    <div class="process-steps" id="process-steps"><p class="loading">Loading...</p></div>
   </section>
 
   <!-- CONTACT -->
   <section class="contact">
     <p class="contact-label">Contact</p>
-    <h2 class="contact-headline" id="contact-headline">함께<br>만들자</h2>
+    <h2 class="contact-headline fade-item" id="contact-headline">함께<br>만들자</h2>
     <p class="contact-sub" id="contact-sub"></p>
-    <a href="#" class="contact-btn" id="contact-btn" target="_blank">Instagram DM <span class="arrow">→</span></a>
+    <a href="#" class="contact-btn" id="contact-btn" target="_blank">Instagram DM <span>→</span></a>
     <p class="contact-note" id="contact-note"></p>
   </section>
 
@@ -210,205 +222,203 @@
   </footer>
 
   <script>
-    // 커서
+    // ── 커서 ──
     const cursor = document.getElementById('cursor');
     const ring = document.getElementById('cursorRing');
-    let mx=0,my=0,rx=0,ry=0;
-    document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.left=mx+'px';cursor.style.top=my+'px';});
-    function animateRing(){rx+=(mx-rx)*0.12;ry+=(my-ry)*0.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animateRing);}
-    animateRing();
+    let mx=0, my=0, rx=0, ry=0;
+    document.addEventListener('mousemove', e => {
+      mx=e.clientX; my=e.clientY;
+      cursor.style.left=mx+'px'; cursor.style.top=my+'px';
+    });
+    (function animRing(){ rx+=(mx-rx)*0.12; ry+=(my-ry)*0.12; ring.style.left=rx+'px'; ring.style.top=ry+'px'; requestAnimationFrame(animRing); })();
     document.querySelectorAll('a,button').forEach(el=>{
-      el.addEventListener('mouseenter',()=>{ring.style.width='60px';ring.style.height='60px';});
-      el.addEventListener('mouseleave',()=>{ring.style.width='36px';ring.style.height='36px';});
+      el.addEventListener('mouseenter',()=>{ ring.style.width='60px'; ring.style.height='60px'; });
+      el.addEventListener('mouseleave',()=>{ ring.style.width='36px'; ring.style.height='36px'; });
     });
 
-    // 파싱
-    function parseHeadline(t){return t.replace(/<([^>]+)>/g,'<span class="highlight">$1</span>');}
-    function parseBody(t){return t.replace(/<([^>]+)>/g,'<span class="emphasize">$1</span>');}
+    // ── 스크롤 옵저버 ──
+    const observer = new IntersectionObserver(entries=>{
+      entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-item').forEach(el => observer.observe(el));
 
-    // API
-    async function fetchNotion(db){
-      const r=await fetch('/api/notion?db='+db);
-      const d=await r.json();
-      return d.results||[];
+    // ── 파싱 헬퍼 ──
+    const parseHL = t => t.replace(/<([^>]+)>/g, '<span class="hl">$1</span>');
+    const parseEM = t => t.replace(/<([^>]+)>/g, '<span class="em">$1</span>');
+
+    // ── 노션 API ──
+    async function fetchDB(db) {
+      const r = await fetch('/api/notion?db='+db);
+      const d = await r.json();
+      return d.results || [];
     }
-    function getVal(row,key){
-      const p=row.properties[key];
-      if(!p) return '';
-      if(p.title) return p.title.map(t=>t.plain_text).join('');
-      if(p.rich_text) return p.rich_text.map(t=>t.plain_text).join('');
-      if(p.checkbox!==undefined) return p.checkbox;
-      if(p.files) return p.files[0]?.file?.url||p.files[0]?.external?.url||'';
+
+    function val(row, key) {
+      const p = row.properties[key];
+      if (!p) return '';
+      if (p.title)   return p.title.map(t=>t.plain_text).join('');
+      if (p.rich_text) return p.rich_text.map(t=>t.plain_text).join('');
+      if (p.number !== undefined && p.number !== null) return p.number;
+      if (p.checkbox !== undefined) return p.checkbox;
+      if (p.files && p.files.length) return p.files[0]?.file?.url || p.files[0]?.external?.url || '';
       return '';
     }
 
-    // TITLE
-    async function loadTitle(){
-      try{
-        const rows=await fetchNotion('title');
-        const get=k=>{const r=rows.find(r=>getVal(r,'key')===k);return r?getVal(r,'value'):'';}
-        const tag=get('tag'),name=get('name'),sub=get('sub'),slogan=get('slogan');
-        if(tag) document.getElementById('hero-tag').textContent=tag;
-        if(name){const p=name.split(' ');document.getElementById('hero-name').innerHTML=p[0]+'<br><span class="accent">'+p.slice(1).join(' ')+'</span>';}
-        if(sub) document.getElementById('hero-sub').textContent=sub;
-        if(slogan) document.getElementById('hero-slogan').textContent=slogan;
-      }catch(e){console.log('TITLE 실패',e);}
+    function find(rows, key, value) {
+      return rows.find(r => String(val(r, key)) === String(value)) || null;
     }
 
-    // ABOUT
-    async function loadAbout(){
-      try{
-        const rows=await fetchNotion('about');
-        const get=k=>{const r=rows.find(r=>getVal(r,'key')===k);return r?getVal(r,'value'):'';}
-        const headline=get('headline');
-        const bodies=['body1','body2','body3','body4'].map(get);
-        const footline=get('footline');
-        if(headline) document.getElementById('about-headline').innerHTML=parseHeadline(headline);
-        let html='';
-        bodies.forEach(b=>{if(b) html+=`<p>${parseBody(b)}</p>`;});
-        if(footline) html+=`<p class="about-footline">${footline}</p>`;
-        document.getElementById('about-body').innerHTML=html;
-      }catch(e){console.log('ABOUT 실패',e);}
+    // ── TITLE ──
+    async function loadTitle() {
+      try {
+        const rows = await fetchDB('title');
+        const get = k => { const r = find(rows,'key',k); return r ? val(r,'value') : ''; };
+        const tag=get('tag'), name=get('name'), sub=get('sub');
+        if (tag) document.getElementById('hero-tag').textContent = tag;
+        if (name) {
+          const p = name.split(' ');
+          document.getElementById('hero-name').innerHTML = p[0]+'<br><span class="accent">'+p.slice(1).join(' ')+'</span>';
+        }
+        if (sub) document.getElementById('hero-sub').textContent = sub;
+      } catch(e) { console.error('TITLE',e); }
     }
 
-    // TIMELINE
-    async function loadTimeline(){
-      try{
-        const rows=await fetchNotion('timeline');
-        const list=document.getElementById('timeline-list');
-        list.innerHTML='';
-        rows.forEach(row=>{
-          const year=getVal(row,'year'),title=getVal(row,'title'),text=getVal(row,'text');
-          list.innerHTML+=`<div class="timeline-item"><div class="timeline-year">${year}</div><div class="timeline-desc"><strong>${title}</strong>${text}</div></div>`;
-        });
-        // 스크롤 옵저버 재적용
-        list.querySelectorAll('.timeline-item').forEach(el=>{
-          el.style.opacity='0';el.style.transform='translateY(24px)';
-          el.style.transition='opacity 0.7s ease,transform 0.7s ease';
+    // ── ABOUT ──
+    async function loadAbout() {
+      try {
+        const rows = await fetchDB('about');
+        const get = k => { const r = find(rows,'key',k); return r ? val(r,'value') : ''; };
+        const headline = get('headline');
+        if (headline) document.getElementById('about-headline').innerHTML = parseHL(headline);
+        let html = '';
+        ['body1','body2','body3','body4'].forEach(k=>{ const v=get(k); if(v) html+=`<p>${parseEM(v)}</p>`; });
+        const fl = get('footline');
+        if (fl) html += `<p class="about-footline">${fl}</p>`;
+        document.getElementById('about-body').innerHTML = html;
+      } catch(e) { console.error('ABOUT',e); }
+    }
+
+    // ── TIMELINE ──
+    async function loadTimeline() {
+      try {
+        const rows = await fetchDB('timeline');
+        const list = document.getElementById('timeline-list');
+        list.innerHTML = '';
+        rows.forEach(row => {
+          const year=val(row,'year'), title=val(row,'title'), text=val(row,'text');
+          const el = document.createElement('div');
+          el.className = 'timeline-item fade-item';
+          el.innerHTML = `<div class="timeline-year">${year}</div><div class="timeline-desc"><strong>${title}</strong>${text}</div>`;
+          list.appendChild(el);
           observer.observe(el);
         });
-      }catch(e){console.log('TIMELINE 실패',e);}
+      } catch(e) { console.error('TIMELINE',e); }
     }
 
-    // WORKS
-    async function loadWorks(){
-      try{
-        const rows=await fetchNotion('works');
-        const grid=document.getElementById('works-grid');
-        grid.innerHTML='';
-        rows.forEach(row=>{
-          const title=getVal(row,'title'),thumb=getVal(row,'thumb'),text=getVal(row,'text'),visible=getVal(row,'visible');
-          if(visible===false) return;
-          const pageId=row.id;
-          const card=document.createElement('div');
-          card.className='work-card';
-          card.innerHTML=`
-            ${thumb?`<img class="work-card-thumb" src="${thumb}" alt="${title}">`:`<div class="work-card-placeholder"><span>${title.toUpperCase()}</span></div>`}
+    // ── WORKS ──
+    async function loadWorks() {
+      try {
+        const rows = await fetchDB('works');
+        const grid = document.getElementById('works-grid');
+        grid.innerHTML = '';
+        rows.forEach(row => {
+          const title=val(row,'title'), thumb=val(row,'thumb'), text=val(row,'text'), visible=val(row,'visible');
+          if (visible === false) return;
+          const el = document.createElement('div');
+          el.className = 'work-card fade-item';
+          el.innerHTML = `
+            ${thumb ? `<img class="work-card-thumb" src="${thumb}" alt="${title}">` : `<div class="work-card-bg"><span>${title}</span></div>`}
             <div class="work-card-inner">
-              <div class="work-title-card">${title}</div>
-              <div class="work-meta">${text}</div>
-              <div class="work-open-btn">VIEW WORK →</div>
+              <div class="work-card-title">${title}</div>
+              <div class="work-card-meta">${text}</div>
+              <div class="work-card-btn">VIEW WORK →</div>
             </div>`;
-          card.addEventListener('click',()=>openModal(pageId,title,text));
-          grid.appendChild(card);
-          card.style.opacity='0';card.style.transform='translateY(24px)';
-          card.style.transition='opacity 0.7s ease,transform 0.7s ease';
-          observer.observe(card);
-        });
-      }catch(e){console.log('WORKS 실패',e);}
-    }
-
-    // MODAL
-    async function openModal(pageId,title,meta){
-      document.getElementById('modal-title').textContent=title;
-      document.getElementById('modal-meta').textContent=meta;
-      document.getElementById('modal-body').innerHTML='<div class="modal-loading">Loading...</div>';
-      document.getElementById('modal').classList.add('active');
-      document.body.style.overflow='hidden';
-      try{
-        const r=await fetch('/api/notion?pageId='+pageId);
-        const d=await r.json();
-        const blocks=d.results||[];
-        let html='';
-        blocks.forEach(block=>{
-          const type=block.type,content=block[type];
-          if(!content) return;
-          const getText=arr=>arr?.map(t=>t.plain_text).join('')||'';
-          if(type==='paragraph') html+=`<p>${getText(content.rich_text)}</p>`;
-          else if(type==='heading_1') html+=`<h2 style="font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--white);margin:2rem 0 1rem">${getText(content.rich_text)}</h2>`;
-          else if(type==='heading_2') html+=`<h3 style="font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:var(--white);margin:1.5rem 0 0.8rem">${getText(content.rich_text)}</h3>`;
-          else if(type==='image'){const url=content.type==='file'?content.file.url:content.external.url;html+=`<img src="${url}" alt="">`;}
-          else if(type==='bulleted_list_item') html+=`<p style="padding-left:1rem;border-left:2px solid var(--accent);margin:0.5rem 0">• ${getText(content.rich_text)}</p>`;
-        });
-        document.getElementById('modal-body').innerHTML=html||'<p>내용이 없습니다.</p>';
-      }catch(e){document.getElementById('modal-body').innerHTML='<p>로드 실패</p>';}
-    }
-    document.getElementById('modal-close').addEventListener('click',()=>{document.getElementById('modal').classList.remove('active');document.body.style.overflow='';});
-    document.getElementById('modal').addEventListener('click',e=>{if(e.target===document.getElementById('modal')){document.getElementById('modal').classList.remove('active');document.body.style.overflow='';}});
-
-    // PROCESS
-    async function loadProcess(){
-      try{
-        const rows=await fetchNotion('process');
-        const get=k=>{const r=rows.find(r=>getVal(r,'order')===k);return r?{title:getVal(r,'title'),text:getVal(r,'text')}:null;}
-        const headline=get('headline');
-        if(headline){
-          document.getElementById('process-title').innerHTML=headline.title.replace(/\n/g,'<br>');
-          document.getElementById('process-desc').textContent=headline.text;
-        }
-        const steps=document.getElementById('process-steps');
-        steps.innerHTML='';
-        rows.filter(r=>getVal(r,'order')!=='headline').forEach(row=>{
-          const order=getVal(row,'order'),title=getVal(row,'title'),text=getVal(row,'text');
-          const el=document.createElement('div');
-          el.className='process-step';
-          el.innerHTML=`<div class="step-num">${order}</div><div class="step-title">${title}</div><div class="step-desc">${text}</div>`;
-          steps.appendChild(el);
-          el.style.opacity='0';el.style.transform='translateY(24px)';
-          el.style.transition='opacity 0.7s ease,transform 0.7s ease';
+          el.addEventListener('click', () => openModal(row.id, title, text));
+          grid.appendChild(el);
           observer.observe(el);
         });
-      }catch(e){console.log('PROCESS 실패',e);}
+      } catch(e) { console.error('WORKS',e); }
     }
 
-    // CONTACT
-    async function loadContact(){
-      try{
-        const rows=await fetchNotion('contact');
-        const get=k=>{const r=rows.find(r=>getVal(r,'key')===k);return r?getVal(r,'value'):'';}
-        const headline=get('headline'),sub=get('sub'),instagram=get('instagram');
-        if(headline) document.getElementById('contact-headline').innerHTML=headline.replace(/\n/g,'<br>');
-        if(sub) document.getElementById('contact-sub').textContent=sub;
-        if(instagram){
-          document.getElementById('contact-btn').href='https://instagram.com/'+instagram.replace('@','');
-          document.getElementById('contact-note').textContent=instagram+' · Instagram';
+    // ── MODAL ──
+    async function openModal(pageId, title, meta) {
+      document.getElementById('modal-title').textContent = title;
+      document.getElementById('modal-meta').textContent = meta;
+      document.getElementById('modal-body').innerHTML = '<p class="loading">Loading...</p>';
+      document.getElementById('modal').classList.add('active');
+      document.body.style.overflow = 'hidden';
+      try {
+        const r = await fetch('/api/notion?pageId='+pageId);
+        const d = await r.json();
+        let html = '';
+        (d.results||[]).forEach(block => {
+          const type=block.type, c=block[type];
+          if (!c) return;
+          const txt = arr => (arr||[]).map(t=>t.plain_text).join('');
+          if (type==='paragraph') html+=`<p>${txt(c.rich_text)}</p>`;
+          else if (type==='heading_1') html+=`<h2>${txt(c.rich_text)}</h2>`;
+          else if (type==='heading_2') html+=`<h3>${txt(c.rich_text)}</h3>`;
+          else if (type==='image') { const url=c.type==='file'?c.file.url:c.external.url; html+=`<img src="${url}" alt="">`; }
+          else if (type==='bulleted_list_item') html+=`<li>${txt(c.rich_text)}</li>`;
+        });
+        document.getElementById('modal-body').innerHTML = html || '<p>내용이 없습니다.</p>';
+      } catch(e) { document.getElementById('modal-body').innerHTML='<p>로드 실패</p>'; }
+    }
+    document.getElementById('modal-close').addEventListener('click', ()=>{ document.getElementById('modal').classList.remove('active'); document.body.style.overflow=''; });
+    document.getElementById('modal').addEventListener('click', e=>{ if(e.target.id==='modal'){ document.getElementById('modal').classList.remove('active'); document.body.style.overflow=''; } });
+
+    // ── PROCESS ──
+    async function loadProcess() {
+      try {
+        const rows = await fetchDB('process');
+        // headline 행 찾기 (num === 'headline')
+        const hlRow = rows.find(r => val(r,'num') === 'headline');
+        if (hlRow) {
+          document.getElementById('process-title').innerHTML = val(hlRow,'title').replace(/\n/g,'<br>');
+          document.getElementById('process-desc').textContent = val(hlRow,'text');
         }
-      }catch(e){console.log('CONTACT 실패',e);}
+        // 나머지 스텝 (num !== 'headline'), order 숫자로 이미 정렬되어 있음
+        const stepRows = rows.filter(r => val(r,'num') !== 'headline');
+        const steps = document.getElementById('process-steps');
+        steps.innerHTML = '';
+        stepRows.forEach(row => {
+          const num=val(row,'num'), title=val(row,'title'), text=val(row,'text');
+          const el = document.createElement('div');
+          el.className = 'process-step fade-item';
+          el.innerHTML = `<div class="step-num">${num}</div><div class="step-title">${title}</div><div class="step-desc">${text}</div>`;
+          steps.appendChild(el);
+          observer.observe(el);
+        });
+      } catch(e) { console.error('PROCESS',e); }
     }
 
-    // FOOTER
-    async function loadFooter(){
-      try{
-        const rows=await fetchNotion('footer');
-        const get=k=>{const r=rows.find(r=>getVal(r,'key')===k);return r?getVal(r,'value'):'';}
-        const logo=get('logo'),copy=get('copy');
-        if(logo) document.getElementById('footer-logo').textContent=logo;
-        if(copy) document.getElementById('footer-copy').textContent=copy;
-      }catch(e){console.log('FOOTER 실패',e);}
+    // ── CONTACT ──
+    async function loadContact() {
+      try {
+        const rows = await fetchDB('contact');
+        const get = k => { const r = find(rows,'key',k); return r ? val(r,'value') : ''; };
+        const headline=get('headline'), sub=get('sub'), ig=get('instagram');
+        if (headline) document.getElementById('contact-headline').innerHTML = headline.replace(/\n/g,'<br>');
+        if (sub) document.getElementById('contact-sub').textContent = sub;
+        if (ig) {
+          document.getElementById('contact-btn').href = 'https://instagram.com/'+ig.replace('@','');
+          document.getElementById('contact-note').textContent = ig+' · Instagram';
+        }
+      } catch(e) { console.error('CONTACT',e); }
     }
 
-    // 스크롤 옵저버
-    const observer=new IntersectionObserver(entries=>{
-      entries.forEach(e=>{if(e.isIntersecting){e.target.style.opacity='1';e.target.style.transform='translateY(0)';}});
-    },{threshold:0.1});
+    // ── FOOTER ──
+    async function loadFooter() {
+      try {
+        const rows = await fetchDB('footer');
+        const get = k => { const r = find(rows,'key',k); return r ? val(r,'value') : ''; };
+        const logo=get('logo'), copy=get('copy');
+        if (logo) document.getElementById('footer-logo').textContent = logo;
+        if (copy) document.getElementById('footer-copy').textContent = copy;
+      } catch(e) { console.error('FOOTER',e); }
+    }
 
-    document.querySelectorAll('.about-grid,.contact-headline').forEach(el=>{
-      el.style.opacity='0';el.style.transform='translateY(24px)';
-      el.style.transition='opacity 0.7s ease,transform 0.7s ease';
-      observer.observe(el);
-    });
-
-    // 전체 로드
+    // ── 전체 로드 ──
     loadTitle();
     loadAbout();
     loadTimeline();
