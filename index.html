@@ -350,19 +350,21 @@
     async function loadProcess(){
       try{
         const rows=await fetchNotion('process');
-        const get=k=>{const r=rows.find(r=>getVal(r,'order')===k);return r?{title:getVal(r,'title'),text:getVal(r,'text')}:null;}
-        const headline=get('headline');
-        if(headline){
-          document.getElementById('process-title').innerHTML=headline.title.replace(/\n/g,'<br>');
-          document.getElementById('process-desc').textContent=headline.text;
+        const headlineRow=rows.find(r=>getVal(r,'num')==='headline');
+        const stepRows=rows.filter(r=>getVal(r,'num')!=='headline');
+        
+        if(headlineRow){
+          document.getElementById('process-title').innerHTML=getVal(headlineRow,'title').replace(/\n/g,'<br>');
+          document.getElementById('process-desc').textContent=getVal(headlineRow,'text');
         }
+        
         const steps=document.getElementById('process-steps');
         steps.innerHTML='';
-        rows.filter(r=>getVal(r,'order')!=='headline').forEach(row=>{
-          const order=getVal(row,'order'),title=getVal(row,'title'),text=getVal(row,'text');
+        stepRows.forEach(row=>{
+          const num=getVal(row,'num'),title=getVal(row,'title'),text=getVal(row,'text');
           const el=document.createElement('div');
           el.className='process-step';
-          el.innerHTML=`<div class="step-num">${order}</div><div class="step-title">${title}</div><div class="step-desc">${text}</div>`;
+          el.innerHTML=`<div class="step-num">${num}</div><div class="step-title">${title}</div><div class="step-desc">${text}</div>`;
           steps.appendChild(el);
           el.style.opacity='0';el.style.transform='translateY(24px)';
           el.style.transition='opacity 0.7s ease,transform 0.7s ease';
