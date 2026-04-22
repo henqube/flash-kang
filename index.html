@@ -19,8 +19,7 @@
 
     /* HERO */
     .hero { position: relative; width: 100vw; height: 100vh; overflow: hidden; display: flex; align-items: flex-end; }
-    .hero-bg { position: absolute; inset: 0; background: repeating-linear-gradient(45deg, transparent, transparent 40px, rgba(255,60,0,0.03) 40px, rgba(255,60,0,0.03) 80px), linear-gradient(160deg, #111 0%, #0a0a0a 60%, #1a0800 100%); display: flex; align-items: center; justify-content: center; }
-    .hero-bg span { font-family: 'Space Mono', monospace; font-size: 0.75rem; color: rgba(255,255,255,0.05); letter-spacing: 0.2em; }
+   .hero-bg { position: absolute; inset: 0; overflow: hidden; background: #0a0a0a; }
     .hero-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.2) 60%, transparent 100%); }
     .hero-content { position: relative; z-index: 2; padding: 0 6vw 6vh; width: 100%; }
     .hero-tag { font-family: 'Space Mono', monospace; font-size: 0.7rem; letter-spacing: 0.3em; color: var(--accent); text-transform: uppercase; margin-bottom: 1rem; min-height: 1em; opacity: 0; animation: fadeUp 0.8s 0.3s forwards; }
