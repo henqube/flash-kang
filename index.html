@@ -557,10 +557,10 @@
     </div>
     <div class="hero-overlay"></div>
     <div class="hero-content">
-      <p class="hero-tag">Game Artist · VFX · Since 2002</p>
-      <h1 class="hero-name">FLASH<br><span class="accent">KANG</span></h1>
-      <p class="hero-sub">2D 핸드드로잉으로 게임의 감정을 만드는 사람</p>
-      <p class="hero-slogan">바르게 빠르게 — 正 敏</p>
+      <p class="hero-tag" id="hero-tag">Game Artist · VFX · Since 2002</p>
+      <h1 class="hero-name" id="hero-name">FLASH<br><span class="accent">KANG</span></h1>
+      <p class="hero-sub" id="hero-sub">2D 핸드드로잉으로 게임의 감정을 만드는 사람</p>
+      <p class="hero-slogan" id="hero-slogan">바르게 빠르게 — 正 敏</p>
     </div>
     <div class="scroll-hint">
       <span>Scroll</span>
@@ -742,6 +742,36 @@
         ring.style.height = '36px';
       });
     });
+
+    // 노션 TITLE DB 연동
+    async function loadTitle() {
+      try {
+        const res = await fetch('/api/notion?db=title');
+        const data = await res.json();
+        const rows = data.results;
+
+        const getValue = (key) => {
+          const row = rows.find(r => r.properties.key?.title?.[0]?.plain_text === key);
+          return row?.properties?.value?.rich_text?.[0]?.plain_text || '';
+        };
+
+        const tag = getValue('tag');
+        const name = getValue('name');
+        const sub = getValue('sub');
+        const slogan = getValue('slogan');
+
+        if (tag) document.getElementById('hero-tag').textContent = tag;
+        if (name) {
+          const parts = name.split(' ');
+          document.getElementById('hero-name').innerHTML = parts[0] + '<br><span class="accent">' + parts.slice(1).join(' ') + '</span>';
+        }
+        if (sub) document.getElementById('hero-sub').textContent = sub;
+        if (slogan) document.getElementById('hero-slogan').textContent = slogan;
+      } catch (e) {
+        console.log('Notion TITLE 로드 실패:', e);
+      }
+    }
+    loadTitle();
 
     // 스크롤 페이드인
     const observer = new IntersectionObserver(entries => {
