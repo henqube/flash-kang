@@ -44,7 +44,9 @@ export default async function handler(req, res) {
         'Notion-Version': '2022-06-28',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({}),
+      body: JSON.stringify({
+  sorts: [{ property: 'order', direction: 'ascending' }]
+}),
     });
 
     const data = await response.json();
