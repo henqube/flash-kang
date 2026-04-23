@@ -434,42 +434,180 @@
       overflow-y: auto;
     }
     .subpage.active { display: flex; }
-    .subpage-nav {
-      position: sticky; top: 0; z-index: 10;
+
+    /* 서브페이지 히어로 */
+    .sp-hero {
+      background: var(--black);
+      min-height: 38vh;
+      position: relative;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      overflow: hidden; flex-shrink: 0;
+    }
+    .sp-hero::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse 60% 80% at 30% 60%, rgba(255,85,0,0.14) 0%, transparent 70%);
+      z-index: 1;
+    }
+    .sp-hero::after {
+      content: ''; position: absolute;
+      bottom: 0; left: 0; right: 0; height: 72px;
+      background: var(--white);
+      clip-path: polygon(0 55%, 100% 0, 100% 100%, 0 100%);
+      z-index: 3;
+    }
+    .sp-hero-nav {
+      position: absolute; top: 0; left: 0; right: 0;
       height: 54px; padding: 0 52px;
       display: flex; align-items: center; justify-content: space-between;
-      background: var(--black); flex-shrink: 0;
+      z-index: 4;
     }
-    .subpage-body {
-      flex: 1;
-      padding: 64px 52px 80px;
+    .sp-hero-content {
+      position: relative; z-index: 2;
+      padding: 0 52px 56px;
+      display: flex; align-items: flex-start; justify-content: space-between;
     }
-    .subpage-title {
-      font-size: clamp(48px, 8vw, 96px);
-      font-weight: 700; letter-spacing: -0.04em; line-height: 0.9;
-      color: var(--black); text-transform: uppercase;
-      margin-bottom: 56px;
+    .sp-hero-title {
+      font-size: clamp(52px, 9vw, 110px);
+      font-weight: 700; letter-spacing: -0.04em; line-height: 0.88;
+      color: var(--white); text-transform: uppercase;
     }
-    .subpage-title em { font-style: normal; color: var(--accent); }
-    .subpage-grid {
-      display: grid; grid-template-columns: repeat(3,1fr); gap: 2px;
+    .sp-hero-title em { font-style: normal; color: var(--accent); }
+    .sp-hero-meta {
+      display: flex; flex-direction: column; align-items: flex-end; gap: 2px;
+      padding-top: 10px;
     }
-    .subpage-list {
-      display: flex; flex-direction: column; gap: 0;
-      max-width: 720px;
+    .sp-hero-count {
+      font-size: clamp(28px, 4vw, 48px); font-weight: 700;
+      color: rgba(255,255,255,0.12); letter-spacing: -0.03em; line-height: 1;
     }
+    .sp-hero-label {
+      font-size: 10px; font-weight: 600; color: rgba(255,255,255,0.28);
+      letter-spacing: 0.16em; text-transform: uppercase;
+    }
+
+    /* 서브페이지 바디 */
+    .sp-body { flex: 1; padding: 0 52px 80px; }
+    .sp-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 2px; }
+    .sp-list { display: flex; flex-direction: column; gap: 0; max-width: 760px; }
     .sp-empty {
-      font-size: 13px; font-weight: 300;
-      color: var(--muted); padding: 40px 0;
-      letter-spacing: 0.06em;
+      font-size: 13px; font-weight: 300; color: var(--muted);
+      padding: 48px 0; letter-spacing: 0.06em;
     }
-    @media(max-width:768px) {
-      .subpage-nav { padding: 0 24px; }
-      .subpage-body { padding: 48px 24px 60px; }
-      .subpage-grid { grid-template-columns: 1fr 1fr; }
+
+    /* 상세 페이지 (Works 카드 클릭 후) */
+    .detail-page {
+      position: fixed; inset: 0; z-index: 200;
+      background: var(--white);
+      display: none; flex-direction: column;
+      overflow-y: auto;
     }
-    @media(max-width:480px) {
-      .subpage-grid { grid-template-columns: 1fr; }
+    .detail-page.active { display: flex; }
+    .detail-hero {
+      background: var(--black);
+      position: relative;
+      min-height: 46vh;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      overflow: hidden; flex-shrink: 0;
+    }
+    .detail-hero::after {
+      content: ''; position: absolute;
+      bottom: 0; left: 0; right: 0; height: 72px;
+      background: var(--white);
+      clip-path: polygon(0 55%, 100% 0, 100% 100%, 0 100%);
+      z-index: 3;
+    }
+    .detail-hero-nav {
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 54px; padding: 0 52px;
+      display: flex; align-items: center; justify-content: space-between;
+      z-index: 4;
+    }
+    .detail-back {
+      font-size: 11px; font-weight: 500; color: rgba(255,255,255,0.4);
+      letter-spacing: 0.1em; text-transform: uppercase;
+      background: none; border: none; cursor: pointer;
+      transition: color 0.15s; text-decoration: none;
+    }
+    .detail-back:hover { color: var(--white); }
+    .detail-hero-media {
+      position: absolute; inset: 0; z-index: 1;
+      background: #1a1a1a;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .detail-hero-media img {
+      width: 100%; height: 100%; object-fit: cover; opacity: 0.7;
+    }
+    .detail-hero-media-ph {
+      font-size: 10px; color: rgba(255,255,255,0.15);
+      letter-spacing: 0.2em; text-transform: uppercase;
+    }
+    .detail-hero-overlay {
+      position: absolute; inset: 0; z-index: 2;
+      background: rgba(8,8,8,0.45);
+    }
+    .detail-hero-content {
+      position: relative; z-index: 4;
+      padding: 0 52px 56px;
+      display: flex; align-items: flex-start; justify-content: space-between;
+    }
+    .detail-cat {
+      font-size: 10px; font-weight: 700; color: var(--accent);
+      letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 10px;
+    }
+    .detail-title {
+      font-size: clamp(36px, 6vw, 72px); font-weight: 700;
+      letter-spacing: -0.03em; line-height: 0.9;
+      color: var(--white); text-transform: uppercase;
+    }
+    .detail-tags {
+      display: flex; flex-direction: column; align-items: flex-end; gap: 4px;
+      padding-top: 8px;
+    }
+    .detail-tag {
+      font-size: 10px; font-weight: 400; color: rgba(255,255,255,0.35);
+      letter-spacing: 0.1em; text-transform: uppercase;
+    }
+    .detail-body { padding: 12px 52px 80px; }
+    .detail-desc {
+      font-size: 15px; font-weight: 300; line-height: 1.9;
+      color: rgba(17,17,17,0.6); max-width: 620px; margin-bottom: 48px;
+    }
+    .detail-gallery { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; margin-bottom: 2px; }
+    .detail-gallery-item {
+      background: var(--gray); aspect-ratio: 4/3;
+      display: flex; align-items: center; justify-content: center;
+      position: relative; overflow: hidden;
+    }
+    .detail-gallery-item img { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; }
+    .detail-gallery-item.wide { grid-column: span 2; aspect-ratio: 16/7; }
+    .detail-gallery-ph {
+      font-size: 9px; color: #ccc; letter-spacing: 0.12em; text-transform: uppercase;
+    }
+    .detail-meta {
+      display: grid; grid-template-columns: repeat(3,1fr); gap: 0;
+      border-top: 1px solid rgba(17,17,17,0.08);
+      margin-top: 48px; padding-top: 28px;
+    }
+    .detail-meta-item { padding-right: 24px; }
+    .detail-meta-label {
+      font-size: 9px; font-weight: 700; color: var(--accent);
+      letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 7px;
+    }
+    .detail-meta-value { font-size: 14px; font-weight: 400; color: var(--black); }
+
+    @media(max-width: 768px) {
+      .sp-hero-nav, .detail-hero-nav { padding: 0 24px; }
+      .sp-hero-content, .detail-hero-content { padding: 0 24px 48px; }
+      .sp-body { padding: 0 24px 60px; }
+      .detail-body { padding: 12px 24px 60px; }
+      .sp-grid { grid-template-columns: 1fr 1fr; }
+      .detail-gallery { grid-template-columns: 1fr; }
+      .detail-gallery-item.wide { grid-column: span 1; aspect-ratio: 4/3; }
+      .detail-meta { grid-template-columns: 1fr 1fr; gap: 24px; }
+    }
+    @media(max-width: 480px) {
+      .sp-grid { grid-template-columns: 1fr; }
+      .detail-meta { grid-template-columns: 1fr; }
     }
     /* ── MODAL ── */
     .modal-overlay {
@@ -962,14 +1100,15 @@
     async function loadSubpageData(name) {
       if (name === 'works') {
         var grid = document.getElementById('subpage-works-grid');
+        var countEl = document.getElementById('works-count');
         try {
           var rows = await fetchDB('works');
-          if (!rows.length) { grid.innerHTML = '<p class="sp-empty">준비 중입니다.</p>'; return; }
+          var visible = rows.filter(function(r) { return val(r,'visible') !== false; });
+          if (!visible.length) { grid.innerHTML = '<p class="sp-empty">준비 중입니다.</p>'; return; }
+          if (countEl) countEl.textContent = visible.length;
           grid.innerHTML = '';
-          rows.forEach(function(row) {
-            var title = val(row,'title'), thumb = val(row,'thumb'),
-                text = val(row,'text'), visible = val(row,'visible');
-            if (visible === false) return;
+          visible.forEach(function(row) {
+            var title = val(row,'title'), thumb = val(row,'thumb'), text = val(row,'text');
             var el = document.createElement('a');
             el.className = 'work-card visible';
             el.href = '#';
@@ -982,18 +1121,24 @@
               + '<div class="wi-title">' + title + '</div>'
               + '<div class="wi-desc">' + text + '</div>'
               + '</div>';
-            el.addEventListener('click', function(e) { e.preventDefault(); openModal(row.id, title, text); });
+            el.addEventListener('click', function(e) {
+              e.preventDefault();
+              openDetail(row, title, text, thumb);
+            });
             grid.appendChild(el);
           });
         } catch(e) { grid.innerHTML = '<p class="sp-empty">로드 실패</p>'; }
 
       } else if (name === 'knowhow') {
         var list = document.getElementById('subpage-knowhow-list');
+        var countEl = document.getElementById('knowhow-count');
         try {
           var rows = await fetchDB('process');
-          if (!rows.length) { list.innerHTML = '<p class="sp-empty">준비 중입니다.</p>'; return; }
+          var items = rows.filter(function(r) { return val(r,'num') !== 'headline'; });
+          if (!items.length) { list.innerHTML = '<p class="sp-empty">준비 중입니다.</p>'; return; }
+          if (countEl) countEl.textContent = items.length;
           list.innerHTML = '';
-          rows.filter(function(r) { return val(r,'num') !== 'headline'; }).forEach(function(row) {
+          items.forEach(function(row) {
             var title = val(row,'title'), cat = val(row,'num'), thumb = val(row,'thumb') || '';
             var el = document.createElement('a');
             el.className = 'kn-item visible';
@@ -1014,19 +1159,19 @@
 
       } else if (name === 'notes') {
         var list = document.getElementById('subpage-notes-list');
+        var countEl = document.getElementById('notes-count');
         try {
           var rows = await fetchDB('works');
           var noteRows = rows.filter(function(r) { return val(r,'type') === 'note'; });
           if (!noteRows.length) { list.innerHTML = '<p class="sp-empty">준비 중입니다.</p>'; return; }
+          if (countEl) countEl.textContent = noteRows.length;
           list.innerHTML = '';
           noteRows.forEach(function(row) {
             var title = val(row,'title'), text = val(row,'text'), thumb = val(row,'thumb') || '';
             var el = document.createElement('a');
             el.className = 'kn-item visible';
             el.href = '#';
-            var thumbHtml = thumb
-              ? '<img src="' + thumb + '" alt="">'
-              : '<div class="kit-ph">IMG</div>';
+            var thumbHtml = thumb ? '<img src="' + thumb + '" alt="">' : '<div class="kit-ph">IMG</div>';
             el.innerHTML = '<div class="ki-thumb">' + thumbHtml + '</div>'
               + '<div class="ki-body">'
               + '<div class="ki-cat">Note</div>'
@@ -1038,6 +1183,86 @@
           });
         } catch(e) { list.innerHTML = '<p class="sp-empty">로드 실패</p>'; }
       }
+    }
+
+    // ── Works 상세 페이지 열기 ──
+    async function openDetail(row, title, desc, thumb) {
+      var dp = document.getElementById('detail-works');
+      dp.classList.add('active');
+      dp.scrollTop = 0;
+
+      document.getElementById('detail-title').textContent = title;
+      document.getElementById('detail-desc').textContent = desc || '';
+
+      // 썸네일
+      var media = document.getElementById('detail-media');
+      if (thumb) {
+        media.innerHTML = '<img src="' + thumb + '" alt="' + title + '">';
+      } else {
+        media.innerHTML = '<div class="detail-hero-media-ph">GIF / VIDEO</div>';
+      }
+
+      // 태그 (노션 데이터에서 client, period, tool 파싱)
+      var client = val(row,'client') || val(row,'company') || '';
+      var period = val(row,'period') || val(row,'year') || '';
+      var tool   = val(row,'tool') || 'Adobe Animate';
+      var tagsEl = document.getElementById('detail-tags');
+      tagsEl.innerHTML = '';
+      [client, period, tool].forEach(function(t) {
+        if (!t) return;
+        var span = document.createElement('div');
+        span.className = 'detail-tag';
+        span.textContent = t;
+        tagsEl.appendChild(span);
+      });
+
+      // 메타
+      var metaEl = document.getElementById('detail-meta');
+      var metaItems = [
+        { label: 'Client', value: client || '—' },
+        { label: 'Period', value: period || '—' },
+        { label: 'Tool',   value: tool   || '—' }
+      ];
+      metaEl.innerHTML = '';
+      metaItems.forEach(function(m) {
+        var div = document.createElement('div');
+        div.className = 'detail-meta-item';
+        div.innerHTML = '<div class="detail-meta-label">' + m.label + '</div>'
+          + '<div class="detail-meta-value">' + m.value + '</div>';
+        metaEl.appendChild(div);
+      });
+
+      // 노션 블록 (갤러리 + 본문)
+      var gallery = document.getElementById('detail-gallery');
+      gallery.innerHTML = '<div class="detail-gallery-item wide"><div class="detail-gallery-ph">Loading...</div></div>';
+      try {
+        var r = await fetch('/api/notion?pageId=' + row.id);
+        var d = await r.json();
+        var blocks = d.results || [];
+        var imgs = blocks.filter(function(b) { return b.type === 'image'; });
+        if (imgs.length) {
+          gallery.innerHTML = '';
+          imgs.forEach(function(b, i) {
+            var url = b.image.type === 'file' ? b.image.file.url : b.image.external.url;
+            var item = document.createElement('div');
+            item.className = 'detail-gallery-item' + (i === 0 ? ' wide' : '');
+            item.innerHTML = '<img src="' + url + '" alt="">';
+            gallery.appendChild(item);
+          });
+        } else {
+          gallery.innerHTML = '<div class="detail-gallery-item wide"><div class="detail-gallery-ph">GIF / IMAGE</div></div>';
+        }
+        // 본문 텍스트
+        var desc2 = document.getElementById('detail-desc');
+        var paras = blocks.filter(function(b) { return b.type === 'paragraph'; })
+          .map(function(b) { return (b.paragraph.rich_text || []).map(function(t) { return t.plain_text; }).join(''); })
+          .filter(Boolean);
+        if (paras.length) desc2.textContent = paras[0];
+      } catch(e) { console.error('DETAIL', e); }
+    }
+
+    function closeDetail() {
+      document.getElementById('detail-works').classList.remove('active');
     }
 
     // 네비 링크에 서브페이지 연결
@@ -1074,17 +1299,25 @@
 
   <!-- WORKS 서브페이지 -->
   <div class="subpage" id="subpage-works">
-    <nav class="subpage-nav">
-      <a href="/" class="nav-logo" style="text-decoration:none;">FLASH <em>KANG</em></a>
-      <ul class="nav-links">
-        <li><a href="#" class="on" onclick="return false;">Works</a></li>
-        <li><a href="#" onclick="showSubpage('knowhow'); return false;">Knowhow</a></li>
-        <li><a href="#" onclick="showSubpage('notes'); return false;">Notes</a></li>
-      </ul>
-    </nav>
-    <div class="subpage-body">
-      <div class="subpage-title">Works</div>
-      <div class="subpage-grid" id="subpage-works-grid">
+    <div class="sp-hero">
+      <nav class="sp-hero-nav">
+        <a href="/" class="nav-logo" style="text-decoration:none;">FLASH <em>KANG</em></a>
+        <ul class="nav-links">
+          <li><a href="#" class="on" onclick="return false;">Works</a></li>
+          <li><a href="#" onclick="showSubpage('knowhow'); return false;">Knowhow</a></li>
+          <li><a href="#" onclick="showSubpage('notes'); return false;">Notes</a></li>
+        </ul>
+      </nav>
+      <div class="sp-hero-content">
+        <div class="sp-hero-title">WORKS</div>
+        <div class="sp-hero-meta">
+          <div class="sp-hero-count" id="works-count">—</div>
+          <div class="sp-hero-label">Projects</div>
+        </div>
+      </div>
+    </div>
+    <div class="sp-body">
+      <div class="sp-grid" id="subpage-works-grid">
         <p class="sp-empty">Loading...</p>
       </div>
     </div>
@@ -1092,17 +1325,25 @@
 
   <!-- KNOWHOW 서브페이지 -->
   <div class="subpage" id="subpage-knowhow">
-    <nav class="subpage-nav">
-      <a href="/" class="nav-logo" style="text-decoration:none;">FLASH <em>KANG</em></a>
-      <ul class="nav-links">
-        <li><a href="#" onclick="showSubpage('works'); return false;">Works</a></li>
-        <li><a href="#" class="on" onclick="return false;">Knowhow</a></li>
-        <li><a href="#" onclick="showSubpage('notes'); return false;">Notes</a></li>
-      </ul>
-    </nav>
-    <div class="subpage-body">
-      <div class="subpage-title">Know<br><em>how</em></div>
-      <div class="subpage-list" id="subpage-knowhow-list">
+    <div class="sp-hero">
+      <nav class="sp-hero-nav">
+        <a href="/" class="nav-logo" style="text-decoration:none;">FLASH <em>KANG</em></a>
+        <ul class="nav-links">
+          <li><a href="#" onclick="showSubpage('works'); return false;">Works</a></li>
+          <li><a href="#" class="on" onclick="return false;">Knowhow</a></li>
+          <li><a href="#" onclick="showSubpage('notes'); return false;">Notes</a></li>
+        </ul>
+      </nav>
+      <div class="sp-hero-content">
+        <div class="sp-hero-title">KNOW<br><em>HOW</em></div>
+        <div class="sp-hero-meta">
+          <div class="sp-hero-count" id="knowhow-count">—</div>
+          <div class="sp-hero-label">Articles</div>
+        </div>
+      </div>
+    </div>
+    <div class="sp-body">
+      <div class="sp-list" id="subpage-knowhow-list">
         <p class="sp-empty">Loading...</p>
       </div>
     </div>
@@ -1110,19 +1351,53 @@
 
   <!-- NOTES 서브페이지 -->
   <div class="subpage" id="subpage-notes">
-    <nav class="subpage-nav">
-      <a href="/" class="nav-logo" style="text-decoration:none;">FLASH <em>KANG</em></a>
-      <ul class="nav-links">
-        <li><a href="#" onclick="showSubpage('works'); return false;">Works</a></li>
-        <li><a href="#" onclick="showSubpage('knowhow'); return false;">Knowhow</a></li>
-        <li><a href="#" class="on" onclick="return false;">Notes</a></li>
-      </ul>
-    </nav>
-    <div class="subpage-body">
-      <div class="subpage-title">Notes</div>
-      <div class="subpage-list" id="subpage-notes-list">
+    <div class="sp-hero">
+      <nav class="sp-hero-nav">
+        <a href="/" class="nav-logo" style="text-decoration:none;">FLASH <em>KANG</em></a>
+        <ul class="nav-links">
+          <li><a href="#" onclick="showSubpage('works'); return false;">Works</a></li>
+          <li><a href="#" onclick="showSubpage('knowhow'); return false;">Knowhow</a></li>
+          <li><a href="#" class="on" onclick="return false;">Notes</a></li>
+        </ul>
+      </nav>
+      <div class="sp-hero-content">
+        <div class="sp-hero-title">NOTES</div>
+        <div class="sp-hero-meta">
+          <div class="sp-hero-count" id="notes-count">—</div>
+          <div class="sp-hero-label">Posts</div>
+        </div>
+      </div>
+    </div>
+    <div class="sp-body">
+      <div class="sp-list" id="subpage-notes-list">
         <p class="sp-empty">Loading...</p>
       </div>
+    </div>
+  </div>
+
+  <!-- WORKS 상세 페이지 -->
+  <div class="detail-page" id="detail-works">
+    <div class="detail-hero">
+      <nav class="detail-hero-nav">
+        <a href="/" class="nav-logo" style="text-decoration:none;">FLASH <em>KANG</em></a>
+        <button class="detail-back" onclick="closeDetail()">← Works</button>
+      </nav>
+      <div class="detail-hero-media" id="detail-media">
+        <div class="detail-hero-media-ph">GIF / VIDEO</div>
+      </div>
+      <div class="detail-hero-overlay"></div>
+      <div class="detail-hero-content">
+        <div>
+          <div class="detail-cat" id="detail-cat">VFX</div>
+          <div class="detail-title" id="detail-title">—</div>
+        </div>
+        <div class="detail-tags" id="detail-tags"></div>
+      </div>
+    </div>
+    <div class="detail-body">
+      <p class="detail-desc" id="detail-desc"></p>
+      <div class="detail-gallery" id="detail-gallery"></div>
+      <div class="detail-meta" id="detail-meta"></div>
     </div>
   </div>
 </body>
