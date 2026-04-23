@@ -51,17 +51,10 @@
     .hero {
       position: relative;
       background: var(--black);
-      min-height: 75vh;
+      min-height: 100vh;
       display: flex; align-items: flex-end;
       overflow: hidden;
       padding-top: 56px;
-    }
-    .hero::after {
-      content: '';
-      position: absolute; bottom: 0; left: 0; right: 0;
-      height: 80px; z-index: 4;
-      background: var(--white);
-      clip-path: polygon(0 52%, 100% 0, 100% 100%, 0 100%);
     }
     .hero-vbg {
       position: absolute; inset: 0;
@@ -87,9 +80,9 @@
     .hero-vbg iframe {
       position: absolute;
       top: 50%; left: 50%;
-      width: 188vh; min-width: 106%;
-      height: 62vw; min-height: 112%;
-      transform: translate(-50%, -46%);
+      width: 177.78vh; min-width: 100%;
+      height: 56.25vw; min-height: 100%;
+      transform: translate(-50%,-50%);
       pointer-events: none; opacity: 0.55;
       z-index: 1;
     }
@@ -97,7 +90,7 @@
 
     .hero-content {
       position: relative; z-index: 3;
-      padding: 54px 52px 22vh;
+      padding: 0 52px 64px;
       width: 100%;
       display: flex; align-items: flex-end; justify-content: space-between;
     }
@@ -116,29 +109,30 @@
       opacity: 0; animation: fadeUp 0.9s 0.5s forwards;
     }
     .hero-name em { font-style: normal; color: var(--accent); }
-    /* ── HERO TIMELINE ── */
-    .hero-timeline {
+    .hero-meta {
       display: flex; flex-direction: column;
-      align-items: flex-end; gap: 0;
+      align-items: flex-end; gap: 10px;
       padding-bottom: 12px;
       opacity: 0; animation: fadeUp 0.9s 0.75s forwards;
     }
-    .ht-item {
-      display: flex; align-items: baseline; gap: 12px;
-      padding: 8px 0;
-      border-bottom: 1px solid rgba(255,255,255,0.07);
+    .hero-role {
+      font-size: 11px; font-weight: 400;
+      color: rgba(255,255,255,0.38);
+      letter-spacing: 0.14em; text-transform: uppercase;
     }
-    .ht-item:last-child { border-bottom: none; }
-    .ht-year {
-      font-size: 11px; font-weight: 700;
-      color: var(--accent); letter-spacing: 0.06em;
-      flex-shrink: 0;
+    .hero-scroll {
+      margin-top: 16px;
+      display: flex; flex-direction: column; align-items: flex-end; gap: 6px;
+      opacity: 0; animation: fadeIn 1s 1.4s forwards;
     }
-    .ht-title {
-      font-size: 11px; font-weight: 300;
-      color: rgba(255,255,255,0.42);
-      letter-spacing: 0.04em; text-align: right;
-      line-height: 1.45;
+    .scroll-label {
+      font-size: 9px; font-weight: 600; letter-spacing: 0.25em;
+      color: rgba(255,255,255,0.22); text-transform: uppercase;
+    }
+    .scroll-line {
+      width: 1px; height: 52px;
+      background: linear-gradient(to bottom, var(--accent), transparent);
+      animation: scrollPulse 2.2s 2s infinite;
     }
 
     /* ── DIAGONAL CUTS ── */
@@ -520,17 +514,41 @@
         <p class="hero-tag" id="hero-tag">VFX Artist · OCTOPO</p>
         <h1 class="hero-name" id="hero-name">FLASH<br><em>KANG</em></h1>
       </div>
-      <div class="hero-timeline" id="hero-timeline">
-        <!-- 노션 연동 전 임시 데이터 -->
-        <div class="ht-item"><span class="ht-year">2002</span><span class="ht-title">스틱 애니메이션, Flash 입문</span></div>
-        <div class="ht-item"><span class="ht-year">2012</span><span class="ht-title">게임 업계 VFX 아티스트 시작</span></div>
-        <div class="ht-item"><span class="ht-year">2019</span><span class="ht-title">시프트업 합류</span></div>
-        <div class="ht-item"><span class="ht-year">2024</span><span class="ht-title">OCTOPO VFX 총괄 리드</span></div>
+      <div class="hero-meta">
+        <div class="hero-role" id="hero-role">Game VFX Artist</div>
+        <div class="hero-scroll">
+          <span class="scroll-label">Scroll</span>
+          <div class="scroll-line"></div>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- DIAG: black → white -->
+  <div class="diag"></div>
+
+  <!-- ABOUT -->
+  <section class="about-sec">
+    <div class="sec-label">About</div>
+    <div class="about-grid fade-item">
+      <div class="about-headline" id="about-headline">2002년,<br>스틱 하나에서<br><span class="hl">시작했다.</span></div>
+      <div class="about-body" id="about-body"></div>
+    </div>
+  </section>
+
+  <!-- DIAG: white → cream -->
+  <div class="diag2"></div>
+
+  <!-- TIMELINE (cream bg) -->
+  <section class="timeline-sec" style="background:var(--cream);">
+    <div class="sec-label">Timeline</div>
+    <div id="timeline-list"></div>
+  </section>
+
+  <!-- DIAG: cream → white -->
+  <div style="position:relative;height:80px;background:var(--cream);overflow:hidden;">
+    <div style="position:absolute;bottom:0;left:0;right:0;height:100%;background:#fff;clip-path:polygon(0 0,100% 52%,100% 100%,0 100%);"></div>
+  </div>
 
   <!-- WORKS -->
   <section class="works-sec" id="works">
@@ -538,33 +556,7 @@
       <div class="sec-title">Works</div>
       <a href="#" class="sec-more">전체 보기 →</a>
     </div>
-    <div class="works-grid" id="works-grid">
-      <!-- 임시 카드 — 노션 연동 후 자동 교체 -->
-      <a href="#" class="work-card" onclick="return false;">
-        <div class="work-thumb"><div class="gif-dot"></div><div class="wt-ph">GIF</div></div>
-        <div class="work-info">
-          <div class="wi-cat">Character VFX</div>
-          <div class="wi-title">화염 스킬 이펙트</div>
-          <div class="wi-desc">핸드드로잉 기반. 타이밍과 스머징 기법.</div>
-        </div>
-      </a>
-      <a href="#" class="work-card" onclick="return false;">
-        <div class="work-thumb"><div class="gif-dot"></div><div class="wt-ph">GIF</div></div>
-        <div class="work-info">
-          <div class="wi-cat">Environment VFX</div>
-          <div class="wi-title">물과 바람 배경 이펙트</div>
-          <div class="wi-desc">루프 애니메이션. 레이어 분리 구조.</div>
-        </div>
-      </a>
-      <a href="#" class="work-card" onclick="return false;">
-        <div class="work-thumb"><div class="gif-dot"></div><div class="wt-ph">GIF</div></div>
-        <div class="work-info">
-          <div class="wi-cat">UI VFX</div>
-          <div class="wi-title">레벨업 & 보상 연출</div>
-          <div class="wi-desc">짧고 임팩트 있게. UI와 VFX의 경계.</div>
-        </div>
-      </a>
-    </div>
+    <div class="works-grid" id="works-grid"></div>
   </section>
 
   <!-- MODAL -->
@@ -585,56 +577,12 @@
     <!-- KNOWHOW -->
     <div id="knowhow">
       <div class="kn-col-title">Knowhow</div>
-      <div class="kn-list" id="knowhow-list">
-        <!-- 임시 데이터 — 노션 연동 후 자동 교체 -->
-        <a href="#" class="kn-item" onclick="return false;">
-          <div class="ki-thumb"><div class="gif-dot"></div><div class="kit-ph">GIF</div></div>
-          <div class="ki-body"><div class="ki-cat">VFX 12법칙</div><div class="ki-title">이펙트에 생명을 넣는 12가지 원칙</div></div>
-          <div class="ki-arr">→</div>
-        </a>
-        <a href="#" class="kn-item" onclick="return false;">
-          <div class="ki-thumb"><div class="gif-dot"></div><div class="kit-ph">GIF</div></div>
-          <div class="ki-body"><div class="ki-cat">속성별 노하우</div><div class="ki-title">화염 이펙트 — 타이밍과 스머징</div></div>
-          <div class="ki-arr">→</div>
-        </a>
-        <a href="#" class="kn-item" onclick="return false;">
-          <div class="ki-thumb"><div class="gif-dot"></div><div class="kit-ph">GIF</div></div>
-          <div class="ki-body"><div class="ki-cat">Adobe Animate</div><div class="ki-title">나만의 게임 VFX 워크플로</div></div>
-          <div class="ki-arr">→</div>
-        </a>
-        <a href="#" class="kn-item" onclick="return false;">
-          <div class="ki-thumb"><div class="gif-dot"></div><div class="kit-ph">GIF</div></div>
-          <div class="ki-body"><div class="ki-cat">핸드드로잉</div><div class="ki-title">디지털 툴 이전에 손이 먼저다</div></div>
-          <div class="ki-arr">→</div>
-        </a>
-      </div>
+      <div class="kn-list" id="knowhow-list"></div>
     </div>
     <!-- NOTES -->
     <div id="notes">
       <div class="kn-col-title">Notes</div>
-      <div class="kn-list" id="notes-list">
-        <!-- 임시 데이터 — 노션 연동 후 자동 교체 -->
-        <a href="#" class="kn-item" onclick="return false;">
-          <div class="ki-thumb"><div class="kit-ph">IMG</div></div>
-          <div class="ki-body"><div class="ki-cat">팀 리딩</div><div class="ki-title">평가 없이 성장시키는 방법에 대해</div></div>
-          <div class="ki-arr">→</div>
-        </a>
-        <a href="#" class="kn-item" onclick="return false;">
-          <div class="ki-thumb"><div class="kit-ph">IMG</div></div>
-          <div class="ki-body"><div class="ki-cat">교육</div><div class="ki-title">신입 아티스트에게 감을 가르치기</div></div>
-          <div class="ki-arr">→</div>
-        </a>
-        <a href="#" class="kn-item" onclick="return false;">
-          <div class="ki-thumb"><div class="kit-ph">IMG</div></div>
-          <div class="ki-body"><div class="ki-cat">문제 해결</div><div class="ki-title">안 된다고 했지만 다 해결법을 찾았다</div></div>
-          <div class="ki-arr">→</div>
-        </a>
-        <a href="#" class="kn-item" onclick="return false;">
-          <div class="ki-thumb"><div class="kit-ph">IMG</div></div>
-          <div class="ki-body"><div class="ki-cat">커리어</div><div class="ki-title">회사에서도 행복해도 된다는 선언</div></div>
-          <div class="ki-arr">→</div>
-        </a>
-      </div>
+      <div class="kn-list" id="notes-list"></div>
     </div>
   </div>
 
@@ -790,19 +738,21 @@
       } catch(e) { console.error('ABOUT', e); }
     }
 
-    // ── TIMELINE (Hero 우측에 렌더링) ──
+    // ── TIMELINE ──
     async function loadTimeline() {
       try {
         const rows = await fetchDB('timeline');
-        if (!rows.length) return; // 노션 데이터 없으면 임시 데이터 유지
-        const container = document.getElementById('hero-timeline');
-        container.innerHTML = '';
+        const list = document.getElementById('timeline-list');
+        list.innerHTML = '';
         rows.forEach(row => {
-          const year = val(row,'year'), title = val(row,'title');
+          const year = val(row,'year'), title = val(row,'title'), text = val(row,'text');
           const el = document.createElement('div');
-          el.className = 'ht-item';
-          el.innerHTML = `<span class="ht-year">${year}</span><span class="ht-title">${title}</span>`;
-          container.appendChild(el);
+          el.className = 'timeline-item';
+          el.innerHTML = `
+            <div class="timeline-year">${year}</div>
+            <div class="timeline-desc"><strong>${title}</strong>${text}</div>`;
+          list.appendChild(el);
+          observer.observe(el);
         });
       } catch(e) { console.error('TIMELINE', e); }
     }
@@ -973,15 +923,13 @@
 
     // ── 전체 로드 ──
     loadTitle();
+    loadAbout();
     loadTimeline();
     loadWorks();
     loadKnowhow();
     loadNotes();
     loadContact();
     loadFooter();
-
-    // 임시 카드에도 옵저버 적용
-    document.querySelectorAll('.work-card, .kn-item').forEach(el => observer.observe(el));
   </script>
 </body>
 </html>
