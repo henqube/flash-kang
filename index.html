@@ -55,7 +55,13 @@
       display: flex; align-items: flex-end;
       overflow: hidden;
       padding-top: 56px;
-      margin-bottom: -2px;
+    }
+    .hero::after {
+      content: '';
+      position: absolute; bottom: 0; left: 0; right: 0;
+      height: 80px; z-index: 4;
+      background: var(--white);
+      clip-path: polygon(0 52%, 100% 0, 100% 100%, 0 100%);
     }
     .hero-vbg {
       position: absolute; inset: 0;
@@ -138,7 +144,7 @@
     /* ── DIAGONAL CUTS ── */
     .diag {
       position: relative; height: 80px;
-      background: transparent; overflow: hidden;
+      background: var(--black); overflow: hidden;
     }
     .diag::after {
       content: ''; position: absolute;
@@ -525,7 +531,6 @@
   </section>
 
   <!-- DIAG: black → white -->
-  <div class="diag"></div>
 
   <!-- WORKS -->
   <section class="works-sec" id="works">
