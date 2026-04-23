@@ -61,7 +61,7 @@
       position: absolute; bottom: 0; left: 0; right: 0;
       height: 80px; z-index: 4;
       background: var(--white);
-      clip-path: polygon(0 56%, 100% -2%, 100% 100%, 0 100%);
+      clip-path: polygon(0 52%, 100% 0, 100% 100%, 0 100%);
     }
     .hero-vbg {
       position: absolute; inset: 0;
@@ -159,7 +159,7 @@
       content: ''; position: absolute;
       bottom: 0; left: 0; right: 0; height: 100%;
       background: var(--cream);
-      clip-path: polygon(0 -2%, 100% 56%, 100% 100%, 0 100%);
+      clip-path: polygon(0 0, 100% 52%, 100% 100%, 0 100%);
     }
     .diag3 {
       position: relative; height: 80px;
@@ -169,7 +169,7 @@
       content: ''; position: absolute;
       bottom: 0; left: 0; right: 0; height: 100%;
       background: var(--black);
-      clip-path: polygon(0 56%, 100% -2%, 100% 100%, 0 100%);
+      clip-path: polygon(0 52%, 100% 0, 100% 100%, 0 100%);
     }
     .diag4 {
       position: relative; height: 80px;
@@ -324,11 +324,6 @@
       font-size: 14px; font-weight: 500;
       color: var(--black); line-height: 1.35;
     }
-    .ki-text {
-      font-size: 12px; font-weight: 300;
-      color: var(--muted); line-height: 1.5;
-      margin-top: 4px;
-    }
     .ki-arr {
       font-size: 14px; color: #ccc; flex-shrink: 0;
       transition: color 0.18s, transform 0.18s;
@@ -443,7 +438,7 @@
     /* 서브페이지 히어로 */
     .sp-hero {
       background: var(--black);
-      min-height: 32vh;
+      min-height: 38vh;
       position: relative;
       display: flex; flex-direction: column; justify-content: flex-end;
       overflow: hidden; flex-shrink: 0;
@@ -457,7 +452,7 @@
       content: ''; position: absolute;
       bottom: 0; left: 0; right: 0; height: 72px;
       background: var(--white);
-      clip-path: polygon(0 58%, 100% -2%, 100% 100%, 0 100%);
+      clip-path: polygon(0 55%, 100% 0, 100% 100%, 0 100%);
       z-index: 3;
     }
     .sp-hero-nav {
@@ -468,7 +463,7 @@
     }
     .sp-hero-content {
       position: relative; z-index: 2;
-      padding: 0 52px 44px;
+      padding: 0 52px 56px;
       display: flex; align-items: flex-start; justify-content: space-between;
     }
     .sp-hero-title {
@@ -518,7 +513,7 @@
       content: ''; position: absolute;
       bottom: 0; left: 0; right: 0; height: 72px;
       background: var(--white);
-      clip-path: polygon(0 58%, 100% -2%, 100% 100%, 0 100%);
+      clip-path: polygon(0 55%, 100% 0, 100% 100%, 0 100%);
       z-index: 3;
     }
     .detail-hero-nav {
@@ -542,7 +537,10 @@
     .detail-hero-media img {
       width: 100%; height: 100%; object-fit: cover; opacity: 0.7;
     }
-    .detail-hero-media-ph { display: none; }
+    .detail-hero-media-ph {
+      font-size: 10px; color: rgba(255,255,255,0.15);
+      letter-spacing: 0.2em; text-transform: uppercase;
+    }
     .detail-hero-overlay {
       position: absolute; inset: 0; z-index: 2;
       background: rgba(8,8,8,0.45);
@@ -561,8 +559,10 @@
       letter-spacing: -0.03em; line-height: 0.9;
       color: var(--white); text-transform: uppercase;
     }
-    .detail-tags { display: none; }
-    .detail-tags-hidden {
+    .detail-tags {
+      display: flex; flex-direction: column; align-items: flex-end; gap: 4px;
+      padding-top: 8px;
+    }
     .detail-tag {
       font-size: 10px; font-weight: 400; color: rgba(255,255,255,0.35);
       letter-spacing: 0.1em; text-transform: uppercase;
@@ -583,7 +583,11 @@
     .detail-gallery-ph {
       font-size: 9px; color: #ccc; letter-spacing: 0.12em; text-transform: uppercase;
     }
-    .detail-meta { display: none; }
+    .detail-meta {
+      display: grid; grid-template-columns: repeat(3,1fr); gap: 0;
+      border-top: 1px solid rgba(17,17,17,0.08);
+      margin-top: 48px; padding-top: 28px;
+    }
     .detail-meta-item { padding-right: 24px; }
     .detail-meta-label {
       font-size: 9px; font-weight: 700; color: var(--accent);
@@ -696,10 +700,10 @@
     <div class="hero-vbg" id="hero-vbg"></div>
     <div class="hero-content">
       <div class="hero-left">
-        <p class="hero-tag" id="hero-tag">VFX Artist · OCTOPO</p>
-        <h1 class="hero-name" id="hero-name">FLASH<br><em>KANG</em></h1>
+        <p class="hero-tag" id="hero-tag" style="visibility:hidden">VFX Artist · OCTOPO</p>
+        <h1 class="hero-name" id="hero-name" style="visibility:hidden">FLASH<br><em>KANG</em></h1>
       </div>
-      <div class="hero-timeline" id="hero-timeline">
+      <div class="hero-timeline" id="hero-timeline" style="visibility:hidden">
         <div class="ht-item"><span class="ht-year">2023 – NOW</span><span class="ht-title">OCTOPO</span></div>
         <div class="ht-item"><span class="ht-year">2019</span><span class="ht-title">SHIFTUP</span></div>
         <div class="ht-item"><span class="ht-year">2018</span><span class="ht-title">COOKAPPS</span></div>
@@ -862,7 +866,12 @@
           document.getElementById('hero-name').innerHTML =
             p[0] + '<br><em>' + p.slice(1).join(' ') + '</em>';
         }
-        if (sub) { var roleEl = document.getElementById('hero-role'); if (roleEl) roleEl.textContent = sub; }
+        if (sub) document.getElementById('hero-role') && (document.getElementById('hero-role').textContent = sub);
+        // 로딩 완료 후 표시
+        ['hero-tag','hero-name','hero-timeline'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.style.visibility = 'visible';
+        });
         if (heroVideo) {
           const match = heroVideo.match(/[?&]v=([^&]+)/);
           const videoId = match ? match[1] : null;
@@ -940,7 +949,6 @@
           el.addEventListener('click', e => { e.preventDefault(); openModal(row.id, title, text); });
           grid.appendChild(el);
           observer.observe(el);
-          setTimeout(function() { el.classList.add('visible'); }, 50);
         });
       } catch(e) { console.error('WORKS', e); }
     }
@@ -976,7 +984,7 @@
     // ── KNOWHOW ──
     async function loadKnowhow() {
       try {
-        const rows = await fetchDB('knowhow'); // 노션 DB key: process = knowhow 콘텐츠
+        const rows = await fetchDB('process'); // 노션 DB key: process = knowhow 콘텐츠
         const list = document.getElementById('knowhow-list');
         if (!list) return;
         list.innerHTML = '';
@@ -1095,7 +1103,7 @@
         var countEl = document.getElementById('works-count');
         try {
           var rows = await fetchDB('works');
-          var visible = rows.filter(function(r) { var v = val(r,'visible'); return v === true || v === ''; });
+          var visible = rows.filter(function(r) { return val(r,'visible') !== false; });
           if (!visible.length) { grid.innerHTML = '<p class="sp-empty">준비 중입니다.</p>'; return; }
           if (countEl) countEl.textContent = visible.length;
           grid.innerHTML = '';
@@ -1125,25 +1133,23 @@
         var list = document.getElementById('subpage-knowhow-list');
         var countEl = document.getElementById('knowhow-count');
         try {
-          var rows = await fetchDB('knowhow');
+          var rows = await fetchDB('process');
           var items = rows.filter(function(r) { return val(r,'num') !== 'headline'; });
           if (!items.length) { list.innerHTML = '<p class="sp-empty">준비 중입니다.</p>'; return; }
           if (countEl) countEl.textContent = items.length;
           list.innerHTML = '';
           items.forEach(function(row) {
-            var title = val(row,'title'), cat = val(row,'num'), thumb = val(row,'thumb') || '', text = val(row,'text') || '';
+            var title = val(row,'title'), cat = val(row,'num'), thumb = val(row,'thumb') || '';
             var el = document.createElement('a');
             el.className = 'kn-item visible';
             el.href = '#';
             var thumbHtml = thumb
               ? '<img src="' + thumb + '" alt="">'
               : '<div class="gif-dot"></div><div class="kit-ph">GIF</div>';
-            var textHtml = text ? '<div class="ki-text">' + text + '</div>' : '';
             el.innerHTML = '<div class="ki-thumb">' + thumbHtml + '</div>'
               + '<div class="ki-body">'
               + '<div class="ki-cat">' + (cat || 'Knowhow') + '</div>'
               + '<div class="ki-title">' + title + '</div>'
-              + textHtml
               + '</div>'
               + '<div class="ki-arr">→</div>';
             el.addEventListener('click', function(e) { e.preventDefault(); openModal(row.id, title, ''); });
@@ -1304,9 +1310,12 @@
       </nav>
       <div class="sp-hero-content">
         <div class="sp-hero-title">WORKS</div>
+        <div class="sp-hero-meta">
+          <div class="sp-hero-count" id="works-count">—</div>
+          <div class="sp-hero-label">Projects</div>
+        </div>
       </div>
     </div>
-  </div>
     <div class="sp-body">
       <div class="sp-grid" id="subpage-works-grid">
         <p class="sp-empty">Loading...</p>
@@ -1326,10 +1335,13 @@
         </ul>
       </nav>
       <div class="sp-hero-content">
-        <div class="sp-hero-title">KNOW<br>HOW</div>
+        <div class="sp-hero-title">KNOW<br><em>HOW</em></div>
+        <div class="sp-hero-meta">
+          <div class="sp-hero-count" id="knowhow-count">—</div>
+          <div class="sp-hero-label">Articles</div>
+        </div>
       </div>
     </div>
-  </div>
     <div class="sp-body">
       <div class="sp-list" id="subpage-knowhow-list">
         <p class="sp-empty">Loading...</p>
@@ -1350,9 +1362,12 @@
       </nav>
       <div class="sp-hero-content">
         <div class="sp-hero-title">NOTES</div>
+        <div class="sp-hero-meta">
+          <div class="sp-hero-count" id="notes-count">—</div>
+          <div class="sp-hero-label">Posts</div>
+        </div>
       </div>
     </div>
-  </div>
     <div class="sp-body">
       <div class="sp-list" id="subpage-notes-list">
         <p class="sp-empty">Loading...</p>
