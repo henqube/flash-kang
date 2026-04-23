@@ -425,6 +425,52 @@
       color: rgba(255,255,255,0.14); letter-spacing: 0.06em;
     }
 
+
+    /* ── SUBPAGE OVERLAY ── */
+    .subpage {
+      position: fixed; inset: 0; z-index: 150;
+      background: var(--white);
+      display: none; flex-direction: column;
+      overflow-y: auto;
+    }
+    .subpage.active { display: flex; }
+    .subpage-nav {
+      position: sticky; top: 0; z-index: 10;
+      height: 54px; padding: 0 52px;
+      display: flex; align-items: center; justify-content: space-between;
+      background: var(--black); flex-shrink: 0;
+    }
+    .subpage-body {
+      flex: 1;
+      padding: 64px 52px 80px;
+    }
+    .subpage-title {
+      font-size: clamp(48px, 8vw, 96px);
+      font-weight: 700; letter-spacing: -0.04em; line-height: 0.9;
+      color: var(--black); text-transform: uppercase;
+      margin-bottom: 56px;
+    }
+    .subpage-title em { font-style: normal; color: var(--accent); }
+    .subpage-grid {
+      display: grid; grid-template-columns: repeat(3,1fr); gap: 2px;
+    }
+    .subpage-list {
+      display: flex; flex-direction: column; gap: 0;
+      max-width: 720px;
+    }
+    .sp-empty {
+      font-size: 13px; font-weight: 300;
+      color: var(--muted); padding: 40px 0;
+      letter-spacing: 0.06em;
+    }
+    @media(max-width:768px) {
+      .subpage-nav { padding: 0 24px; }
+      .subpage-body { padding: 48px 24px 60px; }
+      .subpage-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media(max-width:480px) {
+      .subpage-grid { grid-template-columns: 1fr; }
+    }
     /* ── MODAL ── */
     .modal-overlay {
       position: fixed; inset: 0; z-index: 200;
@@ -503,11 +549,11 @@
 
   <!-- NAV -->
   <nav class="nav">
-    <div class="nav-logo">FLASH <em>KANG</em></div>
+    <a href="/" class="nav-logo" style="text-decoration:none;">FLASH <em>KANG</em></a>
     <ul class="nav-links">
-      <li><a href="#works" class="on">Works</a></li>
-      <li><a href="#knowhow">Knowhow</a></li>
-      <li><a href="#notes">Notes</a></li>
+      <li><a href="#works" class="on" data-section="works">Works</a></li>
+      <li><a href="#knowhow" data-section="knowhow">Knowhow</a></li>
+      <li><a href="#notes" data-section="notes">Notes</a></li>
     </ul>
   </nav>
 
@@ -516,10 +562,10 @@
     <div class="hero-vbg" id="hero-vbg"></div>
     <div class="hero-content">
       <div class="hero-left">
-        <p class="hero-tag" id="hero-tag">VFX Artist · OCTOPO</p>
-        <h1 class="hero-name" id="hero-name">FLASH<br><em>KANG</em></h1>
+        <p class="hero-tag" id="hero-tag" style="visibility:hidden">VFX Artist · OCTOPO</p>
+        <h1 class="hero-name" id="hero-name" style="visibility:hidden">FLASH<br><em>KANG</em></h1>
       </div>
-      <div class="hero-timeline" id="hero-timeline">
+      <div class="hero-timeline" id="hero-timeline" style="visibility:hidden">
         <div class="ht-item"><span class="ht-year">2023 – NOW</span><span class="ht-title">OCTOPO</span></div>
         <div class="ht-item"><span class="ht-year">2019</span><span class="ht-title">SHIFTUP</span></div>
         <div class="ht-item"><span class="ht-year">2018</span><span class="ht-title">COOKAPPS</span></div>
@@ -682,7 +728,12 @@
           document.getElementById('hero-name').innerHTML =
             p[0] + '<br><em>' + p.slice(1).join(' ') + '</em>';
         }
-        if (sub) document.getElementById('hero-role').textContent = sub;
+        if (sub) document.getElementById('hero-role') && (document.getElementById('hero-role').textContent = sub);
+        // 로딩 완료 후 표시
+        ['hero-tag','hero-name','hero-timeline'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.style.visibility = 'visible';
+        });
         if (heroVideo) {
           const match = heroVideo.match(/[?&]v=([^&]+)/);
           const videoId = match ? match[1] : null;
@@ -885,6 +936,118 @@
       } catch(e) { console.error('FOOTER', e); }
     }
 
+
+    // ── 서브페이지 전환 ──
+    let subpageDataLoaded = { works: false, knowhow: false, notes: false };
+
+    function showSubpage(name) {
+      document.querySelectorAll('.subpage').forEach(el => el.classList.remove('active'));
+      const sp = document.getElementById('subpage-' + name);
+      if (sp) {
+        sp.classList.add('active');
+        sp.scrollTop = 0;
+        document.body.style.overflow = 'hidden';
+        if (!subpageDataLoaded[name]) {
+          loadSubpageData(name);
+          subpageDataLoaded[name] = true;
+        }
+      }
+    }
+
+    function closeSubpage() {
+      document.querySelectorAll('.subpage').forEach(el => el.classList.remove('active'));
+      document.body.style.overflow = '';
+    }
+
+    async function loadSubpageData(name) {
+      if (name === 'works') {
+        const grid = document.getElementById('subpage-works-grid');
+        try {
+          const rows = await fetchDB('works');
+          if (!rows.length) { grid.innerHTML = '<p class="sp-empty">준비 중입니다.</p>'; return; }
+          grid.innerHTML = '';
+          rows.forEach(row => {
+            const title = val(row,'title'), thumb = val(row,'thumb'),
+                  text = val(row,'text'), visible = val(row,'visible');
+            if (visible === false) return;
+            const el = document.createElement('a');
+            el.className = 'work-card visible';
+            el.href = '#';
+            el.innerHTML = \`
+              <div class="work-thumb">
+                \${thumb ? \`<img src="\${thumb}" alt="\${title}">\` : \`<div class="gif-dot"></div><div class="wt-ph">GIF</div>\`}
+              </div>
+              <div class="work-info">
+                <div class="wi-cat">VFX</div>
+                <div class="wi-title">\${title}</div>
+                <div class="wi-desc">\${text}</div>
+              </div>\`;
+            el.addEventListener('click', e => { e.preventDefault(); openModal(row.id, title, text); });
+            grid.appendChild(el);
+          });
+        } catch(e) { grid.innerHTML = '<p class="sp-empty">로드 실패</p>'; }
+
+      } else if (name === 'knowhow') {
+        const list = document.getElementById('subpage-knowhow-list');
+        try {
+          const rows = await fetchDB('process');
+          if (!rows.length) { list.innerHTML = '<p class="sp-empty">준비 중입니다.</p>'; return; }
+          list.innerHTML = '';
+          rows.filter(r => val(r,'num') !== 'headline').forEach(row => {
+            const title = val(row,'title'), cat = val(row,'num'), thumb = val(row,'thumb') || '';
+            const el = document.createElement('a');
+            el.className = 'kn-item visible';
+            el.href = '#';
+            el.innerHTML = \`
+              <div class="ki-thumb">
+                \${thumb ? \`<img src="\${thumb}" alt="">\` : \`<div class="gif-dot"></div><div class="kit-ph">GIF</div>\`}
+              </div>
+              <div class="ki-body">
+                <div class="ki-cat">\${cat || 'Knowhow'}</div>
+                <div class="ki-title">\${title}</div>
+              </div>
+              <div class="ki-arr">→</div>\`;
+            el.addEventListener('click', e => { e.preventDefault(); openModal(row.id, title, ''); });
+            list.appendChild(el);
+          });
+        } catch(e) { list.innerHTML = '<p class="sp-empty">로드 실패</p>'; }
+
+      } else if (name === 'notes') {
+        const list = document.getElementById('subpage-notes-list');
+        try {
+          const rows = await fetchDB('works');
+          const noteRows = rows.filter(r => val(r,'type') === 'note');
+          if (!noteRows.length) { list.innerHTML = '<p class="sp-empty">준비 중입니다.</p>'; return; }
+          list.innerHTML = '';
+          noteRows.forEach(row => {
+            const title = val(row,'title'), text = val(row,'text'), thumb = val(row,'thumb') || '';
+            const el = document.createElement('a');
+            el.className = 'kn-item visible';
+            el.href = '#';
+            el.innerHTML = \`
+              <div class="ki-thumb">
+                \${thumb ? \`<img src="\${thumb}" alt="">\` : \`<div class="kit-ph">IMG</div>\`}
+              </div>
+              <div class="ki-body">
+                <div class="ki-cat">Note</div>
+                <div class="ki-title">\${title}</div>
+              </div>
+              <div class="ki-arr">→</div>\`;
+            el.addEventListener('click', e => { e.preventDefault(); openModal(row.id, title, text); });
+            list.appendChild(el);
+          });
+        } catch(e) { list.innerHTML = '<p class="sp-empty">로드 실패</p>'; }
+      }
+    }
+
+    // 네비 링크에 서브페이지 연결
+    document.querySelectorAll('.nav-links a[data-section]').forEach(a => {
+      a.addEventListener('click', e => {
+        e.preventDefault();
+        showSubpage(a.dataset.section);
+      });
+    });
+
     // ── Nav active 스크롤 연동 ──
     const sections = ['works','knowhow','notes'];
     const navLinks = document.querySelectorAll('.nav-links a');
@@ -901,7 +1064,6 @@
 
     // ── 전체 로드 ──
     loadTitle();
-    loadAbout();
     loadTimeline();
     loadWorks();
     loadKnowhow();
@@ -909,5 +1071,59 @@
     loadContact();
     loadFooter();
   </script>
+
+  <!-- WORKS 서브페이지 -->
+  <div class="subpage" id="subpage-works">
+    <nav class="subpage-nav">
+      <a href="/" class="nav-logo" style="text-decoration:none;">FLASH <em>KANG</em></a>
+      <ul class="nav-links">
+        <li><a href="#" class="on" onclick="return false;">Works</a></li>
+        <li><a href="#" onclick="showSubpage('knowhow'); return false;">Knowhow</a></li>
+        <li><a href="#" onclick="showSubpage('notes'); return false;">Notes</a></li>
+      </ul>
+    </nav>
+    <div class="subpage-body">
+      <div class="subpage-title">Works</div>
+      <div class="subpage-grid" id="subpage-works-grid">
+        <p class="sp-empty">Loading...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- KNOWHOW 서브페이지 -->
+  <div class="subpage" id="subpage-knowhow">
+    <nav class="subpage-nav">
+      <a href="/" class="nav-logo" style="text-decoration:none;">FLASH <em>KANG</em></a>
+      <ul class="nav-links">
+        <li><a href="#" onclick="showSubpage('works'); return false;">Works</a></li>
+        <li><a href="#" class="on" onclick="return false;">Knowhow</a></li>
+        <li><a href="#" onclick="showSubpage('notes'); return false;">Notes</a></li>
+      </ul>
+    </nav>
+    <div class="subpage-body">
+      <div class="subpage-title">Know<br><em>how</em></div>
+      <div class="subpage-list" id="subpage-knowhow-list">
+        <p class="sp-empty">Loading...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- NOTES 서브페이지 -->
+  <div class="subpage" id="subpage-notes">
+    <nav class="subpage-nav">
+      <a href="/" class="nav-logo" style="text-decoration:none;">FLASH <em>KANG</em></a>
+      <ul class="nav-links">
+        <li><a href="#" onclick="showSubpage('works'); return false;">Works</a></li>
+        <li><a href="#" onclick="showSubpage('knowhow'); return false;">Knowhow</a></li>
+        <li><a href="#" class="on" onclick="return false;">Notes</a></li>
+      </ul>
+    </nav>
+    <div class="subpage-body">
+      <div class="subpage-title">Notes</div>
+      <div class="subpage-list" id="subpage-notes-list">
+        <p class="sp-empty">Loading...</p>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
