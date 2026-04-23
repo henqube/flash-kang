@@ -551,7 +551,7 @@
   <nav class="nav">
     <a href="/" class="nav-logo" style="text-decoration:none;">FLASH <em>KANG</em></a>
     <ul class="nav-links">
-      <li><a href="#works" class="on" data-section="works">Works</a></li>
+      <li><a href="#works" data-section="works">Works</a></li>
       <li><a href="#knowhow" data-section="knowhow">Knowhow</a></li>
       <li><a href="#notes" data-section="notes">Notes</a></li>
     </ul>
@@ -941,8 +941,8 @@
     let subpageDataLoaded = { works: false, knowhow: false, notes: false };
 
     function showSubpage(name) {
-      document.querySelectorAll('.subpage').forEach(el => el.classList.remove('active'));
-      const sp = document.getElementById('subpage-' + name);
+      document.querySelectorAll('.subpage').forEach(function(el) { el.classList.remove('active'); });
+      var sp = document.getElementById('subpage-' + name);
       if (sp) {
         sp.classList.add('active');
         sp.scrollTop = 0;
@@ -955,85 +955,85 @@
     }
 
     function closeSubpage() {
-      document.querySelectorAll('.subpage').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.subpage').forEach(function(el) { el.classList.remove('active'); });
       document.body.style.overflow = '';
     }
 
     async function loadSubpageData(name) {
       if (name === 'works') {
-        const grid = document.getElementById('subpage-works-grid');
+        var grid = document.getElementById('subpage-works-grid');
         try {
-          const rows = await fetchDB('works');
+          var rows = await fetchDB('works');
           if (!rows.length) { grid.innerHTML = '<p class="sp-empty">준비 중입니다.</p>'; return; }
           grid.innerHTML = '';
-          rows.forEach(row => {
-            const title = val(row,'title'), thumb = val(row,'thumb'),
-                  text = val(row,'text'), visible = val(row,'visible');
+          rows.forEach(function(row) {
+            var title = val(row,'title'), thumb = val(row,'thumb'),
+                text = val(row,'text'), visible = val(row,'visible');
             if (visible === false) return;
-            const el = document.createElement('a');
+            var el = document.createElement('a');
             el.className = 'work-card visible';
             el.href = '#';
-            el.innerHTML = \`
-              <div class="work-thumb">
-                \${thumb ? \`<img src="\${thumb}" alt="\${title}">\` : \`<div class="gif-dot"></div><div class="wt-ph">GIF</div>\`}
-              </div>
-              <div class="work-info">
-                <div class="wi-cat">VFX</div>
-                <div class="wi-title">\${title}</div>
-                <div class="wi-desc">\${text}</div>
-              </div>\`;
-            el.addEventListener('click', e => { e.preventDefault(); openModal(row.id, title, text); });
+            var thumbHtml = thumb
+              ? '<img src="' + thumb + '" alt="' + title + '">'
+              : '<div class="gif-dot"></div><div class="wt-ph">GIF</div>';
+            el.innerHTML = '<div class="work-thumb">' + thumbHtml + '</div>'
+              + '<div class="work-info">'
+              + '<div class="wi-cat">VFX</div>'
+              + '<div class="wi-title">' + title + '</div>'
+              + '<div class="wi-desc">' + text + '</div>'
+              + '</div>';
+            el.addEventListener('click', function(e) { e.preventDefault(); openModal(row.id, title, text); });
             grid.appendChild(el);
           });
         } catch(e) { grid.innerHTML = '<p class="sp-empty">로드 실패</p>'; }
 
       } else if (name === 'knowhow') {
-        const list = document.getElementById('subpage-knowhow-list');
+        var list = document.getElementById('subpage-knowhow-list');
         try {
-          const rows = await fetchDB('process');
+          var rows = await fetchDB('process');
           if (!rows.length) { list.innerHTML = '<p class="sp-empty">준비 중입니다.</p>'; return; }
           list.innerHTML = '';
-          rows.filter(r => val(r,'num') !== 'headline').forEach(row => {
-            const title = val(row,'title'), cat = val(row,'num'), thumb = val(row,'thumb') || '';
-            const el = document.createElement('a');
+          rows.filter(function(r) { return val(r,'num') !== 'headline'; }).forEach(function(row) {
+            var title = val(row,'title'), cat = val(row,'num'), thumb = val(row,'thumb') || '';
+            var el = document.createElement('a');
             el.className = 'kn-item visible';
             el.href = '#';
-            el.innerHTML = \`
-              <div class="ki-thumb">
-                \${thumb ? \`<img src="\${thumb}" alt="">\` : \`<div class="gif-dot"></div><div class="kit-ph">GIF</div>\`}
-              </div>
-              <div class="ki-body">
-                <div class="ki-cat">\${cat || 'Knowhow'}</div>
-                <div class="ki-title">\${title}</div>
-              </div>
-              <div class="ki-arr">→</div>\`;
-            el.addEventListener('click', e => { e.preventDefault(); openModal(row.id, title, ''); });
+            var thumbHtml = thumb
+              ? '<img src="' + thumb + '" alt="">'
+              : '<div class="gif-dot"></div><div class="kit-ph">GIF</div>';
+            el.innerHTML = '<div class="ki-thumb">' + thumbHtml + '</div>'
+              + '<div class="ki-body">'
+              + '<div class="ki-cat">' + (cat || 'Knowhow') + '</div>'
+              + '<div class="ki-title">' + title + '</div>'
+              + '</div>'
+              + '<div class="ki-arr">→</div>';
+            el.addEventListener('click', function(e) { e.preventDefault(); openModal(row.id, title, ''); });
             list.appendChild(el);
           });
         } catch(e) { list.innerHTML = '<p class="sp-empty">로드 실패</p>'; }
 
       } else if (name === 'notes') {
-        const list = document.getElementById('subpage-notes-list');
+        var list = document.getElementById('subpage-notes-list');
         try {
-          const rows = await fetchDB('works');
-          const noteRows = rows.filter(r => val(r,'type') === 'note');
+          var rows = await fetchDB('works');
+          var noteRows = rows.filter(function(r) { return val(r,'type') === 'note'; });
           if (!noteRows.length) { list.innerHTML = '<p class="sp-empty">준비 중입니다.</p>'; return; }
           list.innerHTML = '';
-          noteRows.forEach(row => {
-            const title = val(row,'title'), text = val(row,'text'), thumb = val(row,'thumb') || '';
-            const el = document.createElement('a');
+          noteRows.forEach(function(row) {
+            var title = val(row,'title'), text = val(row,'text'), thumb = val(row,'thumb') || '';
+            var el = document.createElement('a');
             el.className = 'kn-item visible';
             el.href = '#';
-            el.innerHTML = \`
-              <div class="ki-thumb">
-                \${thumb ? \`<img src="\${thumb}" alt="">\` : \`<div class="kit-ph">IMG</div>\`}
-              </div>
-              <div class="ki-body">
-                <div class="ki-cat">Note</div>
-                <div class="ki-title">\${title}</div>
-              </div>
-              <div class="ki-arr">→</div>\`;
-            el.addEventListener('click', e => { e.preventDefault(); openModal(row.id, title, text); });
+            var thumbHtml = thumb
+              ? '<img src="' + thumb + '" alt="">'
+              : '<div class="kit-ph">IMG</div>';
+            el.innerHTML = '<div class="ki-thumb">' + thumbHtml + '</div>'
+              + '<div class="ki-body">'
+              + '<div class="ki-cat">Note</div>'
+              + '<div class="ki-title">' + title + '</div>'
+              + '</div>'
+              + '<div class="ki-arr">→</div>';
+            el.addEventListener('click', function(e) { e.preventDefault(); openModal(row.id, title, text); });
             list.appendChild(el);
           });
         } catch(e) { list.innerHTML = '<p class="sp-empty">로드 실패</p>'; }
@@ -1041,8 +1041,8 @@
     }
 
     // 네비 링크에 서브페이지 연결
-    document.querySelectorAll('.nav-links a[data-section]').forEach(a => {
-      a.addEventListener('click', e => {
+    document.querySelectorAll('.nav-links a[data-section]').forEach(function(a) {
+      a.addEventListener('click', function(e) {
         e.preventDefault();
         showSubpage(a.dataset.section);
       });
