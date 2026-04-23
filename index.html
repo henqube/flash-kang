@@ -696,10 +696,10 @@
     <div class="hero-vbg" id="hero-vbg"></div>
     <div class="hero-content">
       <div class="hero-left">
-        <p class="hero-tag" id="hero-tag" style="visibility:hidden">VFX Artist · OCTOPO</p>
-        <h1 class="hero-name" id="hero-name" style="visibility:hidden">FLASH<br><em>KANG</em></h1>
+        <p class="hero-tag" id="hero-tag">VFX Artist · OCTOPO</p>
+        <h1 class="hero-name" id="hero-name">FLASH<br><em>KANG</em></h1>
       </div>
-      <div class="hero-timeline" id="hero-timeline" style="visibility:hidden">
+      <div class="hero-timeline" id="hero-timeline">
         <div class="ht-item"><span class="ht-year">2023 – NOW</span><span class="ht-title">OCTOPO</span></div>
         <div class="ht-item"><span class="ht-year">2019</span><span class="ht-title">SHIFTUP</span></div>
         <div class="ht-item"><span class="ht-year">2018</span><span class="ht-title">COOKAPPS</span></div>
@@ -862,12 +862,7 @@
           document.getElementById('hero-name').innerHTML =
             p[0] + '<br><em>' + p.slice(1).join(' ') + '</em>';
         }
-        if (sub) document.getElementById('hero-role') && (document.getElementById('hero-role').textContent = sub);
-        // 로딩 완료 후 표시
-        ['hero-tag','hero-name','hero-timeline'].forEach(id => {
-          const el = document.getElementById(id);
-          if (el) el.style.visibility = 'visible';
-        });
+        if (sub) { var roleEl = document.getElementById('hero-role'); if (roleEl) roleEl.textContent = sub; }
         if (heroVideo) {
           const match = heroVideo.match(/[?&]v=([^&]+)/);
           const videoId = match ? match[1] : null;
@@ -945,6 +940,7 @@
           el.addEventListener('click', e => { e.preventDefault(); openModal(row.id, title, text); });
           grid.appendChild(el);
           observer.observe(el);
+          setTimeout(function() { el.classList.add('visible'); }, 50);
         });
       } catch(e) { console.error('WORKS', e); }
     }
@@ -1099,7 +1095,7 @@
         var countEl = document.getElementById('works-count');
         try {
           var rows = await fetchDB('works');
-          var visible = rows.filter(function(r) { return val(r,'visible') !== false; });
+          var visible = rows.filter(function(r) { var v = val(r,'visible'); return v === true || v === ''; });
           if (!visible.length) { grid.innerHTML = '<p class="sp-empty">준비 중입니다.</p>'; return; }
           if (countEl) countEl.textContent = visible.length;
           grid.innerHTML = '';
