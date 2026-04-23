@@ -9,7 +9,7 @@ export default async function handler(req, res) {
     about:    process.env.NOTION_ABOUT_DB,
     timeline: process.env.NOTION_TIMELINE_DB,
     works:    process.env.NOTION_WORKS_DB,
-    knowhow:  process.env.NOTION_KNOWHOW_DB,
+    process:  process.env.NOTION_PROCESS_DB,
     contact:  process.env.NOTION_CONTACT_DB,
     footer:   process.env.NOTION_FOOTER_DB,
   };
