@@ -1,1 +1,1404 @@
-<!DOCTYPE html><html><body><h1>Use provided file in chat</h1></body></html>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flash Kang — Game VFX Artist</title>
+  <meta name="description" content="2002년 스틱 하나에서 시작한 게임 아티스트. OCTOPO VFX 총괄 리드." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --black: #111;
+      --white: #fff;
+      --cream: #f7f5f2;
+      --accent: #ff5500;
+      --gray: #f0eeeb;
+      --text: #111;
+      --muted: #aaa;
+    }
+    html, body {
+      width: 100%;
+      background: var(--white);
+      color: var(--text);
+      font-family: 'DM Sans', 'Noto Sans KR', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      height: 56px; padding: 0 52px;
+      display: flex; align-items: center; justify-content: space-between;
+      background: var(--black);
+    }
+    .nav-logo {
+      font-size: 13px; font-weight: 700; letter-spacing: 0.1em;
+      color: var(--white); text-transform: uppercase;
+    }
+    .nav-logo em { font-style: normal; color: var(--accent); }
+    .nav-links { display: flex; gap: 36px; list-style: none; }
+    .nav-links a {
+      font-size: 11px; font-weight: 500; letter-spacing: 0.1em;
+      color: rgba(255,255,255,0.38); text-decoration: none;
+      text-transform: uppercase; transition: color 0.18s;
+    }
+    .nav-links a:hover, .nav-links a.on { color: var(--white); }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      background: var(--black);
+      min-height: 100vh;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      overflow: hidden;
+      padding-top: 56px;
+    }
+    .hero::after {
+      content: '';
+      position: absolute; bottom: 0; left: 0; right: 0;
+      height: 80px; z-index: 4;
+      background: var(--white);
+      clip-path: polygon(0 52%, 100% 0, 100% 100%, 0 100%);
+    }
+    .hero-vbg {
+      position: absolute; inset: 0;
+      background: var(--black); overflow: hidden;
+    }
+    .hero-vbg::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 65% 55% at 72% 38%, rgba(255,85,0,0.22) 0%, transparent 68%),
+        radial-gradient(ellipse 40% 55% at 25% 72%, rgba(255,120,20,0.1) 0%, transparent 60%);
+      animation: vshift 9s ease-in-out infinite alternate;
+    }
+    @keyframes vshift {
+      0% { opacity: 0.55; transform: scale(1); }
+      100% { opacity: 1; transform: scale(1.07); }
+    }
+    .hero-vbg::after {
+      content: ''; position: absolute; inset: 0;
+      background: rgba(8,8,8,0.52);
+    }
+    /* YouTube iframe bg */
+    .hero-vbg iframe {
+      position: absolute;
+      top: 50%; left: 50%;
+      width: 177.78vh; min-width: 100%;
+      height: 56.25vw; min-height: 100%;
+      transform: translate(-50%,-50%);
+      pointer-events: none; opacity: 0.55;
+      z-index: 1;
+    }
+    .hero-vbg::before, .hero-vbg::after { z-index: 2; }
+
+    .hero-content {
+      position: relative; z-index: 3;
+      padding: 0 52px 64px;
+      width: 100%;
+      display: flex; align-items: flex-start; justify-content: space-between;
+    }
+    .hero-tag {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.3em;
+      color: var(--accent); text-transform: uppercase;
+      margin-bottom: 18px;
+      opacity: 0; animation: fadeUp 0.8s 0.3s forwards;
+    }
+    .hero-left { display: flex; flex-direction: column; margin-top: -30px; }
+    .hero-name {
+      font-size: clamp(72px, 11vw, 130px);
+      font-weight: 700;
+      letter-spacing: -0.04em; line-height: 0.88;
+      color: var(--white); text-transform: uppercase;
+      opacity: 0; animation: fadeUp 0.9s 0.5s forwards;
+    }
+    .hero-name em { font-style: normal; color: var(--accent); }
+    .hero-timeline {
+      display: flex; flex-direction: column;
+      align-items: flex-end; gap: 0;
+      padding-bottom: 100px;
+      opacity: 0; animation: fadeUp 0.9s 0.75s forwards;
+    }
+    .ht-item {
+      display: flex; align-items: baseline; gap: 12px;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+    .ht-item:last-child { border-bottom: none; }
+    .ht-year {
+      font-size: 11px; font-weight: 700;
+      color: var(--accent); letter-spacing: 0.06em;
+      flex-shrink: 0;
+    }
+    .ht-title {
+      font-size: 11px; font-weight: 300;
+      color: rgba(255,255,255,0.42);
+      letter-spacing: 0.04em; text-align: right;
+      line-height: 1.45;
+    }
+
+    /* ── DIAGONAL CUTS ── */
+    .diag {
+      position: relative; height: 80px;
+      background: var(--black); overflow: hidden;
+    }
+    .diag::after {
+      content: ''; position: absolute;
+      bottom: 0; left: 0; right: 0; height: 100%;
+      background: var(--white);
+      clip-path: polygon(0 52%, 100% 0, 100% 100%, 0 100%);
+    }
+    .diag2 {
+      position: relative; height: 80px;
+      background: var(--white); overflow: hidden;
+    }
+    .diag2::after {
+      content: ''; position: absolute;
+      bottom: 0; left: 0; right: 0; height: 100%;
+      background: var(--cream);
+      clip-path: polygon(0 0, 100% 52%, 100% 100%, 0 100%);
+    }
+    .diag3 {
+      position: relative; height: 80px;
+      background: var(--cream); overflow: hidden;
+    }
+    .diag3::after {
+      content: ''; position: absolute;
+      bottom: 0; left: 0; right: 0; height: 100%;
+      background: var(--black);
+      clip-path: polygon(0 52%, 100% 0, 100% 100%, 0 100%);
+    }
+    .diag4 {
+      position: relative; height: 80px;
+      background: var(--black); overflow: hidden;
+    }
+    .diag4::after {
+      content: ''; position: absolute;
+      bottom: 0; left: 0; right: 0; height: 100%;
+      background: var(--white);
+      clip-path: polygon(0 0, 100% 52%, 100% 100%, 0 100%);
+    }
+
+    /* ── ABOUT ── */
+    .about-sec {
+      background: var(--white);
+      padding: 72px 52px 80px;
+    }
+    .sec-label {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.22em;
+      text-transform: uppercase; color: var(--accent);
+      margin-bottom: 40px;
+    }
+    .about-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 6vw; align-items: start;
+    }
+    .about-headline {
+      font-size: clamp(34px, 4.5vw, 58px);
+      font-weight: 700; line-height: 1.05;
+      letter-spacing: -0.02em; color: var(--black);
+    }
+    .about-headline .hl { color: var(--accent); }
+    .about-body {
+      font-size: 15px; font-weight: 300; line-height: 1.95;
+      color: rgba(17,17,17,0.6);
+    }
+    .about-body p + p { margin-top: 1.2rem; }
+    .about-body .em { color: var(--black); font-weight: 600; }
+    .about-footline {
+      margin-top: 2rem;
+      font-size: 11px; font-weight: 600;
+      letter-spacing: 0.12em; color: rgba(255,85,0,0.75);
+      text-transform: uppercase;
+    }
+
+    /* ── WORKS ── */
+    .works-sec {
+      background: var(--white);
+      padding: 60px 52px 72px;
+    }
+    .sec-head {
+      display: flex; align-items: baseline; justify-content: space-between;
+      margin-bottom: 36px;
+    }
+    .sec-title {
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 0.2em; text-transform: uppercase; color: var(--black);
+    }
+    .sec-more {
+      font-size: 12px; font-weight: 400; color: var(--muted);
+      text-decoration: none; transition: color 0.15s;
+    }
+    .sec-more:hover { color: var(--accent); }
+
+    .works-grid {
+      display: grid; grid-template-columns: repeat(3,1fr); gap: 2px;
+    }
+    .work-card {
+      text-decoration: none; color: inherit;
+      display: block; cursor: pointer;
+      opacity: 0; transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .work-card.visible { opacity: 1; transform: translateY(0); }
+    .work-thumb {
+      width: 100%; aspect-ratio: 4/3;
+      background: var(--gray);
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden; position: relative;
+      transition: opacity 0.2s;
+    }
+    .work-card:hover .work-thumb { opacity: 0.78; }
+    .work-thumb img {
+      width: 100%; height: 100%; object-fit: cover;
+      position: absolute; inset: 0;
+    }
+    .wt-ph {
+      font-size: 10px; font-weight: 600; color: #ccc;
+      letter-spacing: 0.12em; text-transform: uppercase;
+    }
+    .gif-dot {
+      position: absolute; top: 12px; left: 12px;
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--accent); z-index: 1;
+    }
+    .work-info { padding: 16px 2px 36px; }
+    .wi-cat {
+      font-size: 9px; font-weight: 700; color: var(--accent);
+      letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 6px;
+    }
+    .wi-title {
+      font-size: 16px; font-weight: 600; color: var(--black);
+      line-height: 1.3; letter-spacing: -0.01em; margin-bottom: 5px;
+    }
+    .wi-desc {
+      font-size: 13px; font-weight: 300;
+      color: var(--muted); line-height: 1.65;
+    }
+
+    /* ── KNOWHOW + NOTES (cream bg) ── */
+    .kn-wrap {
+      background: var(--cream);
+      padding: 72px 52px 88px;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 60px;
+    }
+    .kn-col-title {
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--black); margin-bottom: 28px;
+    }
+    .kn-list { display: flex; flex-direction: column; gap: 0; }
+    .kn-item {
+      display: flex; align-items: center; gap: 16px;
+      padding: 16px 0;
+      border-bottom: 1px solid #e8e5e0;
+      text-decoration: none; color: inherit;
+      transition: opacity 0.18s;
+      opacity: 0; transform: translateY(16px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .kn-item.visible { opacity: 1; transform: translateY(0); }
+    .kn-item:hover { opacity: 0.6; }
+    .kn-item:last-child { border-bottom: none; }
+    .ki-thumb {
+      width: 72px; height: 52px; flex-shrink: 0;
+      background: #e8e5e0;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden; position: relative;
+    }
+    .ki-thumb img { width: 100%; height: 100%; object-fit: cover; }
+    .ki-thumb .gif-dot { top: 6px; left: 6px; width: 5px; height: 5px; }
+    .kit-ph {
+      font-size: 9px; font-weight: 600; color: #ccc;
+      letter-spacing: 0.1em; text-transform: uppercase;
+    }
+    .ki-body { flex: 1; }
+    .ki-cat {
+      font-size: 9px; font-weight: 700; color: var(--accent);
+      letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 5px;
+    }
+    .ki-title {
+      font-size: 14px; font-weight: 500;
+      color: var(--black); line-height: 1.35;
+    }
+    .ki-arr {
+      font-size: 14px; color: #ccc; flex-shrink: 0;
+      transition: color 0.18s, transform 0.18s;
+    }
+    .kn-item:hover .ki-arr { color: var(--accent); transform: translateX(3px); }
+
+    /* ── TIMELINE ── */
+    .timeline-sec {
+      background: var(--white);
+      padding: 72px 52px 80px;
+    }
+    .timeline-item {
+      display: grid; grid-template-columns: 140px 1fr;
+      gap: 4vw; padding: 24px 0;
+      border-bottom: 1px solid rgba(17,17,17,0.07);
+      transition: border-color 0.25s;
+      opacity: 0; transform: translateY(16px);
+      transition: opacity 0.6s ease, transform 0.6s ease, border-color 0.25s;
+    }
+    .timeline-item:hover { border-color: rgba(255,85,0,0.28); }
+    .timeline-item.visible { opacity: 1; transform: translateY(0); }
+    .timeline-year {
+      font-size: 28px; font-weight: 700; letter-spacing: -0.02em;
+      color: rgba(17,17,17,0.1); transition: color 0.25s; line-height: 1.3;
+    }
+    .timeline-item:hover .timeline-year { color: var(--accent); }
+    .timeline-desc {
+      font-size: 14px; font-weight: 300;
+      color: rgba(17,17,17,0.55); line-height: 1.75;
+      padding-top: 4px;
+    }
+    .timeline-desc strong {
+      color: var(--black); font-weight: 600;
+      display: block; margin-bottom: 3px; font-size: 15px;
+    }
+
+    /* ── CONTACT ── */
+    .contact-sec {
+      background: var(--black);
+      padding: 100px 52px;
+      display: flex; flex-direction: column; align-items: center; text-align: center;
+    }
+    .contact-label {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.28em;
+      color: var(--accent); text-transform: uppercase; margin-bottom: 28px;
+    }
+    .contact-headline {
+      font-size: clamp(42px, 7vw, 96px);
+      font-weight: 700; letter-spacing: -0.04em; line-height: 0.9;
+      color: var(--white); margin-bottom: 28px;
+      opacity: 0; transform: translateY(20px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .contact-headline.visible { opacity: 1; transform: translateY(0); }
+    .contact-headline em { font-style: normal; color: var(--accent); }
+    .contact-sub {
+      font-size: 15px; font-weight: 300;
+      color: rgba(255,255,255,0.38); line-height: 1.85;
+      max-width: 480px; margin-bottom: 48px;
+    }
+    .contact-btn {
+      display: inline-flex; align-items: center; gap: 12px;
+      padding: 14px 36px;
+      border: 1px solid var(--accent);
+      font-size: 11px; font-weight: 600; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--white);
+      text-decoration: none;
+      transition: background 0.25s, color 0.25s;
+    }
+    .contact-btn:hover { background: var(--accent); color: var(--black); }
+    .contact-note {
+      margin-top: 20px; font-size: 11px; font-weight: 400;
+      color: rgba(255,255,255,0.18); letter-spacing: 0.1em;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--black);
+      padding: 32px 52px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .ft-logo {
+      font-size: 13px; font-weight: 700;
+      letter-spacing: 0.1em; color: rgba(255,255,255,0.5);
+      text-transform: uppercase;
+    }
+    .ft-logo em { font-style: normal; color: var(--accent); }
+    .ft-links { display: flex; gap: 32px; list-style: none; }
+    .ft-links a {
+      font-size: 11px; font-weight: 400;
+      color: rgba(255,255,255,0.22);
+      text-decoration: none; letter-spacing: 0.08em;
+      text-transform: uppercase; transition: color 0.15s;
+    }
+    .ft-links a:hover { color: var(--accent); }
+    .ft-copy {
+      font-size: 11px; font-weight: 300;
+      color: rgba(255,255,255,0.14); letter-spacing: 0.06em;
+    }
+
+
+    /* ── SUBPAGE OVERLAY ── */
+    .subpage {
+      position: fixed; inset: 0; z-index: 150;
+      background: var(--white);
+      display: none; flex-direction: column;
+      overflow-y: auto;
+    }
+    .subpage.active { display: flex; }
+
+    /* 서브페이지 히어로 */
+    .sp-hero {
+      background: var(--black);
+      min-height: 38vh;
+      position: relative;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      overflow: hidden; flex-shrink: 0;
+    }
+    .sp-hero::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse 60% 80% at 30% 60%, rgba(255,85,0,0.14) 0%, transparent 70%);
+      z-index: 1;
+    }
+    .sp-hero::after {
+      content: ''; position: absolute;
+      bottom: 0; left: 0; right: 0; height: 72px;
+      background: var(--white);
+      clip-path: polygon(0 55%, 100% 0, 100% 100%, 0 100%);
+      z-index: 3;
+    }
+    .sp-hero-nav {
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 54px; padding: 0 52px;
+      display: flex; align-items: center; justify-content: space-between;
+      z-index: 4;
+    }
+    .sp-hero-content {
+      position: relative; z-index: 2;
+      padding: 0 52px 56px;
+      display: flex; align-items: flex-start; justify-content: space-between;
+    }
+    .sp-hero-title {
+      font-size: clamp(52px, 9vw, 110px);
+      font-weight: 700; letter-spacing: -0.04em; line-height: 0.88;
+      color: var(--white); text-transform: uppercase;
+    }
+    .sp-hero-title em { font-style: normal; color: var(--accent); }
+    .sp-hero-meta {
+      display: flex; flex-direction: column; align-items: flex-end; gap: 2px;
+      padding-top: 10px;
+    }
+    .sp-hero-count {
+      font-size: clamp(28px, 4vw, 48px); font-weight: 700;
+      color: rgba(255,255,255,0.12); letter-spacing: -0.03em; line-height: 1;
+    }
+    .sp-hero-label {
+      font-size: 10px; font-weight: 600; color: rgba(255,255,255,0.28);
+      letter-spacing: 0.16em; text-transform: uppercase;
+    }
+
+    /* 서브페이지 바디 */
+    .sp-body { flex: 1; padding: 0 52px 80px; }
+    .sp-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 2px; }
+    .sp-list { display: flex; flex-direction: column; gap: 0; max-width: 760px; }
+    .sp-empty {
+      font-size: 13px; font-weight: 300; color: var(--muted);
+      padding: 48px 0; letter-spacing: 0.06em;
+    }
+
+    /* 상세 페이지 (Works 카드 클릭 후) */
+    .detail-page {
+      position: fixed; inset: 0; z-index: 200;
+      background: var(--white);
+      display: none; flex-direction: column;
+      overflow-y: auto;
+    }
+    .detail-page.active { display: flex; }
+    .detail-hero {
+      background: var(--black);
+      position: relative;
+      min-height: 46vh;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      overflow: hidden; flex-shrink: 0;
+    }
+    .detail-hero::after {
+      content: ''; position: absolute;
+      bottom: 0; left: 0; right: 0; height: 72px;
+      background: var(--white);
+      clip-path: polygon(0 55%, 100% 0, 100% 100%, 0 100%);
+      z-index: 3;
+    }
+    .detail-hero-nav {
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 54px; padding: 0 52px;
+      display: flex; align-items: center; justify-content: space-between;
+      z-index: 4;
+    }
+    .detail-back {
+      font-size: 11px; font-weight: 500; color: rgba(255,255,255,0.4);
+      letter-spacing: 0.1em; text-transform: uppercase;
+      background: none; border: none; cursor: pointer;
+      transition: color 0.15s; text-decoration: none;
+    }
+    .detail-back:hover { color: var(--white); }
+    .detail-hero-media {
+      position: absolute; inset: 0; z-index: 1;
+      background: #1a1a1a;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .detail-hero-media img {
+      width: 100%; height: 100%; object-fit: cover; opacity: 0.7;
+    }
+    .detail-hero-media-ph {
+      font-size: 10px; color: rgba(255,255,255,0.15);
+      letter-spacing: 0.2em; text-transform: uppercase;
+    }
+    .detail-hero-overlay {
+      position: absolute; inset: 0; z-index: 2;
+      background: rgba(8,8,8,0.45);
+    }
+    .detail-hero-content {
+      position: relative; z-index: 4;
+      padding: 0 52px 56px;
+      display: flex; align-items: flex-start; justify-content: space-between;
+    }
+    .detail-cat {
+      font-size: 10px; font-weight: 700; color: var(--accent);
+      letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 10px;
+    }
+    .detail-title {
+      font-size: clamp(36px, 6vw, 72px); font-weight: 700;
+      letter-spacing: -0.03em; line-height: 0.9;
+      color: var(--white); text-transform: uppercase;
+    }
+    .detail-tags {
+      display: flex; flex-direction: column; align-items: flex-end; gap: 4px;
+      padding-top: 8px;
+    }
+    .detail-tag {
+      font-size: 10px; font-weight: 400; color: rgba(255,255,255,0.35);
+      letter-spacing: 0.1em; text-transform: uppercase;
+    }
+    .detail-body { padding: 12px 52px 80px; }
+    .detail-desc {
+      font-size: 15px; font-weight: 300; line-height: 1.9;
+      color: rgba(17,17,17,0.6); max-width: 620px; margin-bottom: 48px;
+    }
+    .detail-gallery { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; margin-bottom: 2px; }
+    .detail-gallery-item {
+      background: var(--gray); aspect-ratio: 4/3;
+      display: flex; align-items: center; justify-content: center;
+      position: relative; overflow: hidden;
+    }
+    .detail-gallery-item img { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; }
+    .detail-gallery-item.wide { grid-column: span 2; aspect-ratio: 16/7; }
+    .detail-gallery-ph {
+      font-size: 9px; color: #ccc; letter-spacing: 0.12em; text-transform: uppercase;
+    }
+    .detail-meta {
+      display: grid; grid-template-columns: repeat(3,1fr); gap: 0;
+      border-top: 1px solid rgba(17,17,17,0.08);
+      margin-top: 48px; padding-top: 28px;
+    }
+    .detail-meta-item { padding-right: 24px; }
+    .detail-meta-label {
+      font-size: 9px; font-weight: 700; color: var(--accent);
+      letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 7px;
+    }
+    .detail-meta-value { font-size: 14px; font-weight: 400; color: var(--black); }
+
+    @media(max-width: 768px) {
+      .sp-hero-nav, .detail-hero-nav { padding: 0 24px; }
+      .sp-hero-content, .detail-hero-content { padding: 0 24px 48px; }
+      .sp-body { padding: 0 24px 60px; }
+      .detail-body { padding: 12px 24px 60px; }
+      .sp-grid { grid-template-columns: 1fr 1fr; }
+      .detail-gallery { grid-template-columns: 1fr; }
+      .detail-gallery-item.wide { grid-column: span 1; aspect-ratio: 4/3; }
+      .detail-meta { grid-template-columns: 1fr 1fr; gap: 24px; }
+    }
+    @media(max-width: 480px) {
+      .sp-grid { grid-template-columns: 1fr; }
+      .detail-meta { grid-template-columns: 1fr; }
+    }
+    /* ── MODAL ── */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 200;
+      background: rgba(17,17,17,0.94);
+      display: none; justify-content: center;
+      overflow-y: auto; padding: 5rem 2rem;
+    }
+    .modal-overlay.active { display: flex; }
+    .modal-box {
+      width: 100%; max-width: 820px;
+      background: #181818; padding: 3.5rem;
+      position: relative; height: fit-content;
+    }
+    .modal-close {
+      position: absolute; top: 20px; right: 20px;
+      font-size: 11px; font-weight: 600; letter-spacing: 0.2em;
+      color: rgba(255,255,255,0.3); background: none; border: none;
+      cursor: pointer; text-transform: uppercase; transition: color 0.18s;
+    }
+    .modal-close:hover { color: var(--accent); }
+    .modal-title {
+      font-size: 2.8rem; font-weight: 700; letter-spacing: -0.02em;
+      color: var(--white); margin-bottom: 8px; line-height: 1.1;
+    }
+    .modal-meta {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.2em;
+      color: var(--accent); text-transform: uppercase; margin-bottom: 2.5rem;
+    }
+    .modal-body {
+      font-size: 15px; line-height: 1.9;
+      color: rgba(255,255,255,0.65); font-weight: 300;
+    }
+    .modal-body img { width: 100%; margin: 1.5rem 0; display: block; }
+    .modal-body p { margin-bottom: 1rem; }
+    .modal-body h2 { font-size: 1.8rem; font-weight: 700; color: var(--white); margin: 2rem 0 1rem; }
+    .modal-body h3 { font-size: 1.3rem; font-weight: 700; color: var(--white); margin: 1.5rem 0 0.8rem; }
+    .modal-body li {
+      padding-left: 1rem; border-left: 2px solid var(--accent);
+      margin: 0.5rem 0; list-style: none;
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; } to { opacity: 1; }
+    }
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.3; } 50% { opacity: 1; }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .kn-wrap { grid-template-columns: 1fr; gap: 40px; }
+      .about-grid { grid-template-columns: 1fr; gap: 32px; }
+    }
+    @media (max-width: 768px) {
+      .nav { padding: 0 24px; }
+      .hero-content { padding: 0 24px 52px; }
+      .about-sec, .works-sec, .timeline-sec, .kn-wrap, .contact-sec { padding-left: 24px; padding-right: 24px; }
+      footer { padding: 28px 24px; flex-direction: column; gap: 16px; text-align: center; }
+      .works-grid { grid-template-columns: 1fr 1fr; gap: 2px; }
+      .timeline-item { grid-template-columns: 88px 1fr; gap: 20px; }
+      .ft-links { gap: 20px; }
+    }
+    @media (max-width: 500px) {
+      .works-grid { grid-template-columns: 1fr; }
+      .hero-content { flex-direction: column; align-items: flex-start; gap: 24px; }
+      .hero-timeline { align-items: flex-start; padding-bottom: 90px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <a href="/" class="nav-logo" style="text-decoration:none;">FLASH <em>KANG</em></a>
+    <ul class="nav-links">
+      <li><a href="#works" data-section="works">Works</a></li>
+      <li><a href="#knowhow" data-section="knowhow">Knowhow</a></li>
+      <li><a href="#notes" data-section="notes">Notes</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-vbg" id="hero-vbg"></div>
+    <div class="hero-content">
+      <div class="hero-left">
+        <p class="hero-tag" id="hero-tag" style="visibility:hidden">VFX Artist · OCTOPO</p>
+        <h1 class="hero-name" id="hero-name" style="visibility:hidden">FLASH<br><em>KANG</em></h1>
+      </div>
+      <div class="hero-timeline" id="hero-timeline" style="visibility:hidden">
+        <div class="ht-item"><span class="ht-year">2023 – NOW</span><span class="ht-title">OCTOPO</span></div>
+        <div class="ht-item"><span class="ht-year">2019</span><span class="ht-title">SHIFTUP</span></div>
+        <div class="ht-item"><span class="ht-year">2018</span><span class="ht-title">COOKAPPS</span></div>
+        <div class="ht-item"><span class="ht-year">2015</span><span class="ht-title">XLGAMES</span></div>
+        <div class="ht-item"><span class="ht-year">2012</span><span class="ht-title">GAEWOOL</span></div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- WORKS -->
+  <section class="works-sec" id="works">
+    <div class="sec-head">
+      <div class="sec-title">Works</div>
+      <a href="#" class="sec-more">전체 보기 →</a>
+    </div>
+    <div class="works-grid" id="works-grid"></div>
+  </section>
+
+  <!-- MODAL -->
+  <div class="modal-overlay" id="modal">
+    <div class="modal-box">
+      <button class="modal-close" id="modal-close">✕ Close</button>
+      <div class="modal-title" id="modal-title"></div>
+      <div class="modal-meta" id="modal-meta"></div>
+      <div class="modal-body" id="modal-body"></div>
+    </div>
+  </div>
+
+  <!-- DIAG: white → cream -->
+  <div class="diag2"></div>
+
+  <!-- KNOWHOW + NOTES -->
+  <div class="kn-wrap">
+    <!-- KNOWHOW -->
+    <div id="knowhow">
+      <div class="kn-col-title">Knowhow</div>
+      <div class="kn-list" id="knowhow-list"></div>
+    </div>
+    <!-- NOTES -->
+    <div id="notes">
+      <div class="kn-col-title">Notes</div>
+      <div class="kn-list" id="notes-list"></div>
+    </div>
+  </div>
+
+  <!-- DIAG: cream → black -->
+  <div class="diag3"></div>
+
+  <!-- CONTACT -->
+  <section class="contact-sec">
+    <div class="contact-label">Contact</div>
+    <h2 class="contact-headline fade-item" id="contact-headline">함께<br><em>만들어요.</em></h2>
+    <p class="contact-sub" id="contact-sub">게임 VFX, 협업, 강연 문의는 인스타그램 DM으로 연락 주세요.</p>
+    <a href="#" class="contact-btn" id="contact-btn" target="_blank">Instagram DM →</a>
+    <p class="contact-note" id="contact-note"></p>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="ft-logo">FLASH <em>KANG</em></div>
+    <ul class="ft-links">
+      <li><a href="#works">Works</a></li>
+      <li><a href="#knowhow">Knowhow</a></li>
+      <li><a href="#notes">Notes</a></li>
+    </ul>
+    <div class="ft-copy" id="footer-copy">© 2026 Flash Kang</div>
+  </footer>
+
+  <script>
+    // ── 스크롤 옵저버 ──
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.fade-item').forEach(el => observer.observe(el));
+
+    // ── 노션 API ──
+    async function fetchDB(db) {
+      const r = await fetch('/api/notion?db=' + db);
+      const d = await r.json();
+      return d.results || [];
+    }
+
+    function val(row, key) {
+      const p = row.properties[key];
+      if (!p) return '';
+      if (p.title)   return p.title.map(t => t.plain_text).join('');
+      if (p.rich_text) return p.rich_text.map(t => t.plain_text).join('');
+      if (p.number !== undefined && p.number !== null) return p.number;
+      if (p.checkbox !== undefined) return p.checkbox;
+      if (p.files && p.files.length)
+        return p.files[0]?.file?.url || p.files[0]?.external?.url || '';
+      return '';
+    }
+
+    function find(rows, key, value) {
+      return rows.find(r => String(val(r, key)) === String(value)) || null;
+    }
+
+    const parseHL = t => t.replace(/<([^>]+)>/g, '<span class="hl">$1</span>');
+    const parseEM = t => t.replace(/<([^>]+)>/g, '<span class="em">$1</span>');
+
+    // ── 블록 렌더링 ──
+    async function renderBlocks(blocks) {
+      let html = '';
+      for (const block of blocks) {
+        const type = block.type;
+        const c = block[type];
+        if (!c) continue;
+        const txt = arr => (arr || []).map(t => t.plain_text).join('');
+        if (type === 'paragraph') {
+          html += `<p>${txt(c.rich_text)}</p>`;
+        } else if (type === 'heading_1') {
+          html += `<h2>${txt(c.rich_text)}</h2>`;
+        } else if (type === 'heading_2') {
+          html += `<h3>${txt(c.rich_text)}</h3>`;
+        } else if (type === 'image') {
+          const url = c.type === 'file' ? c.file.url : c.external.url;
+          html += `<img src="${url}" alt="">`;
+        } else if (type === 'bulleted_list_item') {
+          html += `<li>${txt(c.rich_text)}</li>`;
+        } else if (type === 'divider') {
+          html += `<hr style="border:none;border-top:1px solid rgba(255,255,255,0.1);margin:2rem 0">`;
+        } else if (type === 'column_list') {
+          const colRes = await fetch('/api/notion?pageId=' + block.id);
+          const colData = await colRes.json();
+          let colHtml = '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.5rem;margin:1.5rem 0">';
+          for (const col of (colData.results || [])) {
+            const colBlocksRes = await fetch('/api/notion?pageId=' + col.id);
+            const colBlockData = await colBlocksRes.json();
+            colHtml += '<div>';
+            for (const b of (colBlockData.results || [])) {
+              const bc = b[b.type];
+              if (!bc) continue;
+              const t = arr => (arr || []).map(x => x.plain_text).join('');
+              if (b.type === 'paragraph') colHtml += `<p style="margin-bottom:0.8rem">${t(bc.rich_text)}</p>`;
+              else if (b.type === 'image') {
+                const u = bc.type === 'file' ? bc.file.url : bc.external.url;
+                colHtml += `<img src="${u}" alt="" style="width:100%;margin-bottom:0.8rem">`;
+              }
+            }
+            colHtml += '</div>';
+          }
+          colHtml += '</div>';
+          html += colHtml;
+        }
+      }
+      return html;
+    }
+
+    // ── TITLE / HERO ──
+    async function loadTitle() {
+      try {
+        const rows = await fetchDB('title');
+        const get = k => { const r = find(rows,'key',k); return r ? val(r,'value') : ''; };
+        const tag = get('tag'), name = get('name'), sub = get('sub'), heroVideo = get('hero_video');
+        if (tag) document.getElementById('hero-tag').textContent = tag;
+        if (name) {
+          const p = name.split(' ');
+          document.getElementById('hero-name').innerHTML =
+            p[0] + '<br><em>' + p.slice(1).join(' ') + '</em>';
+        }
+        if (sub) document.getElementById('hero-role') && (document.getElementById('hero-role').textContent = sub);
+        // 로딩 완료 후 표시
+        ['hero-tag','hero-name','hero-timeline'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.style.visibility = 'visible';
+        });
+        if (heroVideo) {
+          const match = heroVideo.match(/[?&]v=([^&]+)/);
+          const videoId = match ? match[1] : null;
+          if (videoId) {
+            const iframe = document.createElement('iframe');
+            iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1`;
+            iframe.frameBorder = '0';
+            iframe.allow = 'autoplay; fullscreen';
+            document.getElementById('hero-vbg').appendChild(iframe);
+            // CSS 그라데이션 제거 (실제 영상 있을 때)
+            document.querySelector('.hero-vbg').style.background = '#111';
+          }
+        }
+      } catch(e) { console.error('TITLE', e); }
+    }
+
+    // ── ABOUT ──
+    async function loadAbout() {
+      try {
+        const rows = await fetchDB('about');
+        const get = k => { const r = find(rows,'key',k); return r ? val(r,'value') : ''; };
+        const headline = get('headline');
+        if (headline) {
+          document.getElementById('about-headline').innerHTML = parseHL(headline);
+        }
+        let html = '';
+        ['body1','body2','body3','body4'].forEach(k => {
+          const v = get(k); if (v) html += `<p>${parseEM(v)}</p>`;
+        });
+        const fl = get('footline');
+        if (fl) html += `<p class="about-footline">${fl}</p>`;
+        if (html) document.getElementById('about-body').innerHTML = html;
+      } catch(e) { console.error('ABOUT', e); }
+    }
+
+    // ── TIMELINE (Hero 우측) ──
+    async function loadTimeline() {
+      try {
+        const rows = await fetchDB('timeline');
+        if (!rows.length) return;
+        const container = document.getElementById('hero-timeline');
+        container.innerHTML = '';
+        rows.forEach(row => {
+          const year = val(row,'year'), title = val(row,'title');
+          const el = document.createElement('div');
+          el.className = 'ht-item';
+          el.innerHTML = `<span class="ht-year">${year}</span><span class="ht-title">${title}</span>`;
+          container.appendChild(el);
+        });
+      } catch(e) { console.error('TIMELINE', e); }
+    }
+
+    // ── WORKS ──
+    async function loadWorks() {
+      try {
+        const rows = await fetchDB('works');
+        const grid = document.getElementById('works-grid');
+        grid.innerHTML = '';
+        rows.forEach(row => {
+          const title = val(row,'title'), thumb = val(row,'thumb'),
+                text = val(row,'text'), visible = val(row,'visible');
+          if (visible === false) return;
+          const el = document.createElement('a');
+          el.className = 'work-card';
+          el.href = '#';
+          el.innerHTML = `
+            <div class="work-thumb">
+              ${thumb ? `<img src="${thumb}" alt="${title}">` : `<div class="gif-dot"></div><div class="wt-ph">GIF</div>`}
+            </div>
+            <div class="work-info">
+              <div class="wi-cat">VFX</div>
+              <div class="wi-title">${title}</div>
+              <div class="wi-desc">${text}</div>
+            </div>`;
+          el.addEventListener('click', e => { e.preventDefault(); openModal(row.id, title, text); });
+          grid.appendChild(el);
+          observer.observe(el);
+        });
+      } catch(e) { console.error('WORKS', e); }
+    }
+
+    // ── MODAL ──
+    async function openModal(pageId, title, meta) {
+      document.getElementById('modal-title').textContent = title;
+      document.getElementById('modal-meta').textContent = meta;
+      document.getElementById('modal-body').innerHTML =
+        '<p style="font-size:11px;color:rgba(255,255,255,0.25);letter-spacing:0.2em;padding:2rem 0">Loading…</p>';
+      document.getElementById('modal').classList.add('active');
+      document.body.style.overflow = 'hidden';
+      try {
+        const r = await fetch('/api/notion?pageId=' + pageId);
+        const d = await r.json();
+        const html = await renderBlocks(d.results || []);
+        document.getElementById('modal-body').innerHTML = html || '<p>내용이 없습니다.</p>';
+      } catch(e) {
+        document.getElementById('modal-body').innerHTML = '<p>로드 실패</p>';
+      }
+    }
+    document.getElementById('modal-close').addEventListener('click', () => {
+      document.getElementById('modal').classList.remove('active');
+      document.body.style.overflow = '';
+    });
+    document.getElementById('modal').addEventListener('click', e => {
+      if (e.target.id === 'modal') {
+        document.getElementById('modal').classList.remove('active');
+        document.body.style.overflow = '';
+      }
+    });
+
+    // ── KNOWHOW ──
+    async function loadKnowhow() {
+      try {
+        const rows = await fetchDB('process'); // 노션 DB key: process = knowhow 콘텐츠
+        const list = document.getElementById('knowhow-list');
+        if (!list) return;
+        list.innerHTML = '';
+        const items = rows.filter(r => val(r,'num') !== 'headline');
+        items.forEach(row => {
+          const title = val(row,'title'), cat = val(row,'num'), thumb = val(row,'thumb') || '';
+          const el = document.createElement('a');
+          el.className = 'kn-item';
+          el.href = '#';
+          el.innerHTML = `
+            <div class="ki-thumb">
+              ${thumb ? `<img src="${thumb}" alt="">` : `<div class="gif-dot"></div><div class="kit-ph">GIF</div>`}
+            </div>
+            <div class="ki-body">
+              <div class="ki-cat">${cat || 'Knowhow'}</div>
+              <div class="ki-title">${title}</div>
+            </div>
+            <div class="ki-arr">→</div>`;
+          el.addEventListener('click', e => e.preventDefault());
+          list.appendChild(el);
+          observer.observe(el);
+        });
+      } catch(e) { console.error('KNOWHOW', e); }
+    }
+
+    // ── NOTES ──
+    async function loadNotes() {
+      // works DB에서 notes 타입만 따로 필터링하거나,
+      // 별도 DB가 없을 경우 샘플 렌더 (노션 DB 구조에 맞게 조정 필요)
+      const list = document.getElementById('notes-list');
+      if (!list) return;
+      // 별도 notes DB가 생기면 fetchDB('notes')로 교체
+      // 현재는 works DB를 공유해서 사용 예시
+      try {
+        const rows = await fetchDB('works');
+        const noteRows = rows.filter(r => {
+          const t = val(r,'text') || '';
+          return t.includes('노트') || t.includes('Note') || val(r,'type') === 'note';
+        });
+        // fallback: works에 notes 없으면 빈 상태로 — 추후 notes DB 연결 예정
+        noteRows.forEach(row => {
+          const title = val(row,'title'), text = val(row,'text'), thumb = val(row,'thumb') || '';
+          const el = document.createElement('a');
+          el.className = 'kn-item';
+          el.href = '#';
+          el.innerHTML = `
+            <div class="ki-thumb">
+              ${thumb ? `<img src="${thumb}" alt="">` : `<div class="kit-ph">IMG</div>`}
+            </div>
+            <div class="ki-body">
+              <div class="ki-cat">Note</div>
+              <div class="ki-title">${title}</div>
+            </div>
+            <div class="ki-arr">→</div>`;
+          el.addEventListener('click', e => { e.preventDefault(); openModal(row.id, title, text); });
+          list.appendChild(el);
+          observer.observe(el);
+        });
+      } catch(e) { console.error('NOTES', e); }
+    }
+
+    // ── CONTACT ──
+    async function loadContact() {
+      try {
+        const rows = await fetchDB('contact');
+        const get = k => { const r = find(rows,'key',k); return r ? val(r,'value') : ''; };
+        const headline = get('headline'), sub = get('sub'), ig = get('instagram');
+        if (headline)
+          document.getElementById('contact-headline').innerHTML = parseHL(headline);
+        if (sub) document.getElementById('contact-sub').textContent = sub;
+        if (ig) {
+          document.getElementById('contact-btn').href = 'https://instagram.com/' + ig.replace('@','');
+          document.getElementById('contact-note').textContent = ig + ' · Instagram';
+        }
+        // contact-headline도 옵저버 등록
+        observer.observe(document.getElementById('contact-headline'));
+      } catch(e) { console.error('CONTACT', e); }
+    }
+
+    // ── FOOTER ──
+    async function loadFooter() {
+      try {
+        const rows = await fetchDB('footer');
+        const get = k => { const r = find(rows,'key',k); return r ? val(r,'value') : ''; };
+        const copy = get('copy');
+        if (copy) document.getElementById('footer-copy').textContent = copy;
+      } catch(e) { console.error('FOOTER', e); }
+    }
+
+
+    // ── 서브페이지 전환 ──
+    let subpageDataLoaded = { works: false, knowhow: false, notes: false };
+
+    function showSubpage(name) {
+      document.querySelectorAll('.subpage').forEach(function(el) { el.classList.remove('active'); });
+      var sp = document.getElementById('subpage-' + name);
+      if (sp) {
+        sp.classList.add('active');
+        sp.scrollTop = 0;
+        document.body.style.overflow = 'hidden';
+        if (!subpageDataLoaded[name]) {
+          loadSubpageData(name);
+          subpageDataLoaded[name] = true;
+        }
+      }
+    }
+
+    function closeSubpage() {
+      document.querySelectorAll('.subpage').forEach(function(el) { el.classList.remove('active'); });
+      document.body.style.overflow = '';
+    }
+
+    async function loadSubpageData(name) {
+      if (name === 'works') {
+        var grid = document.getElementById('subpage-works-grid');
+        var countEl = document.getElementById('works-count');
+        try {
+          var rows = await fetchDB('works');
+          var visible = rows.filter(function(r) { return val(r,'visible') !== false; });
+          if (!visible.length) { grid.innerHTML = '<p class="sp-empty">준비 중입니다.</p>'; return; }
+          if (countEl) countEl.textContent = visible.length;
+          grid.innerHTML = '';
+          visible.forEach(function(row) {
+            var title = val(row,'title'), thumb = val(row,'thumb'), text = val(row,'text');
+            var el = document.createElement('a');
+            el.className = 'work-card visible';
+            el.href = '#';
+            var thumbHtml = thumb
+              ? '<img src="' + thumb + '" alt="' + title + '">'
+              : '<div class="gif-dot"></div><div class="wt-ph">GIF</div>';
+            el.innerHTML = '<div class="work-thumb">' + thumbHtml + '</div>'
+              + '<div class="work-info">'
+              + '<div class="wi-cat">VFX</div>'
+              + '<div class="wi-title">' + title + '</div>'
+              + '<div class="wi-desc">' + text + '</div>'
+              + '</div>';
+            el.addEventListener('click', function(e) {
+              e.preventDefault();
+              openDetail(row, title, text, thumb);
+            });
+            grid.appendChild(el);
+          });
+        } catch(e) { grid.innerHTML = '<p class="sp-empty">로드 실패</p>'; }
+
+      } else if (name === 'knowhow') {
+        var list = document.getElementById('subpage-knowhow-list');
+        var countEl = document.getElementById('knowhow-count');
+        try {
+          var rows = await fetchDB('process');
+          var items = rows.filter(function(r) { return val(r,'num') !== 'headline'; });
+          if (!items.length) { list.innerHTML = '<p class="sp-empty">준비 중입니다.</p>'; return; }
+          if (countEl) countEl.textContent = items.length;
+          list.innerHTML = '';
+          items.forEach(function(row) {
+            var title = val(row,'title'), cat = val(row,'num'), thumb = val(row,'thumb') || '';
+            var el = document.createElement('a');
+            el.className = 'kn-item visible';
+            el.href = '#';
+            var thumbHtml = thumb
+              ? '<img src="' + thumb + '" alt="">'
+              : '<div class="gif-dot"></div><div class="kit-ph">GIF</div>';
+            el.innerHTML = '<div class="ki-thumb">' + thumbHtml + '</div>'
+              + '<div class="ki-body">'
+              + '<div class="ki-cat">' + (cat || 'Knowhow') + '</div>'
+              + '<div class="ki-title">' + title + '</div>'
+              + '</div>'
+              + '<div class="ki-arr">→</div>';
+            el.addEventListener('click', function(e) { e.preventDefault(); openModal(row.id, title, ''); });
+            list.appendChild(el);
+          });
+        } catch(e) { list.innerHTML = '<p class="sp-empty">로드 실패</p>'; }
+
+      } else if (name === 'notes') {
+        var list = document.getElementById('subpage-notes-list');
+        var countEl = document.getElementById('notes-count');
+        try {
+          var rows = await fetchDB('works');
+          var noteRows = rows.filter(function(r) { return val(r,'type') === 'note'; });
+          if (!noteRows.length) { list.innerHTML = '<p class="sp-empty">준비 중입니다.</p>'; return; }
+          if (countEl) countEl.textContent = noteRows.length;
+          list.innerHTML = '';
+          noteRows.forEach(function(row) {
+            var title = val(row,'title'), text = val(row,'text'), thumb = val(row,'thumb') || '';
+            var el = document.createElement('a');
+            el.className = 'kn-item visible';
+            el.href = '#';
+            var thumbHtml = thumb ? '<img src="' + thumb + '" alt="">' : '<div class="kit-ph">IMG</div>';
+            el.innerHTML = '<div class="ki-thumb">' + thumbHtml + '</div>'
+              + '<div class="ki-body">'
+              + '<div class="ki-cat">Note</div>'
+              + '<div class="ki-title">' + title + '</div>'
+              + '</div>'
+              + '<div class="ki-arr">→</div>';
+            el.addEventListener('click', function(e) { e.preventDefault(); openModal(row.id, title, text); });
+            list.appendChild(el);
+          });
+        } catch(e) { list.innerHTML = '<p class="sp-empty">로드 실패</p>'; }
+      }
+    }
+
+    // ── Works 상세 페이지 열기 ──
+    async function openDetail(row, title, desc, thumb) {
+      var dp = document.getElementById('detail-works');
+      dp.classList.add('active');
+      dp.scrollTop = 0;
+
+      document.getElementById('detail-title').textContent = title;
+      document.getElementById('detail-desc').textContent = desc || '';
+
+      // 썸네일
+      var media = document.getElementById('detail-media');
+      if (thumb) {
+        media.innerHTML = '<img src="' + thumb + '" alt="' + title + '">';
+      } else {
+        media.innerHTML = '<div class="detail-hero-media-ph">GIF / VIDEO</div>';
+      }
+
+      // 태그 (노션 데이터에서 client, period, tool 파싱)
+      var client = val(row,'client') || val(row,'company') || '';
+      var period = val(row,'period') || val(row,'year') || '';
+      var tool   = val(row,'tool') || 'Adobe Animate';
+      var tagsEl = document.getElementById('detail-tags');
+      tagsEl.innerHTML = '';
+      [client, period, tool].forEach(function(t) {
+        if (!t) return;
+        var span = document.createElement('div');
+        span.className = 'detail-tag';
+        span.textContent = t;
+        tagsEl.appendChild(span);
+      });
+
+      // 메타
+      var metaEl = document.getElementById('detail-meta');
+      var metaItems = [
+        { label: 'Client', value: client || '—' },
+        { label: 'Period', value: period || '—' },
+        { label: 'Tool',   value: tool   || '—' }
+      ];
+      metaEl.innerHTML = '';
+      metaItems.forEach(function(m) {
+        var div = document.createElement('div');
+        div.className = 'detail-meta-item';
+        div.innerHTML = '<div class="detail-meta-label">' + m.label + '</div>'
+          + '<div class="detail-meta-value">' + m.value + '</div>';
+        metaEl.appendChild(div);
+      });
+
+      // 노션 블록 (갤러리 + 본문)
+      var gallery = document.getElementById('detail-gallery');
+      gallery.innerHTML = '<div class="detail-gallery-item wide"><div class="detail-gallery-ph">Loading...</div></div>';
+      try {
+        var r = await fetch('/api/notion?pageId=' + row.id);
+        var d = await r.json();
+        var blocks = d.results || [];
+        var imgs = blocks.filter(function(b) { return b.type === 'image'; });
+        if (imgs.length) {
+          gallery.innerHTML = '';
+          imgs.forEach(function(b, i) {
+            var url = b.image.type === 'file' ? b.image.file.url : b.image.external.url;
+            var item = document.createElement('div');
+            item.className = 'detail-gallery-item' + (i === 0 ? ' wide' : '');
+            item.innerHTML = '<img src="' + url + '" alt="">';
+            gallery.appendChild(item);
+          });
+        } else {
+          gallery.innerHTML = '<div class="detail-gallery-item wide"><div class="detail-gallery-ph">GIF / IMAGE</div></div>';
+        }
+        // 본문 텍스트
+        var desc2 = document.getElementById('detail-desc');
+        var paras = blocks.filter(function(b) { return b.type === 'paragraph'; })
+          .map(function(b) { return (b.paragraph.rich_text || []).map(function(t) { return t.plain_text; }).join(''); })
+          .filter(Boolean);
+        if (paras.length) desc2.textContent = paras[0];
+      } catch(e) { console.error('DETAIL', e); }
+    }
+
+    function closeDetail() {
+      document.getElementById('detail-works').classList.remove('active');
+    }
+
+    // 네비 링크에 서브페이지 연결
+    document.querySelectorAll('.nav-links a[data-section]').forEach(function(a) {
+      a.addEventListener('click', function(e) {
+        e.preventDefault();
+        showSubpage(a.dataset.section);
+      });
+    });
+
+    // ── Nav active 스크롤 연동 ──
+    const sections = ['works','knowhow','notes'];
+    const navLinks = document.querySelectorAll('.nav-links a');
+    window.addEventListener('scroll', () => {
+      let current = 'works';
+      sections.forEach(id => {
+        const el = document.getElementById(id);
+        if (el && window.scrollY >= el.offsetTop - 120) current = id;
+      });
+      navLinks.forEach(a => {
+        a.classList.toggle('on', a.getAttribute('href') === '#' + current);
+      });
+    });
+
+    // ── 전체 로드 ──
+    loadTitle();
+    loadTimeline();
+    loadWorks();
+    loadKnowhow();
+    loadNotes();
+    loadContact();
+    loadFooter();
+  </script>
+
+  <!-- WORKS 서브페이지 -->
+  <div class="subpage" id="subpage-works">
+    <div class="sp-hero">
+      <nav class="sp-hero-nav">
+        <a href="/" class="nav-logo" style="text-decoration:none;">FLASH <em>KANG</em></a>
+        <ul class="nav-links">
+          <li><a href="#" class="on" onclick="return false;">Works</a></li>
+          <li><a href="#" onclick="showSubpage('knowhow'); return false;">Knowhow</a></li>
+          <li><a href="#" onclick="showSubpage('notes'); return false;">Notes</a></li>
+        </ul>
+      </nav>
+      <div class="sp-hero-content">
+        <div class="sp-hero-title">WORKS</div>
+        <div class="sp-hero-meta">
+          <div class="sp-hero-count" id="works-count">—</div>
+          <div class="sp-hero-label">Projects</div>
+        </div>
+      </div>
+    </div>
+    <div class="sp-body">
+      <div class="sp-grid" id="subpage-works-grid">
+        <p class="sp-empty">Loading...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- KNOWHOW 서브페이지 -->
+  <div class="subpage" id="subpage-knowhow">
+    <div class="sp-hero">
+      <nav class="sp-hero-nav">
+        <a href="/" class="nav-logo" style="text-decoration:none;">FLASH <em>KANG</em></a>
+        <ul class="nav-links">
+          <li><a href="#" onclick="showSubpage('works'); return false;">Works</a></li>
+          <li><a href="#" class="on" onclick="return false;">Knowhow</a></li>
+          <li><a href="#" onclick="showSubpage('notes'); return false;">Notes</a></li>
+        </ul>
+      </nav>
+      <div class="sp-hero-content">
+        <div class="sp-hero-title">KNOW<br><em>HOW</em></div>
+        <div class="sp-hero-meta">
+          <div class="sp-hero-count" id="knowhow-count">—</div>
+          <div class="sp-hero-label">Articles</div>
+        </div>
+      </div>
+    </div>
+    <div class="sp-body">
+      <div class="sp-list" id="subpage-knowhow-list">
+        <p class="sp-empty">Loading...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- NOTES 서브페이지 -->
+  <div class="subpage" id="subpage-notes">
+    <div class="sp-hero">
+      <nav class="sp-hero-nav">
+        <a href="/" class="nav-logo" style="text-decoration:none;">FLASH <em>KANG</em></a>
+        <ul class="nav-links">
+          <li><a href="#" onclick="showSubpage('works'); return false;">Works</a></li>
+          <li><a href="#" onclick="showSubpage('knowhow'); return false;">Knowhow</a></li>
+          <li><a href="#" class="on" onclick="return false;">Notes</a></li>
+        </ul>
+      </nav>
+      <div class="sp-hero-content">
+        <div class="sp-hero-title">NOTES</div>
+        <div class="sp-hero-meta">
+          <div class="sp-hero-count" id="notes-count">—</div>
+          <div class="sp-hero-label">Posts</div>
+        </div>
+      </div>
+    </div>
+    <div class="sp-body">
+      <div class="sp-list" id="subpage-notes-list">
+        <p class="sp-empty">Loading...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- WORKS 상세 페이지 -->
+  <div class="detail-page" id="detail-works">
+    <div class="detail-hero">
+      <nav class="detail-hero-nav">
+        <a href="/" class="nav-logo" style="text-decoration:none;">FLASH <em>KANG</em></a>
+        <button class="detail-back" onclick="closeDetail()">← Works</button>
+      </nav>
+      <div class="detail-hero-media" id="detail-media">
+        <div class="detail-hero-media-ph">GIF / VIDEO</div>
+      </div>
+      <div class="detail-hero-overlay"></div>
+      <div class="detail-hero-content">
+        <div>
+          <div class="detail-cat" id="detail-cat">VFX</div>
+          <div class="detail-title" id="detail-title">—</div>
+        </div>
+        <div class="detail-tags" id="detail-tags"></div>
+      </div>
+    </div>
+    <div class="detail-body">
+      <p class="detail-desc" id="detail-desc"></p>
+      <div class="detail-gallery" id="detail-gallery"></div>
+      <div class="detail-meta" id="detail-meta"></div>
+    </div>
+  </div>
+</body>
+</html>
