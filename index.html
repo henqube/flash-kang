@@ -499,7 +499,7 @@
       position: fixed; inset: 0; z-index: 200;
       background: var(--white);
       display: none; flex-direction: column;
-      overflow-y: auto;
+      overflow-y: scroll;
       overflow-x: hidden;
     }
     .detail-page.active { display: flex; }
@@ -565,22 +565,10 @@
       font-size: 10px; font-weight: 400; color: rgba(255,255,255,0.35);
       letter-spacing: 0.1em; text-transform: uppercase;
     }
-    .detail-body { padding: 12px 52px 80px; overflow: visible; }
-    .detail-desc {
-      font-size: 15px; font-weight: 300; line-height: 1.9;
-      color: rgba(17,17,17,0.6); max-width: 620px; margin-bottom: 48px;
-    }
-    .detail-gallery { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; margin-bottom: 2px; }
-    .detail-gallery-item {
-      background: var(--gray); aspect-ratio: 4/3;
-      display: flex; align-items: center; justify-content: center;
-      position: relative; overflow: hidden;
-    }
-    .detail-gallery-item img { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; }
-    .detail-gallery-item.wide { grid-column: span 2; aspect-ratio: 16/7; }
-    .detail-gallery-ph {
-      font-size: 9px; color: #ccc; letter-spacing: 0.12em; text-transform: uppercase;
-    }
+    .detail-body { padding: 32px 52px 80px; }
+    .detail-desc { display: none; }
+    .detail-gallery { display: block; margin-bottom: 2px; }
+    .detail-gallery-item { display: none; }
     .detail-meta { display: none; }
     .detail-meta-item { padding-right: 24px; }
     .detail-meta-label {
@@ -1281,33 +1269,26 @@
 
 
 
-      // 노션 블록 (갤러리 + 본문)
+      // 노션 블록 전체를 renderBlocks로 렌더링
       var gallery = document.getElementById('detail-gallery');
-      gallery.innerHTML = '<div class="detail-gallery-item wide"><div class="detail-gallery-ph">Loading...</div></div>';
+      var descEl = document.getElementById('detail-desc');
+      gallery.innerHTML = '';
+      descEl.textContent = '';
+      gallery.innerHTML = '<p style="font-size:11px;color:#bbb;letter-spacing:0.15em;padding:2rem 0">Loading...</p>';
       try {
         var r = await fetch('/api/notion?pageId=' + row.id);
         var d = await r.json();
         var blocks = d.results || [];
-        var imgs = blocks.filter(function(b) { return b.type === 'image'; });
-        if (imgs.length) {
-          gallery.innerHTML = '';
-          imgs.forEach(function(b, i) {
-            var url = b.image.type === 'file' ? b.image.file.url : b.image.external.url;
-            var item = document.createElement('div');
-            item.className = 'detail-gallery-item' + (i === 0 ? ' wide' : '');
-            item.innerHTML = '<img src="' + url + '" alt="">';
-            gallery.appendChild(item);
-          });
+        if (blocks.length) {
+          var bodyHtml = await renderBlocks(blocks);
+          gallery.innerHTML = bodyHtml || '<p style="color:#bbb">내용이 없습니다.</p>';
         } else {
-          gallery.innerHTML = '<div class="detail-gallery-item wide"><div class="detail-gallery-ph">GIF / IMAGE</div></div>';
+          gallery.innerHTML = '';
         }
-        // 본문 텍스트
-        var desc2 = document.getElementById('detail-desc');
-        var paras = blocks.filter(function(b) { return b.type === 'paragraph'; })
-          .map(function(b) { return (b.paragraph.rich_text || []).map(function(t) { return t.plain_text; }).join(''); })
-          .filter(Boolean);
-        if (paras.length) desc2.textContent = paras[0];
-      } catch(e) { console.error('DETAIL', e); }
+      } catch(e) {
+        console.error('DETAIL', e);
+        gallery.innerHTML = '<p style="color:#bbb">로드 실패</p>';
+      }
     }
 
     function closeDetail() {
