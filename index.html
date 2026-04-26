@@ -739,9 +739,9 @@
   <!-- CONTACT -->
   <section class="contact-sec">
     <div class="contact-label">Contact</div>
-    <h2 class="contact-headline fade-item" id="contact-headline">함께<br><em>만들어요.</em></h2>
-    <p class="contact-sub" id="contact-sub">게임 VFX, 협업, 강연 문의는 인스타그램 DM으로 연락 주세요.</p>
-    <a href="#" class="contact-btn" id="contact-btn" target="_blank">Instagram DM →</a>
+    <h2 class="contact-headline fade-item" id="contact-headline"></h2>
+    <p class="contact-sub" id="contact-sub"></p>
+    <a href="#" class="contact-btn" id="contact-btn" target="_blank" style="display:none">Instagram DM →</a>
     <p class="contact-note" id="contact-note"></p>
   </section>
 
@@ -1123,7 +1123,9 @@
           document.getElementById('contact-headline').innerHTML = parseHL(headline);
         if (sub) document.getElementById('contact-sub').textContent = sub;
         if (ig) {
-          document.getElementById('contact-btn').href = 'https://instagram.com/' + ig.replace('@','');
+          var btn = document.getElementById('contact-btn');
+          btn.href = 'https://instagram.com/' + ig.replace('@','');
+          btn.style.display = '';
           document.getElementById('contact-note').textContent = ig + ' · Instagram';
         }
         // contact-headline도 옵저버 등록
