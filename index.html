@@ -1065,64 +1065,61 @@
     // ── KNOWHOW ──
     async function loadKnowhow() {
       try {
-        const rows = await fetchDB('knowhow'); // 노션 DB key: process = knowhow 콘텐츠
+        const rows = await fetchDB('knowhow');
         const list = document.getElementById('knowhow-list');
         if (!list) return;
         list.innerHTML = '';
-        const items = rows.filter(r => val(r,'num') !== 'headline');
+        const items = rows
+          .filter(r => val(r,'num') !== 'headline')
+          .sort((a,b) => (val(a,'order')||99) - (val(b,'order')||99));
         items.forEach(row => {
-          const title = val(row,'title'), cat = val(row,'num'), thumb = val(row,'thumb') || '';
+          const title = val(row,'title'), cat = val(row,'num'),
+                thumb = val(row,'thumb') || '', text = val(row,'text') || '';
           const el = document.createElement('a');
           el.className = 'kn-item';
           el.href = '#';
-          el.innerHTML = `
-            <div class="ki-thumb">
-              ${thumb ? `<img src="${thumb}" alt="">` : `<div class="gif-dot"></div><div class="kit-ph">GIF</div>`}
-            </div>
-            <div class="ki-body">
-              <div class="ki-cat">${cat || 'Knowhow'}</div>
-              <div class="ki-title">${title}</div>
-            </div>
-            <div class="ki-arr">→</div>`;
-          el.addEventListener('click', e => e.preventDefault());
+          const thumbHtml = thumb
+            ? '<img src="' + thumb + '" alt="">'
+            : '<div class="gif-dot"></div><div class="kit-ph">GIF</div>';
+          const textHtml = text ? '<div class="ki-text">' + text + '</div>' : '';
+          el.innerHTML = '<div class="ki-thumb">' + thumbHtml + '</div>'
+            + '<div class="ki-body">'
+            + '<div class="ki-cat">' + (cat || 'Knowhow') + '</div>'
+            + '<div class="ki-title">' + title + '</div>'
+            + textHtml
+            + '</div>'
+            + '<div class="ki-arr">→</div>';
+          el.addEventListener('click', e => { e.preventDefault(); openDetail(row, title, text, thumb); });
           list.appendChild(el);
-          observer.observe(el);
+          setTimeout(function() { el.classList.add('visible'); }, 50);
         });
       } catch(e) { console.error('KNOWHOW', e); }
     }
 
     // ── NOTES ──
     async function loadNotes() {
-      // works DB에서 notes 타입만 따로 필터링하거나,
-      // 별도 DB가 없을 경우 샘플 렌더 (노션 DB 구조에 맞게 조정 필요)
       const list = document.getElementById('notes-list');
       if (!list) return;
-      // 별도 notes DB가 생기면 fetchDB('notes')로 교체
-      // 현재는 works DB를 공유해서 사용 예시
       try {
-        const rows = await fetchDB('works');
-        const noteRows = rows.filter(r => {
-          const t = val(r,'text') || '';
-          return t.includes('노트') || t.includes('Note') || val(r,'type') === 'note';
-        });
-        // fallback: works에 notes 없으면 빈 상태로 — 추후 notes DB 연결 예정
-        noteRows.forEach(row => {
-          const title = val(row,'title'), text = val(row,'text'), thumb = val(row,'thumb') || '';
+        const rows = await fetchDB('notes');
+        list.innerHTML = '';
+        rows.forEach(row => {
+          const title = val(row,'title'), text = val(row,'text') || '', thumb = val(row,'thumb') || '';
           const el = document.createElement('a');
           el.className = 'kn-item';
           el.href = '#';
-          el.innerHTML = `
-            <div class="ki-thumb">
-              ${thumb ? `<img src="${thumb}" alt="">` : `<div class="kit-ph">IMG</div>`}
-            </div>
-            <div class="ki-body">
-              <div class="ki-cat">Note</div>
-              <div class="ki-title">${title}</div>
-            </div>
-            <div class="ki-arr">→</div>`;
-          el.addEventListener('click', e => { e.preventDefault(); openModal(row.id, title, text); });
+          const thumbHtml = thumb ? '<img src="' + thumb + '" alt="">' : '<div class="kit-ph">IMG</div>';
+          const textHtml = text ? '<div class="ki-text">' + text + '</div>' : '';
+          el.innerHTML = '<div class="ki-thumb">' + thumbHtml + '</div>'
+            + '<div class="ki-body">'
+            + '<div class="ki-cat">Note</div>'
+            + '<div class="ki-title">' + title + '</div>'
+            + textHtml
+            + '</div>'
+            + '<div class="ki-arr">→</div>';
+          el.addEventListener('click', e => { e.preventDefault(); openDetail(row, title, text, thumb); });
           list.appendChild(el);
-          observer.observe(el);
+          setTimeout(function() { el.classList.add('visible'); }, 50);
         });
       } catch(e) { console.error('NOTES', e); }
     }
