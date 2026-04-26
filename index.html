@@ -463,7 +463,7 @@
     }
     .sp-hero-content {
       position: relative; z-index: 2;
-      padding: 0 52px 56px;
+      padding: 0 52px 36px;
       display: flex; align-items: flex-start; justify-content: space-between;
     }
     .sp-hero-title {
@@ -471,7 +471,7 @@
       font-weight: 700; letter-spacing: -0.04em; line-height: 0.88;
       color: var(--white); text-transform: uppercase;
     }
-    .sp-hero-title em { font-style: normal; color: var(--accent); }
+    .sp-hero-title em { font-style: normal; color: var(--white); }
     .sp-hero-meta {
       display: flex; flex-direction: column; align-items: flex-end; gap: 2px;
       padding-top: 10px;
@@ -700,10 +700,10 @@
     <div class="hero-vbg" id="hero-vbg"></div>
     <div class="hero-content">
       <div class="hero-left">
-        <p class="hero-tag" id="hero-tag" style="visibility:hidden">VFX Artist · OCTOPO</p>
-        <h1 class="hero-name" id="hero-name" style="visibility:hidden">FLASH<br><em>KANG</em></h1>
+        <p class="hero-tag" id="hero-tag">VFX Artist · OCTOPO</p>
+        <h1 class="hero-name" id="hero-name">FLASH<br><em>KANG</em></h1>
       </div>
-      <div class="hero-timeline" id="hero-timeline" style="visibility:hidden">
+      <div class="hero-timeline" id="hero-timeline">
         <div class="ht-item"><span class="ht-year">2023 – NOW</span><span class="ht-title">OCTOPO</span></div>
         <div class="ht-item"><span class="ht-year">2019</span><span class="ht-title">SHIFTUP</span></div>
         <div class="ht-item"><span class="ht-year">2018</span><span class="ht-title">COOKAPPS</span></div>
@@ -867,11 +867,7 @@
             p[0] + '<br><em>' + p.slice(1).join(' ') + '</em>';
         }
         if (sub) document.getElementById('hero-role') && (document.getElementById('hero-role').textContent = sub);
-        // 로딩 완료 후 표시
-        ['hero-tag','hero-name','hero-timeline'].forEach(id => {
-          const el = document.getElementById(id);
-          if (el) el.style.visibility = 'visible';
-        });
+
         if (heroVideo) {
           const match = heroVideo.match(/[?&]v=([^&]+)/);
           const videoId = match ? match[1] : null;
@@ -914,7 +910,11 @@
         if (!rows.length) return;
         const container = document.getElementById('hero-timeline');
         container.innerHTML = '';
-        rows.forEach(row => {
+        const sorted = rows.slice().sort((a, b) => {
+          const oa = val(a,'order') || 999, ob = val(b,'order') || 999;
+          return ob - oa;
+        });
+        sorted.forEach(row => {
           const year = val(row,'year'), title = val(row,'title');
           const el = document.createElement('div');
           el.className = 'ht-item';
@@ -946,9 +946,10 @@
               <div class="wi-title">${title}</div>
               <div class="wi-desc">${text}</div>
             </div>`;
-          el.addEventListener('click', e => { e.preventDefault(); openModal(row.id, title, text); });
+          el.addEventListener('click', e => { e.preventDefault(); openDetail(row, title, text, thumb); });
           grid.appendChild(el);
           observer.observe(el);
+          setTimeout(function() { el.classList.add('visible'); }, 50);
         });
       } catch(e) { console.error('WORKS', e); }
     }
@@ -1335,7 +1336,7 @@
         </ul>
       </nav>
       <div class="sp-hero-content">
-        <div class="sp-hero-title">KNOW<br><em>HOW</em></div>
+        <div class="sp-hero-title">KNOW<br>HOW</div>
         <div class="sp-hero-meta">
           <div class="sp-hero-count" id="knowhow-count">—</div>
           <div class="sp-hero-label">Articles</div>
