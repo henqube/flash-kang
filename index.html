@@ -1028,7 +1028,7 @@
       document.getElementById('modal-body').innerHTML =
         '<p style="font-size:11px;color:rgba(255,255,255,0.25);letter-spacing:0.2em;padding:2rem 0">Loading…</p>';
       document.getElementById('modal').classList.add('active');
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = 'hidden'; document.documentElement.style.overflow = 'hidden';
       try {
         const r = await fetch('/api/notion?pageId=' + pageId);
         const d = await r.json();
@@ -1040,12 +1040,12 @@
     }
     document.getElementById('modal-close').addEventListener('click', () => {
       document.getElementById('modal').classList.remove('active');
-      document.body.style.overflow = '';
+      document.body.style.overflow = ''; document.documentElement.style.overflow = '';
     });
     document.getElementById('modal').addEventListener('click', e => {
       if (e.target.id === 'modal') {
         document.getElementById('modal').classList.remove('active');
-        document.body.style.overflow = '';
+        document.body.style.overflow = ''; document.documentElement.style.overflow = '';
       }
     });
 
@@ -1149,7 +1149,7 @@
       if (sp) {
         sp.classList.add('active');
         sp.scrollTop = 0;
-        document.body.style.overflow = 'hidden';
+        document.body.style.overflow = 'hidden'; document.documentElement.style.overflow = 'hidden';
         if (!subpageDataLoaded[name]) {
           loadSubpageData(name);
           subpageDataLoaded[name] = true;
@@ -1159,7 +1159,7 @@
 
     function closeSubpage() {
       document.querySelectorAll('.subpage').forEach(function(el) { el.classList.remove('active'); });
-      document.body.style.overflow = '';
+      document.body.style.overflow = ''; document.documentElement.style.overflow = '';
     }
 
     async function loadSubpageData(name) {
@@ -1216,7 +1216,7 @@
               + '<div class="ki-title">' + title + '</div>'
               + '</div>'
               + '<div class="ki-arr">→</div>';
-            el.addEventListener('click', function(e) { e.preventDefault(); openModal(row.id, title, ''); });
+            el.addEventListener('click', function(e) { e.preventDefault(); openDetail(row, title, text, thumb); });
             list.appendChild(el);
           });
         } catch(e) { list.innerHTML = '<p class="sp-empty">로드 실패</p>'; }
@@ -1242,7 +1242,7 @@
               + '<div class="ki-title">' + title + '</div>'
               + '</div>'
               + '<div class="ki-arr">→</div>';
-            el.addEventListener('click', function(e) { e.preventDefault(); openModal(row.id, title, text); });
+            el.addEventListener('click', function(e) { e.preventDefault(); openDetail(row, title, text, thumb); });
             list.appendChild(el);
           });
         } catch(e) { list.innerHTML = '<p class="sp-empty">로드 실패</p>'; }
@@ -1254,7 +1254,7 @@
       var dp = document.getElementById('detail-works');
       dp.classList.add('active');
       dp.scrollTop = 0;
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = 'hidden'; document.documentElement.style.overflow = 'hidden';
 
       document.getElementById('detail-title').textContent = title;
       document.getElementById('detail-desc').textContent = desc || '';
@@ -1293,7 +1293,7 @@
 
     function closeDetail() {
       document.getElementById('detail-works').classList.remove('active');
-      document.body.style.overflow = '';
+      document.body.style.overflow = ''; document.documentElement.style.overflow = '';
     }
 
     // 네비 링크에 서브페이지 연결
