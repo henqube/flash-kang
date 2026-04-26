@@ -463,7 +463,7 @@
     }
     .sp-hero-content {
       position: relative; z-index: 2;
-      padding: 0 52px 36px;
+      padding: 0 52px 52px;
       display: flex; align-items: flex-start; justify-content: space-between;
     }
     .sp-hero-title {
@@ -500,6 +500,7 @@
       background: var(--white);
       display: none; flex-direction: column;
       overflow-y: auto;
+      overflow-x: hidden;
     }
     .detail-page.active { display: flex; }
     .detail-hero {
@@ -559,15 +560,12 @@
       letter-spacing: -0.03em; line-height: 0.9;
       color: var(--white); text-transform: uppercase;
     }
-    .detail-tags {
-      display: flex; flex-direction: column; align-items: flex-end; gap: 4px;
-      padding-top: 8px;
-    }
+    .detail-tags { display: none; }
     .detail-tag {
       font-size: 10px; font-weight: 400; color: rgba(255,255,255,0.35);
       letter-spacing: 0.1em; text-transform: uppercase;
     }
-    .detail-body { padding: 12px 52px 80px; }
+    .detail-body { padding: 12px 52px 80px; overflow: visible; }
     .detail-desc {
       font-size: 15px; font-weight: 300; line-height: 1.9;
       color: rgba(17,17,17,0.6); max-width: 620px; margin-bottom: 48px;
@@ -583,11 +581,7 @@
     .detail-gallery-ph {
       font-size: 9px; color: #ccc; letter-spacing: 0.12em; text-transform: uppercase;
     }
-    .detail-meta {
-      display: grid; grid-template-columns: repeat(3,1fr); gap: 0;
-      border-top: 1px solid rgba(17,17,17,0.08);
-      margin-top: 48px; padding-top: 28px;
-    }
+    .detail-meta { display: none; }
     .detail-meta-item { padding-right: 24px; }
     .detail-meta-label {
       font-size: 9px; font-weight: 700; color: var(--accent);
@@ -807,50 +801,136 @@
     const parseEM = t => t.replace(/<([^>]+)>/g, '<span class="em">$1</span>');
 
     // ── 블록 렌더링 ──
-    async function renderBlocks(blocks) {
+    // rich_text 배열을 HTML로 변환 (bold, italic, color 등 지원)
+    function richText(arr) {
+      return (arr || []).map(t => {
+        let s = t.plain_text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+        if (t.annotations) {
+          if (t.annotations.bold)          s = '<strong>' + s + '</strong>';
+          if (t.annotations.italic)        s = '<em>' + s + '</em>';
+          if (t.annotations.strikethrough) s = '<del>' + s + '</del>';
+          if (t.annotations.code)          s = '<code style="background:rgba(0,0,0,0.08);padding:2px 6px;border-radius:3px;font-size:0.9em">' + s + '</code>';
+          if (t.annotations.color && t.annotations.color !== 'default') {
+            const colorMap = { orange:'#ff5500', red:'#e03e3e', blue:'#0a85d1', green:'#0f7b6c', gray:'#9b9a97' };
+            const c = colorMap[t.annotations.color.replace('_background','')] || t.annotations.color;
+            s = '<span style="color:' + c + '">' + s + '</span>';
+          }
+        }
+        if (t.href) s = '<a href="' + t.href + '" target="_blank" style="color:inherit;text-decoration:underline">' + s + '</a>';
+        return s;
+      }).join('');
+    }
+
+    async function renderBlocks(blocks, depth) {
+      depth = depth || 0;
       let html = '';
+      let inList = false;
       for (const block of blocks) {
         const type = block.type;
         const c = block[type];
         if (!c) continue;
-        const txt = arr => (arr || []).map(t => t.plain_text).join('');
+
+        // 리스트 닫기
+        if (type !== 'bulleted_list_item' && type !== 'numbered_list_item' && inList) {
+          html += '</ul>'; inList = false;
+        }
+
         if (type === 'paragraph') {
-          html += `<p>${txt(c.rich_text)}</p>`;
+          const t = richText(c.rich_text);
+          html += t ? '<p style="margin-bottom:1rem;line-height:1.85">' + t + '</p>' : '<p style="margin-bottom:0.6rem">&nbsp;</p>';
+
         } else if (type === 'heading_1') {
-          html += `<h2>${txt(c.rich_text)}</h2>`;
+          html += '<h2 style="font-size:1.4rem;font-weight:700;margin:2rem 0 0.8rem;letter-spacing:-0.02em">' + richText(c.rich_text) + '</h2>';
         } else if (type === 'heading_2') {
-          html += `<h3>${txt(c.rich_text)}</h3>`;
+          html += '<h3 style="font-size:1.15rem;font-weight:600;margin:1.6rem 0 0.6rem">' + richText(c.rich_text) + '</h3>';
+        } else if (type === 'heading_3') {
+          html += '<h4 style="font-size:1rem;font-weight:600;margin:1.2rem 0 0.4rem;color:#555">' + richText(c.rich_text) + '</h4>';
+
+        } else if (type === 'bulleted_list_item') {
+          if (!inList) { html += '<ul style="padding-left:1.4rem;margin-bottom:0.8rem">'; inList = true; }
+          html += '<li style="margin-bottom:0.4rem;line-height:1.7">' + richText(c.rich_text) + '</li>';
+
+        } else if (type === 'numbered_list_item') {
+          if (!inList) { html += '<ol style="padding-left:1.4rem;margin-bottom:0.8rem">'; inList = true; }
+          html += '<li style="margin-bottom:0.4rem;line-height:1.7">' + richText(c.rich_text) + '</li>';
+
         } else if (type === 'image') {
           const url = c.type === 'file' ? c.file.url : c.external.url;
-          html += `<img src="${url}" alt="">`;
-        } else if (type === 'bulleted_list_item') {
-          html += `<li>${txt(c.rich_text)}</li>`;
+          const cap = c.caption ? richText(c.caption) : '';
+          html += '<figure style="margin:1.5rem 0">'
+            + '<img src="' + url + '" alt="" style="width:100%;display:block">'
+            + (cap ? '<figcaption style="font-size:0.8rem;color:#999;margin-top:0.4rem;text-align:center">' + cap + '</figcaption>' : '')
+            + '</figure>';
+
+        } else if (type === 'video') {
+          // 유튜브 임베드 or 직접 업로드
+          let videoHtml = '';
+          if (c.type === 'external' && c.external && c.external.url) {
+            const ytMatch = c.external.url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([^&?]+)/);
+            if (ytMatch) {
+              videoHtml = '<div style="position:relative;padding-bottom:56.25%;margin:1.5rem 0;overflow:hidden">'
+                + '<iframe src="https://www.youtube.com/embed/' + ytMatch[1] + '" style="position:absolute;inset:0;width:100%;height:100%;border:none" allowfullscreen></iframe>'
+                + '</div>';
+            }
+          } else if (c.type === 'file' && c.file && c.file.url) {
+            videoHtml = '<video controls style="width:100%;margin:1.5rem 0"><source src="' + c.file.url + '"></video>';
+          }
+          html += videoHtml;
+
+        } else if (type === 'embed') {
+          const url = c.url || '';
+          const ytMatch = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([^&?]+)/);
+          if (ytMatch) {
+            html += '<div style="position:relative;padding-bottom:56.25%;margin:1.5rem 0;overflow:hidden">'
+              + '<iframe src="https://www.youtube.com/embed/' + ytMatch[1] + '" style="position:absolute;inset:0;width:100%;height:100%;border:none" allowfullscreen></iframe>'
+              + '</div>';
+          }
+
+        } else if (type === 'callout') {
+          const icon = c.icon ? (c.icon.type === 'emoji' ? c.icon.emoji : '') : '💡';
+          const bg = c.color && c.color !== 'default' ? 'rgba(255,85,0,0.06)' : 'rgba(0,0,0,0.04)';
+          html += '<div style="display:flex;gap:0.8rem;background:' + bg + ';padding:1rem 1.2rem;margin:1.2rem 0;border-radius:4px;border-left:3px solid var(--accent, #ff5500)">'
+            + '<span style="font-size:1.1rem;flex-shrink:0">' + icon + '</span>'
+            + '<div style="line-height:1.7">' + richText(c.rich_text) + '</div>'
+            + '</div>';
+
+        } else if (type === 'quote') {
+          html += '<blockquote style="border-left:3px solid #ddd;padding:0.6rem 1rem;margin:1.2rem 0;color:#666;font-style:italic">'
+            + richText(c.rich_text) + '</blockquote>';
+
+        } else if (type === 'code') {
+          html += '<pre style="background:#f4f4f4;padding:1rem 1.2rem;margin:1.2rem 0;overflow-x:auto;border-radius:4px;font-size:0.85rem;line-height:1.6"><code>'
+            + (c.rich_text || []).map(t => t.plain_text).join('') + '</code></pre>';
+
         } else if (type === 'divider') {
-          html += `<hr style="border:none;border-top:1px solid rgba(255,255,255,0.1);margin:2rem 0">`;
+          html += '<hr style="border:none;border-top:1px solid #eee;margin:2rem 0">';
+
         } else if (type === 'column_list') {
-          const colRes = await fetch('/api/notion?pageId=' + block.id);
-          const colData = await colRes.json();
-          let colHtml = '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.5rem;margin:1.5rem 0">';
-          for (const col of (colData.results || [])) {
-            const colBlocksRes = await fetch('/api/notion?pageId=' + col.id);
-            const colBlockData = await colBlocksRes.json();
-            colHtml += '<div>';
-            for (const b of (colBlockData.results || [])) {
-              const bc = b[b.type];
-              if (!bc) continue;
-              const t = arr => (arr || []).map(x => x.plain_text).join('');
-              if (b.type === 'paragraph') colHtml += `<p style="margin-bottom:0.8rem">${t(bc.rich_text)}</p>`;
-              else if (b.type === 'image') {
-                const u = bc.type === 'file' ? bc.file.url : bc.external.url;
-                colHtml += `<img src="${u}" alt="" style="width:100%;margin-bottom:0.8rem">`;
-              }
+          try {
+            const colRes = await fetch('/api/notion?pageId=' + block.id);
+            const colData = await colRes.json();
+            const cols = colData.results || [];
+            const colCount = Math.min(cols.length, 4);
+            let colHtml = '<div style="display:grid;grid-template-columns:repeat(' + colCount + ',1fr);gap:1.5rem;margin:1.5rem 0">';
+            for (const col of cols) {
+              const colBlocksRes = await fetch('/api/notion?pageId=' + col.id);
+              const colBlockData = await colBlocksRes.json();
+              const innerHtml = await renderBlocks(colBlockData.results || [], depth + 1);
+              colHtml += '<div>' + innerHtml + '</div>';
             }
             colHtml += '</div>';
-          }
-          colHtml += '</div>';
-          html += colHtml;
+            html += colHtml;
+          } catch(e) { console.error('column_list', e); }
+
+        } else if (type === 'toggle') {
+          const summary = richText(c.rich_text);
+          html += '<details style="margin:0.8rem 0;padding:0.6rem;border:1px solid #eee;border-radius:4px">'
+            + '<summary style="cursor:pointer;font-weight:500;padding:0.2rem">' + summary + '</summary>'
+            + '<div style="padding:0.8rem 0 0.2rem">' + (block.has_children ? '...' : '') + '</div>'
+            + '</details>';
         }
       }
+      if (inList) html += '</ul>';
       return html;
     }
 
@@ -911,8 +991,8 @@
         const container = document.getElementById('hero-timeline');
         container.innerHTML = '';
         const sorted = rows.slice().sort((a, b) => {
-          const oa = val(a,'order') || 999, ob = val(b,'order') || 999;
-          return ob - oa;
+          const ya = parseInt(val(a,'year')) || 0, yb = parseInt(val(b,'year')) || 0;
+          return yb - ya;
         });
         sorted.forEach(row => {
           const year = val(row,'year'), title = val(row,'title');
@@ -985,7 +1065,7 @@
     // ── KNOWHOW ──
     async function loadKnowhow() {
       try {
-        const rows = await fetchDB('process'); // 노션 DB key: process = knowhow 콘텐츠
+        const rows = await fetchDB('knowhow'); // 노션 DB key: process = knowhow 콘텐츠
         const list = document.getElementById('knowhow-list');
         if (!list) return;
         list.innerHTML = '';
@@ -1134,7 +1214,7 @@
         var list = document.getElementById('subpage-knowhow-list');
         var countEl = document.getElementById('knowhow-count');
         try {
-          var rows = await fetchDB('process');
+          var rows = await fetchDB('knowhow');
           var items = rows.filter(function(r) { return val(r,'num') !== 'headline'; });
           if (!items.length) { list.innerHTML = '<p class="sp-empty">준비 중입니다.</p>'; return; }
           if (countEl) countEl.textContent = items.length;
@@ -1162,8 +1242,8 @@
         var list = document.getElementById('subpage-notes-list');
         var countEl = document.getElementById('notes-count');
         try {
-          var rows = await fetchDB('works');
-          var noteRows = rows.filter(function(r) { return val(r,'type') === 'note'; });
+          var rows = await fetchDB('notes');
+          var noteRows = rows;
           if (!noteRows.length) { list.innerHTML = '<p class="sp-empty">준비 중입니다.</p>'; return; }
           if (countEl) countEl.textContent = noteRows.length;
           list.innerHTML = '';
@@ -1191,6 +1271,7 @@
       var dp = document.getElementById('detail-works');
       dp.classList.add('active');
       dp.scrollTop = 0;
+      document.body.style.overflow = 'hidden';
 
       document.getElementById('detail-title').textContent = title;
       document.getElementById('detail-desc').textContent = desc || '';
@@ -1203,35 +1284,7 @@
         media.innerHTML = '<div class="detail-hero-media-ph">GIF / VIDEO</div>';
       }
 
-      // 태그 (노션 데이터에서 client, period, tool 파싱)
-      var client = val(row,'client') || val(row,'company') || '';
-      var period = val(row,'period') || val(row,'year') || '';
-      var tool   = val(row,'tool') || 'Adobe Animate';
-      var tagsEl = document.getElementById('detail-tags');
-      tagsEl.innerHTML = '';
-      [client, period, tool].forEach(function(t) {
-        if (!t) return;
-        var span = document.createElement('div');
-        span.className = 'detail-tag';
-        span.textContent = t;
-        tagsEl.appendChild(span);
-      });
 
-      // 메타
-      var metaEl = document.getElementById('detail-meta');
-      var metaItems = [
-        { label: 'Client', value: client || '—' },
-        { label: 'Period', value: period || '—' },
-        { label: 'Tool',   value: tool   || '—' }
-      ];
-      metaEl.innerHTML = '';
-      metaItems.forEach(function(m) {
-        var div = document.createElement('div');
-        div.className = 'detail-meta-item';
-        div.innerHTML = '<div class="detail-meta-label">' + m.label + '</div>'
-          + '<div class="detail-meta-value">' + m.value + '</div>';
-        metaEl.appendChild(div);
-      });
 
       // 노션 블록 (갤러리 + 본문)
       var gallery = document.getElementById('detail-gallery');
@@ -1264,6 +1317,7 @@
 
     function closeDetail() {
       document.getElementById('detail-works').classList.remove('active');
+      document.body.style.overflow = '';
     }
 
     // 네비 링크에 서브페이지 연결
@@ -1310,11 +1364,7 @@
         </ul>
       </nav>
       <div class="sp-hero-content">
-        <div class="sp-hero-title">WORKS</div>
-        <div class="sp-hero-meta">
-          <div class="sp-hero-count" id="works-count">—</div>
-          <div class="sp-hero-label">Projects</div>
-        </div>
+        <div class="sp-hero-title">WORKS</div></div>
       </div>
     </div>
     <div class="sp-body">
@@ -1336,11 +1386,7 @@
         </ul>
       </nav>
       <div class="sp-hero-content">
-        <div class="sp-hero-title">KNOW<br>HOW</div>
-        <div class="sp-hero-meta">
-          <div class="sp-hero-count" id="knowhow-count">—</div>
-          <div class="sp-hero-label">Articles</div>
-        </div>
+        <div class="sp-hero-title">KNOW<br>HOW</div></div>
       </div>
     </div>
     <div class="sp-body">
@@ -1362,11 +1408,7 @@
         </ul>
       </nav>
       <div class="sp-hero-content">
-        <div class="sp-hero-title">NOTES</div>
-        <div class="sp-hero-meta">
-          <div class="sp-hero-count" id="notes-count">—</div>
-          <div class="sp-hero-label">Posts</div>
-        </div>
+        <div class="sp-hero-title">NOTES</div></div>
       </div>
     </div>
     <div class="sp-body">
