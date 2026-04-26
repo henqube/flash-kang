@@ -1013,7 +1013,7 @@
               <div class="wi-title">${title}</div>
               <div class="wi-desc">${text}</div>
             </div>`;
-          el.addEventListener('click', e => { e.preventDefault(); openDetail(row, title, text, thumb); });
+          el.addEventListener('click', e => { e.preventDefault(); openDetail(row, title, text, thumb, 'Works'); });
           grid.appendChild(el);
           observer.observe(el);
           setTimeout(function() { el.classList.add('visible'); }, 50);
@@ -1076,7 +1076,7 @@
             + textHtml
             + '</div>'
             + '<div class="ki-arr">→</div>';
-          el.addEventListener('click', e => { e.preventDefault(); openDetail(row, title, text, thumb); });
+          el.addEventListener('click', e => { e.preventDefault(); openDetail(row, title, text, thumb, 'Knowhow'); });
           list.appendChild(el);
           setTimeout(function() { el.classList.add('visible'); }, 50);
         });
@@ -1104,7 +1104,7 @@
             + textHtml
             + '</div>'
             + '<div class="ki-arr">→</div>';
-          el.addEventListener('click', e => { e.preventDefault(); openDetail(row, title, text, thumb); });
+          el.addEventListener('click', e => { e.preventDefault(); openDetail(row, title, text, thumb, 'Notes'); });
           list.appendChild(el);
           setTimeout(function() { el.classList.add('visible'); }, 50);
         });
@@ -1203,7 +1203,7 @@
           if (countEl) countEl.textContent = items.length;
           list.innerHTML = '';
           items.forEach(function(row) {
-            var title = val(row,'title'), cat = val(row,'num'), thumb = val(row,'thumb') || '';
+            var title = val(row,'title'), cat = val(row,'num'), thumb = val(row,'thumb') || '', text = val(row,'text') || '';
             var el = document.createElement('a');
             el.className = 'kn-item visible';
             el.href = '#';
@@ -1216,7 +1216,7 @@
               + '<div class="ki-title">' + title + '</div>'
               + '</div>'
               + '<div class="ki-arr">→</div>';
-            el.addEventListener('click', function(e) { e.preventDefault(); openDetail(row, title, text, thumb); });
+            el.addEventListener('click', function(e) { e.preventDefault(); openDetail(row, title, text, thumb, 'Knowhow'); });
             list.appendChild(el);
           });
         } catch(e) { list.innerHTML = '<p class="sp-empty">로드 실패</p>'; }
@@ -1242,7 +1242,7 @@
               + '<div class="ki-title">' + title + '</div>'
               + '</div>'
               + '<div class="ki-arr">→</div>';
-            el.addEventListener('click', function(e) { e.preventDefault(); openDetail(row, title, text, thumb); });
+            el.addEventListener('click', function(e) { e.preventDefault(); openDetail(row, title, text, thumb, 'Notes'); });
             list.appendChild(el);
           });
         } catch(e) { list.innerHTML = '<p class="sp-empty">로드 실패</p>'; }
@@ -1250,11 +1250,14 @@
     }
 
     // ── Works 상세 페이지 열기 ──
-    async function openDetail(row, title, desc, thumb) {
+    async function openDetail(row, title, desc, thumb, source) {
       var dp = document.getElementById('detail-works');
       dp.classList.add('active');
       dp.scrollTop = 0;
       document.body.style.overflow = 'hidden'; document.documentElement.style.overflow = 'hidden';
+      // 뒤로가기 텍스트 동적 변경
+      var backBtn = document.querySelector('.detail-back');
+      if (backBtn) backBtn.textContent = '← ' + (source || 'Works');
 
       document.getElementById('detail-title').textContent = title;
       document.getElementById('detail-desc').textContent = desc || '';
