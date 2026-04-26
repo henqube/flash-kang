@@ -683,9 +683,9 @@
   <nav class="nav">
     <a href="/" class="nav-logo" style="text-decoration:none;">FLASH <em>KANG</em></a>
     <ul class="nav-links">
-      <li><a href="#works" data-section="works">Works</a></li>
-      <li><a href="#knowhow" data-section="knowhow">Knowhow</a></li>
-      <li><a href="#notes" data-section="notes">Notes</a></li>
+      <li><a href="#" data-section="works">Works</a></li>
+      <li><a href="#" data-section="knowhow">Knowhow</a></li>
+      <li><a href="#" data-section="notes">Notes</a></li>
     </ul>
   </nav>
 
@@ -1181,7 +1181,7 @@
         var countEl = document.getElementById('works-count');
         try {
           var rows = await fetchDB('works');
-          var visible = rows.filter(function(r) { return val(r,'visible') !== false; });
+          var visible = rows.filter(function(r) { var v = val(r,'visible'); return v === true || v === ''; });
           if (!visible.length) { grid.innerHTML = '<p class="sp-empty">준비 중입니다.</p>'; return; }
           if (countEl) countEl.textContent = visible.length;
           grid.innerHTML = '';
@@ -1204,6 +1204,7 @@
               openDetail(row, title, text, thumb);
             });
             grid.appendChild(el);
+            setTimeout(function() { el.classList.add('visible'); }, 50);
           });
         } catch(e) { grid.innerHTML = '<p class="sp-empty">로드 실패</p>'; }
 
