@@ -4,7 +4,28 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Flash Kang — Game VFX Artist</title>
-  <meta name="description" content="2002년 스틱 하나에서 시작한 게임 아티스트. OCTOPO VFX 총괄 리드." />
+  <meta name="description" content="OCTOPO Studio — 2D VFX Artist" />
+  <meta name="keywords" content="플래시강, Flash Kang, 옥토포, OCTOPO, 옥토포 스튜디오, 2D VFX, 게임 이펙트, 2D 이펙트, 모바일 게임 VFX, 브롤스타즈 VFX, Brawl Stars VFX, 데스티니차일드, Adobe Animate, Hand-drawn VFX, 핸드드로잉 이펙트" />
+
+  <!-- Open Graph — SNS 공유 시 미리보기 카드 -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://flash-kang.com" />
+  <meta property="og:title" content="Flash Kang — 2D VFX Lead" />
+  <meta property="og:description" content="OCTOPO Studio — 2D VFX Artist" />
+  <meta property="og:image" content="https://flash-kang.com/og-image.jpg" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Flash Kang — 2D VFX Lead" />
+  <meta name="twitter:description" content="OCTOPO Studio — 2D VFX Artist" />
+  <meta name="twitter:image" content="https://flash-kang.com/og-image.jpg" />
+
+  <!-- Google Search Console 인증 — 발급 후 content 값 교체 -->
+  <!-- <meta name="google-site-verification" content="여기에_발급받은_코드_입력" /> -->
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://flash-kang.com" />
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet" />
   <style>
@@ -1202,7 +1223,7 @@
         var countEl = document.getElementById('knowhow-count');
         try {
           var rows = await fetchDB('knowhow');
-          var items = rows.filter(function(r) { return val(r,'num') !== 'headline'; });
+          var items = rows.filter(function(r) { return val(r,'num') !== 'headline'; }).reverse();
           if (!items.length) { list.innerHTML = '<p class="sp-empty">준비 중입니다.</p>'; return; }
           if (countEl) countEl.textContent = items.length;
           list.innerHTML = '';
