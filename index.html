@@ -1138,7 +1138,7 @@
         const headline = get('headline'), sub = get('sub'), ig = get('instagram');
         if (headline)
           document.getElementById('contact-headline').innerHTML = parseHL(headline);
-        if (sub) document.getElementById('contact-sub').textContent = sub;
+        if (sub) document.getElementById('contact-sub').innerHTML = sub.replace(/\n/g, '<br>');
         if (ig) {
           var btn = document.getElementById('contact-btn');
           btn.href = 'https://instagram.com/' + ig.replace('@','');
